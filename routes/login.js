@@ -32,7 +32,7 @@ router.post('/submit',  function(req, res, next) {
                 res.redirect('/account');
             }
             else {
-                res.render('login', {});
+                res.render('login', {error: 'invalid username or password'});
             }
         });
     });
