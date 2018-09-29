@@ -12,8 +12,7 @@ import usersRouter from './routes/users';
 import createaccountRouter from './routes/createaccount';
 import loginRouter from './routes/login';
 
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 
 process.on('unhandledRejection', err => {
   throw err;
@@ -33,7 +32,7 @@ process.on('unhandledRejection', err => {
   // app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 
   // set API routes here
-  
+
   app.use('/', indexRouter);
   app.use('/users', usersRouter);
   // app.use('/tickets', ticketsRouter);
