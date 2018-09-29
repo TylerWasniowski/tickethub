@@ -1,14 +1,14 @@
 {
   "extends": ["config:base", ":preserveSemverRanges"],
-  "assignees": ["vikr01"],
+  "assignees": ["tylerwasniowski"],
   "packageRules": [
     {
       "paths": ["packages/frontend/**"],
-      "assignees": ["toep"]
+      "assignees": ["tylerwasniowski"]
     },
     {
       "paths": ["packages/backend/**"],
-      "assignees": ["grivoire1", "surajsetty97"]
+      "assignees": ["verawong789", "zjaved101"]
     }
   ]
 }
