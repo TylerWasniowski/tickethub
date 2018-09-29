@@ -1,4 +1,4 @@
-# TBD PROJECT NAME
+# TICKETHUB
 
 [![Dependency Status](https://david-dm.org/tylerwasniowski/tickethub/status.svg)](https://david-dm.org/tylerwasniowski/tickethub)
 [![DevDependency Status](https://david-dm.org/tylerwasniowski/tickethub/dev-status.svg)](https://david-dm.org/tylerwasniowski/tickethub?type=dev)
