@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 10
+        },
+        "useBuiltIns": "usage"
+      }
+    ]
+  ],
+
+  "plugins": ["@babel/plugin-transform-flow-comments"],
+
+  "env": {
+    "production": {
+      "plugins": [
+        ["transform-inline-environment-variables", {"include": ["NODE_ENV"]}],
+        "minify-constant-folding",
+        "minify-guarded-expressions",
+        "minify-dead-code-elimination"
+      ]
+    }
+  }
+}

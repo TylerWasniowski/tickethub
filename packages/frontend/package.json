@@ -1,0 +1,39 @@
+{
+  "name": "tickethub-frontend",
+  "license": "MIT",
+  "author": "Tyler Wasniowski <tylerwasniowski@gmail.com> (https://github.com/tylerwasniowski)",
+  "repository": "https://github.com/TylerWasniowski/tickethub/tree/master/packages/frontend",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "webpack --config ./webpack/webpack.config.prod.babel.js --colors",
+    "dev": "webpack-dev-server --config ./webpack/webpack.config.devserver.babel.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.0.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^1.0.0",
+    "eslint-loader": "^2.1.0",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-hot-loader": "^4.3.8",
+    "react-loadable": "^5.5.0",
+    "react-router-dom": "^4.3.1",
+    "style-loader": "^0.23.0",
+    "title-case": "^2.1.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.19.1",
+    "webpack-bundle-analyzer": "^3.0.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dashboard": "^2.0.0",
+    "webpack-dev-server": "^3.1.8",
+    "webpack-merge": "^4.1.4",
+    "write-file-webpack-plugin": "^4.4.0"
+  },
+  "productName": "TicketHub"
+}

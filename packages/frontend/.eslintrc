@@ -1,0 +1,50 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": ["flowtype", "import", "jsx-a11y", "promise", "react"],
+  "extends": [
+    "plugin:promise/recommended",
+    "plugin:flowtype/recommended",
+    "airbnb",
+    "prettier"
+  ],
+  "rules": {
+    "comma-dangle": 0,
+    "import/dynamic-import-chunkname": "error",
+    "import/no-commonjs": "error",
+    "import/no-extraneous-dependencies": 0,
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "no-console": 0,
+    "no-magic-numbers": 0,
+    "no-unused-vars": "warn",
+    "quotes": [
+      "error",
+      "single",
+      {"avoidEscape": true, "allowTemplateLiterals": true}
+    ],
+    "react/jsx-filename-extension": ["error", {"extensions": [".jsx"]}],
+    "react/sort-comp": [
+      "error",
+      {
+        "order": [
+          "type-annotations",
+          "static-methods",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
+      }
+    ]
+  }
+}

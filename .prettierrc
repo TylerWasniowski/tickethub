@@ -1,0 +1,19 @@
+{
+  "overrides": [
+    {
+      "files": [
+        ".babelrc",
+        ".eslintrc",
+        ".prettierrc",
+        ".stylelintrc",
+        "*.code-workspace"
+      ],
+      "options": {
+        "parser": "json",
+        "bracketSpacing": false
+      }
+    }
+  ],
+  "singleQuote": true,
+  "trailingComma": "es5"
+}
