@@ -1,19 +1,107 @@
 {
-  "name": "tickethub",
-  "version": "0.0.0",
   "private": true,
+  "name": "tickethub",
+  "license": "MIT",
+  "author": "Tyler Wasniowski <tylerwasniowski@gmail.com> (https://github.com/tylerwasniowski)",
+  "repository": "https://github.com/TylerWasniowski/tickethub.git",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "node ./bin/www"
+    "build": "lerna run build",
+    "dev": "lerna run dev",
+    "heroku-postbuild": "yarn run build",
+    "postinstall": "yarn workspace tickethub-backend postinstall",
+    "lint": "eslint .",
+    "lint-fix": "yarn run lint --fix",
+    "postlint-fix": "prettier --write './**/*.{js,jsx,json,md,css,scss}'",
+    "prepare": "lerna run prepare",
+    "start": "yarn workspace tickethub-backend start",
+    "test": "jest"
   },
-  "dependencies": {
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.16.0",
-    "express-session": "^1.15.6",
-    "http-errors": "~1.6.2",
-    "moment": "^2.22.2",
-    "mongodb": "^2.2.33",
-    "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-flow-comments": "^7.0.0",
+    "@babel/plugin-transform-react-constant-elements": "^7.0.0",
+    "@babel/plugin-transform-react-inline-elements": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.15",
+    "cross-env": "^5.2.0",
+    "dotenv": "^6.0.0",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-babel": "^5.2.0",
+    "eslint-plugin-flowtype": "^2.50.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.22.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-security": "^1.4.0",
+    "flow-bin": "^0.81.0",
+    "flow-typed": "^2.5.1",
+    "husky": "^1.0.0",
+    "jest": "^23.6.0",
+    "lerna": "^3.4.0",
+    "lint-staged": "^7.2.2",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.3",
+    "prettier": "^1.14.2",
+    "prettier-package-json": "^2.0.0",
+    "stylelint": "^9.5.0",
+    "stylelint-config-prettier": "^4.0.0",
+    "stylelint-config-recommended": "^2.1.0",
+    "yarn": "^1.9.4"
+  },
+  "engines": {
+    "node": ">=10",
+    "yarn": ">=1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx}": [
+        "eslint --fix",
+        "prettier --ignore-path .eslintignore --write",
+        "git add"
+      ],
+      "{*.{json,code-workspace},.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
+        "prettier --ignore-path .eslintignore --write",
+        "git add"
+      ],
+      "*.{css,scss}": [
+        "stylelint --ignore-path .eslintignore --syntax scss --fix",
+        "prettier --ignore-path .eslintignore --write",
+        "git add"
+      ],
+      "*.{yml,less,md}": [
+        "prettier --ignore-path .eslintignore --write",
+        "git add"
+      ],
+      "**/package.json": [
+        "prettier-package-json --write",
+        "git add"
+      ]
+    },
+    "globOptions": {
+      "dot": true
+    }
   }
 }
