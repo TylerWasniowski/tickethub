@@ -1,14 +1,14 @@
 # TBD PROJECT NAME
 
-[![Dependency Status](https://david-dm.org/vikr01/tbd-project-name/status.svg)](https://david-dm.org/vikr01/tbd-project-name)
-[![DevDependency Status](https://david-dm.org/vikr01/tbd-project-name/dev-status.svg)](https://david-dm.org/vikr01/tbd-project-name?type=dev)
+[![Dependency Status](https://david-dm.org/tylerwasniowski/tickethub/status.svg)](https://david-dm.org/tylerwasniowski/tickethub)
+[![DevDependency Status](https://david-dm.org/tylerwasniowski/tickethub/dev-status.svg)](https://david-dm.org/tylerwasniowski/tickethub?type=dev)
 
 ## Installation
 
 First, clone the repo via git:
 
 ```bash
-git clone --depth=1 https://github.com/vikr01/tbd-project-name.git your-project-name
+git clone --depth=1 https://github.com/tylerwasniowski/tickethub.git your-project-name
 ```
 
 And then install dependencies with yarn:

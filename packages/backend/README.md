@@ -1,7 +1,7 @@
 # TBD PROJECT BACKEND
 
-[![Dependency Status](https://david-dm.org/vikr01/tbd-project-name/status.svg?path=packages/backend)](https://david-dm.org/vikr01/tbd-project-name?path=packages/backend)
-[![DevDependency Status](https://david-dm.org/vikr01/tbd-project-name/dev-status.svg?path=packages/backend)](https://david-dm.org/vikr01/tbd-project-name?path=packages/backend&type=dev)
+[![Dependency Status](https://david-dm.org/tylerwasniowski/tickethub/status.svg?path=packages/backend)](https://david-dm.org/tylerwasniowski/tickethub?path=packages/backend)
+[![DevDependency Status](https://david-dm.org/tylerwasniowski/tickethub/dev-status.svg?path=packages/backend)](https://david-dm.org/tylerwasniowski/tickethub?path=packages/backend&type=dev)
 
 ## Run in Development Mode
 
