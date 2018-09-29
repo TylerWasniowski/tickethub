@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "bungcip.better-toml",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rebornix.project-snippets",
+    "dsznajder.es7-react-js-snippets",
+    "qassimfarid.ejs-language-support",
+    "leizongmin.node-module-intellisense",
+    "flowtype.flow-for-vscode",
+    "donjayamanne.githistory",
+    "ghmcadams.lintlens",
+    "shinnn.stylelint",
+    "clinyong.vscode-css-modules",
+    "editorconfig.editorconfig",
+    "shd101wyy.markdown-preview-enhanced",
+    "chrmarti.regex",
+    "cssho.vscode-svgviewer",
+    "wayou.vscode-todo-highlight",
+    "yzhang.markdown-all-in-one"
+  ]
+}

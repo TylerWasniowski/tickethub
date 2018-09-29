@@ -1,0 +1,36 @@
+image: Visual Studio 2017
+
+platform:
+  - x64
+
+environment:
+  matrix:
+    - nodejs_version: 10
+
+cache:
+  - '%LOCALAPPDATA%/Yarn'
+  - node_modules -> yarn.lock
+
+matrix:
+  fast_finish: true
+
+build: off
+
+version: '{build}'
+
+shallow_clone: true
+
+clone_depth: 1
+
+install:
+  - node --version
+  - yarn --version
+  - ps: Install-Product node $env:nodejs_version x64
+  - set CI=true
+  - yarn install --ignore-scripts
+
+test_script:
+  - yarn run lint
+  # - yarn run flow
+  - yarn run build
+  - yarn run test
