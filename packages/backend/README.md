@@ -1,4 +1,4 @@
-# TBD PROJECT BACKEND
+# TICKETHUB BACKEND
 
 [![Dependency Status](https://david-dm.org/tylerwasniowski/tickethub/status.svg?path=packages/backend)](https://david-dm.org/tylerwasniowski/tickethub?path=packages/backend)
 [![DevDependency Status](https://david-dm.org/tylerwasniowski/tickethub/dev-status.svg?path=packages/backend)](https://david-dm.org/tylerwasniowski/tickethub?path=packages/backend&type=dev)
