@@ -1,41 +1,49 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+
+const router = express.Router();
 
 
-var mongo = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/';
+const mongo = require('mongodb').MongoClient;
 
+const url = 'mongodb://localhost:27017/';
 
-router.get('/', function(req, res, next){
-    res.render('login', {});
+const bcrypt = require('bcryptjs');
+
+router.get('/', (req, res, next) => {
+  res.render('login', {});
 });
 
 
-router.post('/submit',  function(req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
+router.post('/submit',  (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
 
-    mongo.connect(url, function(err, db) {
-        var dbo = db.db('tickethub');
-        var query = { username: username, password: password};
-        dbo.collection('user-data').find(query).toArray(function(err, result) {
-            if (err) throw err;
-            console.log(result);
-            db.close();
-            console.log(result.length);
+  mongo.connect(url, (err, db) => {
+    const dbo = db.db('tickethub');
+    const query = { username};
+    dbo.collection('user-data').find(query).toArray((err, result) => {
+      if (err) throw err;
+      console.log(result);
+      db.close();
+      console.log(result.length);
 
-            if (result.length == 1) {
-                req.session.success = true;
-                req.session.username = result[0].username;
-                req.session.name = result[0].name;
-                req.session.email = result[0].email;
-                res.redirect('/account');
-            }
-            else {
-                res.render('login', {error: 'invalid username or password'});
-            }
-        });
+      const user = result[0];
+
+      bcrypt.compare(password, user.password).then(valid => {
+        if (valid === true) {
+          req.session.success = true;
+          req.session.username = user.username;
+          req.session.name = user.name;
+          req.session.email = user.email;
+          res.redirect('/account');
+        } else {
+          res.render('login', {error: 'invalid username or password'});
+        }
+      }).catch(error => {
+        res.render('login', {error: 'invalid username or password'});
+      });
     });
+  });
 });
 
 module.exports = router;
