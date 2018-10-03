@@ -11,7 +11,7 @@
     "build": "lerna run build",
     "dev": "lerna run dev",
     "heroku-postbuild": "yarn run build",
-    "postinstall": "yarn workspace tickethub-backend postinstall",
+    "postinstall": "lerna run postinstall",
     "lint": "eslint .",
     "lint-fix": "yarn run lint --fix",
     "postlint-fix": "prettier --write './**/*.{js,jsx,json,md,css,scss}'",
