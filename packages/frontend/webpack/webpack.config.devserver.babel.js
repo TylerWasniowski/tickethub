@@ -33,6 +33,12 @@ export default function(env, argv) {
       inline: false,
       contentBase: outputDir,
       watchContentBase: true,
+      proxy: {
+        '/**/*': {
+          target: 'http://localhost:2000/',
+          changeOrigin: true,
+        },
+      },
     },
 
     plugins: [
