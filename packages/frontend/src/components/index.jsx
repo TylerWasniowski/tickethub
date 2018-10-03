@@ -16,28 +16,24 @@ type Props = {
 };
 
 const App = ({ title }: Props): Node => (
-  <div>
-    {title}
-
-    <Sidebar />
-  </div>
-);
-
-const Sidebar = (): Node => (
   <Router>
     <div>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
-      <li>
-        <Link to="/create-account">Create Account</Link>
-      </li>
-      <li>
-        <Link to="/update-account">Update Account</Link>
-      </li>
+      <div className="sidebar">
+        {title}
+
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/create-account">Create Account</Link>
+        </li>
+        <li>
+          <Link to="/update-account">Update Account</Link>
+        </li>
+      </div>
 
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
