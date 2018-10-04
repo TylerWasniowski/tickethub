@@ -1,9 +1,14 @@
 import express from 'express';
-import mongodb from 'mongodb';
+import mysql from 'mysql';
 
 const router = express.Router();
 
-const url = 'mongodbdb://localhost:27017/tickethub';
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+});
 
 // TODO: Add to frontend
 // router.get('/account',function (req, res, next) {
@@ -18,31 +23,21 @@ router.post('/account/submit', (req, res, next) => {
     password: req.body.password,
   };
 
-  req.session.name = item.name;
-  req.session.email = item.email;
-  req.session.password = item.password;
-
   console.log(item);
 
-  mongodb.connect(
-    url,
-    (err, db) => {
-      const dbo = db.db('tickethub');
-      dbo
-        .collection('user-data')
-        .updateOne(
-          { username: req.session.username },
-          { $set: item },
-          (dbErr, result) => {
-            if (dbErr) throw dbErr;
-            console.log('Item updated');
-            db.close();
-          }
-        );
+  if (!req.session.success) {
+    res.send('not logged in');
+  }
+
+  connection.query(
+    'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
+    [item.name, item.email, item.password, req.session.username],
+    (error, results, fields) => {
+      if (error) throw error;
     }
   );
 
-  res.redirect('/account');
+  res.redirect('/');
 });
 
 // TODO: Move to other route file

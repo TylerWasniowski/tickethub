@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import express from 'express';
+import expressSession from 'express-session';
 
 const router = express.Router();
 
@@ -35,34 +36,14 @@ router.post('/submit', (req, res, next) => {
         results[0].password === password
       ) {
         // connection.end();
+        req.session.success = true;
+        req.session.username = results[0].username;
         res.redirect('/');
       } else {
         res.send('WRONG USERNAME OR PASSWORD!');
       }
     }
   );
-
-  // mongo.connect(url, function(err, db) {
-  //     var dbo = db.db('tickethub');
-  //     var query = { username: username, password: password};
-  //     dbo.collection('user-data').find(query).toArray(function(err, result) {
-  //         if (err) throw err;
-  //         console.log(result);
-  //         db.close();
-  //         console.log(result.length);
-
-  //         if (result.length == 1) {
-  //             req.session.success = true;
-  //             req.session.username = result[0].username;
-  //             req.session.name = result[0].name;
-  //             req.session.email = result[0].email;
-  //             res.redirect('/account');
-  //         }
-  //         else {
-  //             res.render('login', {error: 'invalid username or password'});
-  //         }
-  //     });
-  // });
 });
 
 export default router;
