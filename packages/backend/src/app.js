@@ -11,7 +11,7 @@ import usersRouter from './routes/users';
 // import homeRouter from './routes/home';
 import createaccountRouter from './routes/createaccount';
 import loginRouter from './routes/login';
-
+import checkOut from './routes/checkOut';
 
 const port = process.env.PORT || 3000;
 
@@ -33,13 +33,14 @@ process.on('unhandledRejection', err => {
   // app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 
   // set API routes here
-  
+
   app.use('/', indexRouter);
   app.use('/users', usersRouter);
   // app.use('/tickets', ticketsRouter);
   // app.use('/home', homeRouter);
   app.use('/createaccount', createaccountRouter);
   app.use('/login', loginRouter);
+  app.use('/checkOut', checkOut);
 
   // wait until the app starts
   await promisify(app.listen).bind(app)(port);
