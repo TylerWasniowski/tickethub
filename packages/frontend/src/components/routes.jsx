@@ -1,4 +1,6 @@
-export const HomeRoute = '/';
-export const LoginRoute = '/login';
-export const CreateAccountRoute = '/create-account';
-export const UpdateAccountRoute = '/update-account';
+// @flow
+
+export const HomeRoute: String = '/';
+export const LoginRoute: String = '/login';
+export const CreateAccountRoute: String = '/create-account';
+export const UpdateAccountRoute: String = '/update-account';
