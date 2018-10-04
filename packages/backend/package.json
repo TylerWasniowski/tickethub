@@ -27,8 +27,7 @@
     "http-errors": "~1.6.2",
     "moment": "^2.22.2",
     "morgan": "~1.9.0",
-    "pretty-error": "^2.1.1",
-    "pug": "2.0.0-beta11"
+    "pretty-error": "^2.1.1"
   },
   "peerDependencies": {
     "tickethub-frontend": "*"
