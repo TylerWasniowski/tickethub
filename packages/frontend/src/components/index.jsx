@@ -180,9 +180,18 @@ class Dashboard extends React.Component {
             </div>
             <Divider />
             <List>{ListItems}</List>
-            <Divider />
-            <List />
           </Drawer>
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Router>
+              <div>
+                <Route exact path="/" component={Home} />
+                <Route path="/login" component={Login} />
+                <Route path="/create-account" component={CreateAccount} />
+                <Route path="/update-account" component={UpdateAccount} />
+              </div>
+            </Router>
+          </main>
         </div>
       </React.Fragment>
     );
@@ -197,11 +206,6 @@ const App = (props: Props): Node => (
   <Router>
     <div>
       <Dashboard {...props} />
-
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/create-account" component={CreateAccount} />
-      <Route path="/update-account" component={UpdateAccount} />
     </div>
   </Router>
 );
