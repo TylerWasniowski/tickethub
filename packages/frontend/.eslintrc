@@ -33,6 +33,8 @@
       "single",
       {"avoidEscape": true, "allowTemplateLiterals": true}
     ],
+    "react/destructuring-assignment": "warn",
+    "react/forbid-prop-types": "warn",
     "react/jsx-filename-extension": ["error", {"extensions": [".jsx"]}],
     "react/sort-comp": [
       "error",
