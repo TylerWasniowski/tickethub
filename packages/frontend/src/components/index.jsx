@@ -3,7 +3,7 @@ import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
 import { hot } from 'react-hot-loader';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 
 // Material-ui
 import PropTypes from 'prop-types';
@@ -111,7 +111,11 @@ const styles = theme => ({
   },
 });
 
-class Dashboard extends React.Component {
+type Props = {
+  classes: object,
+};
+
+class Dashboard extends React.Component<Props> {
   state = {
     open: true,
   };
@@ -193,8 +197,8 @@ class Dashboard extends React.Component {
               <div>
                 <Route exact path={HomeRoute} component={Home} />
                 <Route path={LoginRoute} component={Login} />
-                <Route path={CreateAccount} component={CreateAccount} />
-                <Route path={UpdateAccount} component={UpdateAccount} />
+                <Route path={CreateAccountRoute} component={CreateAccount} />
+                <Route path={UpdateAccountRoute} component={UpdateAccount} />
               </div>
             </Router>
           </main>
@@ -203,9 +207,5 @@ class Dashboard extends React.Component {
     );
   }
 }
-
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(Dashboard);

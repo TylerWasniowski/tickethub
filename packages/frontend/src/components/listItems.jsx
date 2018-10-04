@@ -7,7 +7,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
-import Button from '@material-ui/core/Button';
 
 import {
   HomeRoute,
@@ -18,7 +17,7 @@ import {
 
 const ListItems = (
   <div>
-    <a href={`/#/${HomeRoute}`} style={{ textDecoration: 'none' }}>
+    <a href={`/#${HomeRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
         <ListItemIcon>
           <HomeIcon />
@@ -26,7 +25,7 @@ const ListItems = (
         <ListItemText primary="Home" />
       </ListItem>
     </a>
-    <a href={`/#/${LoginRoute}`} style={{ textDecoration: 'none' }}>
+    <a href={`/#${LoginRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
         <ListItemIcon>
           <PeopleIcon />
@@ -34,7 +33,7 @@ const ListItems = (
         <ListItemText primary="Login" />
       </ListItem>
     </a>
-    <a href={`/#/${CreateAccountRoute}`} style={{ textDecoration: 'none' }}>
+    <a href={`/#${CreateAccountRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
         <ListItemIcon>
           <PeopleIcon />
@@ -42,7 +41,7 @@ const ListItems = (
         <ListItemText primary="Create Account" />
       </ListItem>
     </a>
-    <a href={`/#/${UpdateAccountRoute}`} style={{ textDecoration: 'none' }}>
+    <a href={`/#${UpdateAccountRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
         <ListItemIcon>
           <PeopleIcon />
@@ -53,4 +52,4 @@ const ListItems = (
   </div>
 );
 
-export default hot(module)(ListItems);
+export default ListItems;
