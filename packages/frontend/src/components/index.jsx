@@ -28,6 +28,12 @@ import Home from './home';
 import Login from './login';
 import CreateAccount from './createAccount';
 import UpdateAccount from './updateAccount';
+import {
+  HomeRoute,
+  LoginRoute,
+  CreateAccountRoute,
+  UpdateAccountRoute,
+} from './routes';
 
 const drawerWidth = 240;
 
@@ -185,10 +191,10 @@ class Dashboard extends React.Component {
             <div className={classes.appBarSpacer} />
             <Router>
               <div>
-                <Route exact path="/" component={Home} />
-                <Route path="/login" component={Login} />
-                <Route path="/create-account" component={CreateAccount} />
-                <Route path="/update-account" component={UpdateAccount} />
+                <Route exact path={HomeRoute} component={Home} />
+                <Route path={LoginRoute} component={Login} />
+                <Route path={CreateAccount} component={CreateAccount} />
+                <Route path={UpdateAccount} component={UpdateAccount} />
               </div>
             </Router>
           </main>
