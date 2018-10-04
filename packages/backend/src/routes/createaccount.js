@@ -1,40 +1,32 @@
-var express = require('express');
-var router = express.Router();
+import mysql from 'mysql';
 
-var mongo = require('mongodb');
+import express from 'express';
 
-var url = 'mongodb://localhost:27017/tickethub';
+const router = express.Router();
+
+const connection = mysql.createConnection({
+  host: '35.233.153.166',
+  user: 'root',
+  password: 'group3cs160',
+  database: 'tickethub',
+});
+
+const url = 'mongodb://localhost:27017/tickethub';
 
 // TODOD: Move to frontend
-router.get('/', function(req, res, next) {
-    res.render('createaccount', {});
+router.get('/', (req, res, next) => {
+  res.send('createaccount');
 });
 
+router.post('/submit', (req, res, next) => {
+  const ret = {
+    name: req.body.name,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+  };
 
-router.post('/submit', function(req, res, next) {
-    var name = req.body.name;
-    var username = req.body.username;
-    var email = req.body.email;
-    var password = req.body.password;
-
-
-    var item = {
-        name: name,
-        username: username,
-        email: email,
-        password: password
-    };
-
-    console.log(name + ' ' + username + ' ' + email + ' ' + password);
-
-    mongo.connect(url, function(err, db) {
-        db.collection('user-data').insertOne(item, function(err, result) {
-            console.log('Item inserted');
-            db.close();
-        });
-    });
-
-    res.send('success');
+  res.json(ret);
 });
 
-module.exports = router;
+export default router;
