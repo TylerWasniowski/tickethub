@@ -22,12 +22,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import ListItems from './listItems';
+import ListItems from './ListItems';
 
-import Home from './home';
-import Login from './login';
-import CreateAccount from './createAccount';
-import UpdateAccount from './updateAccount';
+import Home from './Home';
+import Login from './Login';
+import CreateAccount from './CreateAccount';
+import UpdateAccount from './UpdateAccount';
 import {
   HomeRoute,
   LoginRoute,
