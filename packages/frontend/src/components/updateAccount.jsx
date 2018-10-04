@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
-import { hot } from 'react-hot-loader';
 
 const UpdateAccount = (): Node => (
   <div>
@@ -31,4 +30,4 @@ const UpdateAccount = (): Node => (
   </div>
 );
 
-export default hot(module)(UpdateAccount);
+export default UpdateAccount;

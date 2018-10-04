@@ -1,8 +1,6 @@
 // @flow
-import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
-import { hot } from 'react-hot-loader';
 
 const Login = (): Node => (
   <div>
@@ -22,4 +20,4 @@ const Login = (): Node => (
   </div>
 );
 
-export default hot(module)(Login);
+export default Login;

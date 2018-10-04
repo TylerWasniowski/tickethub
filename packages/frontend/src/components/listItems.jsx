@@ -1,5 +1,4 @@
 import React from 'react';
-import { hot } from 'react-hot-loader';
 
 // Material-ui imports
 import ListItem from '@material-ui/core/ListItem';

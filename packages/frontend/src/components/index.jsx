@@ -208,4 +208,4 @@ class Dashboard extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(Dashboard);
+export default hot(module)(withStyles(styles)(Dashboard));
