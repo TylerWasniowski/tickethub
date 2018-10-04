@@ -1,6 +1,5 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Link from 'react-router-dom';
 
 // Material-ui imports
 import ListItem from '@material-ui/core/ListItem';
@@ -54,4 +53,4 @@ const ListItems = (
   </div>
 );
 
-export default ListItems;
+export default hot(module)(ListItems);
