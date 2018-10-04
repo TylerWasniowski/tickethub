@@ -5,10 +5,10 @@ import express from 'express';
 const router = express.Router();
 
 const connection = mysql.createConnection({
-  host: '35.233.153.166',
-  user: 'root',
-  password: 'group3cs160',
-  database: 'tickethub',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 // TODOD: Move to frontend
