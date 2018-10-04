@@ -202,12 +202,4 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const App = (props: Props): Node => (
-  <Router>
-    <div>
-      <Dashboard {...props} />
-    </div>
-  </Router>
-);
-
-export default withStyles(styles)(App);
+export default withStyles(styles)(Dashboard);
