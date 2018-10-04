@@ -1,5 +1,4 @@
 // @flow
-import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
 import { hot } from 'react-hot-loader';
