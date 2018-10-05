@@ -2,20 +2,15 @@
 import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
-import { hot } from 'react-hot-loader';
 
-const CreateAccount = (): Node => (
+const UpdateAccount = (): Node => (
   <div>
-    <h1>Create an Account</h1>
-    <form action="/createaccount/submit" method="post">
+    <h1>Update Account</h1>
+    <form action="/account/submit" method="post">
       <br />
       <p>
         Name
         <input type="text" name="name" />
-      </p>
-      <p>
-        Username
-        <input type="text" name="username" />
       </p>
       <p>
         Email
@@ -35,4 +30,4 @@ const CreateAccount = (): Node => (
   </div>
 );
 
-export default hot(module)(CreateAccount);
+export default UpdateAccount;
