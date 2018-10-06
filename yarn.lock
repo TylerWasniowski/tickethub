@@ -5239,15 +5239,6 @@ from@^0.1.7:
   resolved "https://registry.yarnpkg.com/from/-/from-0.1.7.tgz#83c60afc58b9c56997007ed1a768b3ab303a44fe"
   integrity sha1-g8YK/Fi5xWmXAH7Rp2izqzA6RP4=
 
-fs-extra@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-3.0.1.tgz#3794f378c58b342ea7dbbb23095109c4b3b62291"
-  integrity sha1-N5TzeMWLNC6n27sjCVEJxLO2IpE=
-  dependencies:
-    graceful-fs "^4.1.2"
-    jsonfile "^3.0.0"
-    universalify "^0.1.0"
-
 fs-extra@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
@@ -5462,7 +5453,7 @@ glob-to-regexp@^0.3.0:
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz#8c5a1494d2066c570cc3bfe4496175acc4d502ab"
   integrity sha1-jFoUlNIGbFcMw7/kSWF1rMTVAqs=
 
-glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
+glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
   integrity sha512-vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==
@@ -7136,13 +7127,6 @@ json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
   integrity sha1-Hq3nrMASA0rYTiOWdn6tn6VJWCE=
-
-jsonfile@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-3.0.1.tgz#a5ecc6f65f53f662c4415c7675a0331d0992ec66"
-  integrity sha1-pezG9l9T9mLEQVx2daAzHQmS7GY=
-  optionalDependencies:
-    graceful-fs "^4.1.6"
 
 jsonfile@^4.0.0:
   version "4.0.0"
@@ -9369,14 +9353,14 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
 
-prettier-package-json@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/prettier-package-json/-/prettier-package-json-2.0.0.tgz#b520a4a246a7c4814884f32934bc56b9139dbd14"
-  integrity sha512-dG5C0+6IVVFyqDv4E9jy/ctOuFcXNcvKjyboa1dsDMShCmWajKKlr8QwLxKlWRODLlbjMPGEJLCirRwvx50eaw==
+prettier-package-json@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/prettier-package-json/-/prettier-package-json-2.0.1.tgz#73ac83a1b5ef5a40874d58279da91627b0676877"
+  integrity sha512-yfGOOpuQ0LsCLIquoAXqtsBMN3jPOcTVydIasBFf7b4txSP4mx3Xa6++AeJ7F3N57wRFsvUEiqyaTQG96I5CXg==
   dependencies:
-    commander "^2.9.0"
-    fs-extra "^3.0.1"
-    glob "^7.1.2"
+    commander "^2.18.0"
+    fs-extra "^7.0.0"
+    glob "^7.1.3"
     minimatch "^3.0.4"
     parse-author "^2.0.0"
     sort-object-keys "^1.1.2"
