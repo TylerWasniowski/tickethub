@@ -1,5 +1,14 @@
-.search-container {
+main {
   text-align: center;
+}
+
+.search-container {
+  display: inline-block;
+
+  width: 50%;
+  min-width: 400px;
+  max-width: 95%;
+  height: 46px;
 }
 
 .searchbar-container {
@@ -12,14 +21,8 @@
   opacity: 1;
   transition: 350ms;
 
-  width: 50%;
-  min-width: 400px;
-  max-width: 95%;
-  height: 46px;
-
-  cursor: text;
-  display: inline-block;
-  font: 18px arial, sans-serif;
+  display: flex;
+  flex: 1;
 
   text-align: left;
 }
@@ -35,14 +38,22 @@
   margin: 0;
   outline: none;
 
-  position: relative;
-  top: 13px;
-  bottom: 0;
+  cursor: text;
+  font: 18px arial, sans-serif;
 
-  width: 85%;
+  position: relative;
+  top: 2px;
+  bottom: 0;
   padding: 0 18px;
+
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
 }
 
 .search-button {
-  float: right;
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
+  align-items: stretch;
 }
