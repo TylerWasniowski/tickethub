@@ -6,7 +6,6 @@ import { hot } from 'react-hot-loader';
 import { HashRouter as Router, Route, Link } from 'react-router-dom';
 
 // Material-ui
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
