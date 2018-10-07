@@ -3,23 +3,29 @@
 }
 
 .searchbar-container {
-  background-color: #f1f3f4;
+  background-color: #ececec;
+
   border: none;
   border-radius: 22px;
   box-shadow: none;
   outline: none;
   opacity: 1;
-  transition: background-color 300ms ease-in-out;
-  transition: opacity 200ms;
-  height: 44px;
-  max-width: 560px;
+  transition: 350ms;
+
+  width: 50%;
+  min-width: 400px;
+  max-width: 95%;
+  height: 46px;
+
   cursor: text;
   display: inline-block;
   font: 18px arial, sans-serif;
 
   text-align: left;
-  width: 400px;
-  padding: 10px;
+}
+
+.searchbar-container:hover {
+  background-color: #d2d2d2;
 }
 
 .searchbar {
@@ -30,7 +36,13 @@
   outline: none;
 
   position: relative;
-  top: 2px;
+  top: 13px;
   bottom: 0;
-  padding: 0 8px;
+
+  width: 85%;
+  padding: 0 18px;
+}
+
+.search-button {
+  float: right;
 }
