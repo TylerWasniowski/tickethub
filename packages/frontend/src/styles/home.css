@@ -1,0 +1,36 @@
+.search-container {
+  text-align: center;
+}
+
+.searchbar-container {
+  background-color: #f1f3f4;
+  border: none;
+  border-radius: 22px;
+  box-shadow: none;
+  outline: none;
+  opacity: 1;
+  transition: background-color 300ms ease-in-out;
+  transition: opacity 200ms;
+  height: 44px;
+  max-width: 560px;
+  cursor: text;
+  display: inline-block;
+  font: 18px arial, sans-serif;
+
+  text-align: left;
+  width: 400px;
+  padding: 10px;
+}
+
+.searchbar {
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  margin: 0;
+  outline: none;
+
+  position: relative;
+  top: 2px;
+  bottom: 0;
+  padding: 0 8px;
+}
