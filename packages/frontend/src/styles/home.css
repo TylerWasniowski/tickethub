@@ -1,4 +1,6 @@
 main {
+  background-color: #ffffff;
+
   text-align: center;
 }
 
@@ -11,7 +13,7 @@ main {
 }
 
 .searchbar-container {
-  background-color: #ececec;
+  background-color: #f1f3f4;
 
   border: none;
   border-radius: 22px;
@@ -29,7 +31,7 @@ main {
 }
 
 .searchbar-container:hover {
-  background-color: #d2d2d2;
+  background-color: #e8eaed;
 }
 
 .searchbar {
@@ -57,4 +59,12 @@ main {
   flex-direction: row;
   flex: 0 0 auto;
   align-items: stretch;
+}
+
+ul.search-suggestions {
+  padding: 0 0 0 10px;
+}
+
+li.search-suggestion {
+  padding: 0;
 }
