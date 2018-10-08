@@ -193,12 +193,12 @@ class Dashboard extends React.Component<Props> {
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Router>
-              <div>
+              <React.Fragment>
                 <Route exact path={HomeRoute} component={Home} />
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />
-              </div>
+              </React.Fragment>
             </Router>
           </main>
         </div>
