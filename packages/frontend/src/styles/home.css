@@ -28,6 +28,9 @@ main {
   text-align: left;
 
   width: 100%;
+
+  position: relative;
+  z-index: 1;
 }
 
 .searchbar-container:hover {
@@ -62,9 +65,20 @@ main {
 }
 
 ul.search-suggestions {
-  padding: 0 0 0 10px;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 5px 0 1px rgba(0, 0, 0, 0.08);
+  border: none;
+  border-radius: 0 0px 10px 10px;
+
+  position: relative;
+  top: -30px;
+  padding-top: 40px;
+  z-index: 0;
+}
+
+ul.search-suggestions:empty {
+  display: none;
 }
 
 li.search-suggestion {
-  padding: 0;
+  padding: 8px 10px;
 }

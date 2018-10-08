@@ -43,9 +43,13 @@ class Home extends React.Component {
         </div>
         <List className="search-suggestions">
           {suggestions.map(suggestion => (
-            <ListItem className="search-suggestion">{suggestion}</ListItem>
+            <ListItem button className="search-suggestion">
+              {suggestion}
+            </ListItem>
           ))}
-          <ListItem className="search-suggestion">{query}</ListItem>
+          <ListItem button className="search-suggestion">
+            {query}
+          </ListItem>
         </List>
       </div>
     );
