@@ -9,7 +9,7 @@ import Globals from './globals';
 import { productName as name } from '../package.json';
 import outputDir from '../lib/index';
 
-const title = titleCase(name);
+const title = name;
 
 export default {
   target: 'web',
@@ -54,6 +54,7 @@ export default {
       DEBUG: JSON.stringify(process.env.DEBUG) || false,
       TITLE: title,
       REACT_ROOT: 'root',
+      MAX_SUGGESTIONS: process.env.MAX_SUGGESTIONS,
     }),
 
     new ProvidePlugin(Globals),

@@ -42,14 +42,25 @@ class Home extends React.Component {
           </IconButton>
         </div>
         <List className="search-suggestions">
-          {suggestions.map(suggestion => (
-            <ListItem button className="search-suggestion">
-              {suggestion}
-            </ListItem>
-          ))}
-          <ListItem button className="search-suggestion">
-            {query}
-          </ListItem>
+          {/* {suggestions
+            .slice(0, process.env.MAX_SUGGESTIONS)
+            .map(suggestion => (
+              <ListItem button>
+                {suggestion}
+              </ListItem>
+            ))} */}
+
+          {/* Testing suggestions with query */}
+          {query
+            .split('')
+            .sort(() => 0.5 - Math.random())
+            .slice(
+              Math.floor(Math.random() * process.env.MAX_SUGGESTIONS),
+              process.env.MAX_SUGGESTIONS
+            )
+            .map(ch => (
+              <ListItem button>{ch}</ListItem>
+            ))}
         </List>
       </div>
     );
