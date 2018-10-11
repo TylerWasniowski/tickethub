@@ -1,9 +1,15 @@
 .search-container {
   display: inline-block;
 
-  width: 50%;
+  transition: 350ms;
+
+  width: 25%;
   min-width: 300px;
   height: 46px;
+}
+
+.search-container:focus-within {
+  width: 55%;
 }
 
 .searchbar-container {
