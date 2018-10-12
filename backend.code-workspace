@@ -43,6 +43,8 @@
     "stylelint.enable": true,
 
     "prettier.eslintIntegration": true,
-    "prettier.ignorePath": ".eslintignore"
+    "prettier.ignorePath": ".eslintignore",
+
+    "files.eol": "\n"
   }
 }
