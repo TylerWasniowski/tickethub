@@ -4,7 +4,7 @@ main {
   justify-content: flex-start;
   align-items: center;
 
-  background-color: #ffffff;
+  background-color: #fafafa;
 
   padding-bottom: 0 !important;
 
@@ -13,10 +13,11 @@ main {
 
 .box-container {
   justify-content: stretch;
-  background-color: #3f51b50d !important;
   width: 100%;
   flex-grow: 1;
   margin: auto;
+
+  box-shadow: 0px 1px 8px 2px rgba(0, 0, 0, 0.4);
 
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -26,9 +27,6 @@ main {
   text-align: center;
 
   overflow-y: auto;
-
-  box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12) !important;
 
   top: 0;
   position: relative;
