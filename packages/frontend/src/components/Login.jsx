@@ -2,8 +2,10 @@
 import React from 'react';
 import type { Node } from 'react';
 
+import BoxContainer from './BoxContainer';
+
 const Login = (): Node => (
-  <div>
+  <BoxContainer>
     <h1>Login</h1>
     <p>Login</p>
     <form action="login/submit" method="post">
@@ -17,7 +19,7 @@ const Login = (): Node => (
       <button type="submit">Submit</button>
       <br />
     </form>
-  </div>
+  </BoxContainer>
 );
 
 export default Login;

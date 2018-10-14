@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import SearchIcon from '@material-ui/icons/Search';
+import BoxContainer from './BoxContainer';
 
 class Home extends React.Component {
   constructor(props) {
@@ -30,19 +31,20 @@ class Home extends React.Component {
     const { query, suggestions } = this.state;
 
     return (
-      <div className="search-container">
-        <div className="searchbar-container">
-          <input
-            className="searchbar"
-            placeholder="Search TicketHub"
-            onChange={this.handleQueryChange}
-          />
-          <IconButton className="search-button">
-            <SearchIcon />
-          </IconButton>
-        </div>
-        <List className="search-suggestions">
-          {/* {suggestions
+      <div className="home">
+        <div className="search-container">
+          <div className="searchbar-container">
+            <input
+              className="searchbar"
+              placeholder="Search TicketHub"
+              onChange={this.handleQueryChange}
+            />
+            <IconButton className="search-button">
+              <SearchIcon />
+            </IconButton>
+          </div>
+          <List className="search-suggestions">
+            {/* {suggestions
             .slice(0, process.env.MAX_SUGGESTIONS)
             .map(suggestion => (
               <ListItem button>
@@ -50,18 +52,20 @@ class Home extends React.Component {
               </ListItem>
             ))} */}
 
-          {/* Testing suggestions with query */}
-          {query
-            .split('')
-            .sort(() => 0.5 - Math.random())
-            .slice(
-              Math.floor(Math.random() * process.env.MAX_SUGGESTIONS),
-              process.env.MAX_SUGGESTIONS
-            )
-            .map(ch => (
-              <ListItem button>{ch}</ListItem>
-            ))}
-        </List>
+            {/* Testing suggestions with query */}
+            {query
+              .split('')
+              .sort(() => 0.5 - Math.random())
+              .slice(
+                Math.floor(Math.random() * process.env.MAX_SUGGESTIONS),
+                process.env.MAX_SUGGESTIONS
+              )
+              .map(ch => (
+                <ListItem button>{ch}</ListItem>
+              ))}
+          </List>
+        </div>
+        <BoxContainer />
       </div>
     );
   }
