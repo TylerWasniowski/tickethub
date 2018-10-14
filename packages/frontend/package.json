@@ -26,7 +26,7 @@
     "react-hot-loader": "^4.3.11",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^4.3.1",
-    "style-loader": "^0.23.0",
+    "style-loader": "^0.23.1",
     "title-case": "^2.1.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.1",
