@@ -15,6 +15,7 @@ class Home extends React.Component {
     this.getSuggestionComponents = this.getSuggestionComponents.bind(this);
     this.getTicketComponents = this.getTicketComponents.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
   }
 
@@ -46,6 +47,10 @@ class Home extends React.Component {
     this.setState({ query: event.target.value });
   }
 
+  handleKeyPress(event) {
+    if (event.key === 'Enter') this.handleSearch();
+  }
+
   handleSearch() {
     const { query } = this.state;
 
@@ -63,6 +68,7 @@ class Home extends React.Component {
               className="searchbar"
               placeholder="Search TicketHub"
               onChange={this.handleQueryChange}
+              onKeyPress={this.handleKeyPress}
             />
             <IconButton className="search-button" onClick={this.handleSearch}>
               <SearchIcon />
