@@ -12,23 +12,48 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
+    this.getSuggestionComponents = this.getSuggestionComponents.bind(this);
+    this.getTicketComponents = this.getTicketComponents.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   state: {
     query: string,
     suggestions: Array<string>,
+    tickets: Array<string>,
   } = {
     query: '',
     suggestions: [],
+    tickets: [],
   };
+
+  getSuggestionComponents() {
+    const { suggestions } = this.state;
+
+    return suggestions
+      .slice(0, process.env.MAX_SUGGESTIONS)
+      .map(suggestion => <ListItem button>{suggestion}</ListItem>);
+  }
+
+  getTicketComponents() {
+    const { tickets } = this.state;
+
+    return tickets.map(ticket => <ListItem>{ticket}</ListItem>);
+  }
 
   handleQueryChange(event) {
     this.setState({ query: event.target.value });
   }
 
+  handleSearch() {
+    const { query } = this.state;
+
+    this.setState({ tickets: query.split(' ') });
+  }
+
   render() {
-    const { query, suggestions } = this.state;
+    const { query, tickets } = this.state;
 
     return (
       <div className="home">
@@ -39,18 +64,12 @@ class Home extends React.Component {
               placeholder="Search TicketHub"
               onChange={this.handleQueryChange}
             />
-            <IconButton className="search-button">
+            <IconButton className="search-button" onClick={this.handleSearch}>
               <SearchIcon />
             </IconButton>
           </div>
           <List className="search-suggestions">
-            {/* {suggestions
-            .slice(0, process.env.MAX_SUGGESTIONS)
-            .map(suggestion => (
-              <ListItem button>
-                {suggestion}
-              </ListItem>
-            ))} */}
+            {this.getSuggestionComponents()}
 
             {/* Testing suggestions with query */}
             {query
@@ -65,7 +84,11 @@ class Home extends React.Component {
               ))}
           </List>
         </div>
-        <BoxContainer />
+        <BoxContainer
+          className={tickets.length && tickets[0] !== '' ? '' : 'hide'}
+        >
+          <List>{this.getTicketComponents()}</List>
+        </BoxContainer>
       </div>
     );
   }
