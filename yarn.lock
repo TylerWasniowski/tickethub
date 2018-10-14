@@ -12325,10 +12325,10 @@ write-file-atomic@^2.0.0, write-file-atomic@^2.1.0, write-file-atomic@^2.3.0:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-write-file-webpack-plugin@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/write-file-webpack-plugin/-/write-file-webpack-plugin-4.4.0.tgz#344e1551156e015c759d455a0b002c3b54bcad2e"
-  integrity sha512-NcfhBlPbG8yb/3eUkYGuAyNj8P7W227HL9cXcGp0jUp+JnL3CgPlPtY30c0yl3CIbJEW7OfBU90bxHO2v9fQoA==
+write-file-webpack-plugin@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/write-file-webpack-plugin/-/write-file-webpack-plugin-4.4.1.tgz#abd309129f10a9d4f429a8901eb4c19f4f9cf28e"
+  integrity sha512-PuYlu2TZqF/Rkdk3Ri6hiofz+6HQAVkH55VpJ75axQXU2m6cS5jvbgwcJe+vwbgJTLhiX0O7GAPMbgO5DMZEiA==
   dependencies:
     chalk "^2.4.0"
     debug "^3.1.0"

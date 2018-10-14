@@ -36,7 +36,7 @@
     "webpack-dashboard": "^2.0.0",
     "webpack-dev-server": "^3.1.9",
     "webpack-merge": "^4.1.4",
-    "write-file-webpack-plugin": "^4.4.0"
+    "write-file-webpack-plugin": "^4.4.1"
   },
   "productName": "TicketHub"
 }
