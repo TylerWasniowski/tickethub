@@ -4,18 +4,11 @@ import request from 'request';
 
 const router = express.Router();
 
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USERNAME,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE
-// });
-
 const connection = mysql.createConnection({
-  host: '35.233.153.166',
-  user: 'root',
-  password: 'group3cs160',
-  database: 'tickethub',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 let buyerAddress = '';
@@ -46,7 +39,7 @@ connection.query(
 // Get time it takes based on addresses of buyer and seller.
 // The 'howlong' variable is a string. Need to convert to integer if needs calculation.
 router.get('/', (req, res, next) => {
-  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${buyerAddress}&destinations=${sellerAddress}&key=AIzaSyDDR8pPeZGu-l3DK0MKC-TeyWVNZjXHfWw`;
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${buyerAddress}&destinations=${sellerAddress}&key=YOUR-API-KEY`;
   request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       const data = JSON.parse(body, true);
