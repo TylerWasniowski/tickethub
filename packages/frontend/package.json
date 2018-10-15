@@ -11,7 +11,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@material-ui/core": "^3.1.2",
+    "@material-ui/core": "^3.2.1",
     "@material-ui/icons": "^3.0.1",
     "babel-loader": "^8.0.4",
     "classnames": "^2.2.6",
@@ -26,17 +26,17 @@
     "react-hot-loader": "^4.3.11",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^4.3.1",
-    "style-loader": "^0.23.0",
+    "style-loader": "^0.23.1",
     "title-case": "^2.1.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
-    "url-loader": "^1.1.1",
-    "webpack": "^4.19.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.20.2",
     "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-cli": "^3.1.0",
+    "webpack-cli": "^3.1.2",
     "webpack-dashboard": "^2.0.0",
-    "webpack-dev-server": "^3.1.8",
+    "webpack-dev-server": "^3.1.9",
     "webpack-merge": "^4.1.4",
-    "write-file-webpack-plugin": "^4.4.0"
+    "write-file-webpack-plugin": "^4.4.1"
   },
   "productName": "TicketHub"
 }
