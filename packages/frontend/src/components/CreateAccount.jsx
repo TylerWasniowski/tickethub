@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
 import type { Node } from 'react';
-import { hot } from 'react-hot-loader';
+
+import BoxContainer from './BoxContainer';
 
 const CreateAccount = (): Node => (
-  <div>
+  <BoxContainer>
     <h1>Create an Account</h1>
     <form action="createaccount/submit" method="post">
       <br />
@@ -36,7 +37,7 @@ const CreateAccount = (): Node => (
       <button type="submit">Submit</button>
       <br />
     </form>
-  </div>
+  </BoxContainer>
 );
 
 export default CreateAccount;
