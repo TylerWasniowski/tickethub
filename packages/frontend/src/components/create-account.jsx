@@ -1,4 +1,5 @@
 // @flow
+import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
 import { hot } from 'react-hot-loader';
@@ -6,31 +7,26 @@ import { hot } from 'react-hot-loader';
 const CreateAccount = (): Node => (
   <div>
     <h1>Create an Account</h1>
-    <form action="createaccount/submit" method="post">
+    <form action="/createaccount/submit" method="post">
       <br />
       <p>
-        Name 
-        {' '}
+        Name
         <input type="text" name="name" />
       </p>
       <p>
-        Username 
-        {' '}
+        Username
         <input type="text" name="username" />
       </p>
       <p>
-        Email 
-        {' '}
+        Email
         <input type="text" name="email" />
       </p>
       <p>
-        Password 
-        {' '}
+        Password
         <input type="password" name="password" />
       </p>
       <p>
-        Re-enter 
-        {' '}
+        Re-enter
         <input type="password" name="password2" />
       </p>
       <button type="submit">Submit</button>
@@ -39,4 +35,4 @@ const CreateAccount = (): Node => (
   </div>
 );
 
-export default CreateAccount;
+export default hot(module)(CreateAccount);
