@@ -9,19 +9,29 @@ const CreateAccount = (): Node => (
     <form action="createaccount/submit" method="post">
       <br />
       <p>
-        Name <input type="text" name="name" />
+        Name 
+        {' '}
+        <input type="text" name="name" />
       </p>
       <p>
-        Username <input type="text" name="username" />
+        Username 
+        {' '}
+        <input type="text" name="username" />
       </p>
       <p>
-        Email <input type="text" name="email" />
+        Email 
+        {' '}
+        <input type="text" name="email" />
       </p>
       <p>
-        Password <input type="password" name="password" />
+        Password 
+        {' '}
+        <input type="password" name="password" />
       </p>
       <p>
-        Re-enter <input type="password" name="password2" />
+        Re-enter 
+        {' '}
+        <input type="password" name="password2" />
       </p>
       <button type="submit">Submit</button>
       <br />
