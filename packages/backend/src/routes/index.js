@@ -43,7 +43,7 @@ router.post('/account/submit', (req, res, next) => {
 // TODO: Move to other route file
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
-  res.render('/login');
+  res.send('logged out');
 });
 
 router.get('/ticket/:id', (req, res, next) => {
