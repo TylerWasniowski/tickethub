@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
-import BoxContainer from './BoxContainer';
 
 class Home extends React.Component {
   constructor(props) {
@@ -109,11 +109,13 @@ class Home extends React.Component {
             {this.getSuggestionComponents()}
           </List>
         </div>
-        <BoxContainer
-          className={tickets.length && tickets[0] !== '' ? '' : 'hide'}
+        <Paper
+          className={`box-container ${
+            tickets.length && tickets[0] !== '' ? '' : 'hide'
+          }`}
         >
           <List>{this.getTicketComponents()}</List>
-        </BoxContainer>
+        </Paper>
       </div>
     );
   }
