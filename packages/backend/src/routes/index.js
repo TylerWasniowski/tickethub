@@ -43,7 +43,24 @@ router.post('/account/submit', (req, res, next) => {
 // TODO: Move to other route file
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
-  res.redirect('login');
+  res.render('/login');
+});
+
+router.get('/ticket/:id', (req, res, next) => {
+  connection.query(
+    'SELECT * FROM events WHERE id = ?',
+    req.params.id,
+    (error, results, fields) => {
+      if (error) throw error;
+
+      console.log(results);
+
+      if (!results.length) {
+        res.send('Ticket does not exist');
+      }
+      res.send(results[0]);
+    }
+  );
 });
 
 export default router;
