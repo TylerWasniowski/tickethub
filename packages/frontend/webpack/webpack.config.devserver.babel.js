@@ -19,6 +19,7 @@ export default function(env, argv) {
     ],
 
     devServer: {
+      port,
       https: false,
       open: true,
       openPage: '../',
@@ -27,7 +28,6 @@ export default function(env, argv) {
       stats: 'errors-only',
       publicPath: '/bundles',
       lazy: false,
-      port,
       hot: true,
       historyApiFallback: false,
       inline: false,
