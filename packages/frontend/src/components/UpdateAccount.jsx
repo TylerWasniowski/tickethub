@@ -1,10 +1,11 @@
 // @flow
-import '../styles/global.css';
 import React from 'react';
 import type { Node } from 'react';
 
+import Paper from '@material-ui/core/Paper';
+
 const UpdateAccount = (): Node => (
-  <div>
+  <Paper class="box-container">
     <h1>Update Account</h1>
     <form action="/account/submit" method="post">
       <br />
@@ -27,7 +28,7 @@ const UpdateAccount = (): Node => (
       <button type="submit">Submit</button>
       <br />
     </form>
-  </div>
+  </Paper>
 );
 
 export default UpdateAccount;

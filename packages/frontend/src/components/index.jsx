@@ -6,7 +6,6 @@ import { hot } from 'react-hot-loader';
 import { HashRouter as Router, Route, Link } from 'react-router-dom';
 
 // Material-ui
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -130,6 +129,7 @@ class Dashboard extends React.Component<Props> {
 
   render() {
     const { classes } = this.props;
+    const { open } = this.state;
 
     return (
       <React.Fragment>
@@ -137,22 +137,16 @@ class Dashboard extends React.Component<Props> {
         <div className={classes.root}>
           <AppBar
             position="absolute"
-            className={classNames(
-              classes.appBar,
-              this.state.open && classes.appBarShift
-            )}
+            className={classNames(classes.appBar, open && classes.appBarShift)}
           >
-            <Toolbar
-              disableGutters={!this.state.open}
-              className={classes.toolbar}
-            >
+            <Toolbar disableGutters={!open} className={classes.toolbar}>
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
                 onClick={this.handleDrawerOpen}
                 className={classNames(
                   classes.menuButton,
-                  this.state.open && classes.menuButtonHidden
+                  open && classes.menuButtonHidden
                 )}
               >
                 <MenuIcon />
@@ -178,10 +172,10 @@ class Dashboard extends React.Component<Props> {
             classes={{
               paper: classNames(
                 classes.drawerPaper,
-                !this.state.open && classes.drawerPaperClose
+                !open && classes.drawerPaperClose
               ),
             }}
-            open={this.state.open}
+            open={open}
           >
             <div className={classes.toolbarIcon}>
               <IconButton onClick={this.handleDrawerClose}>
@@ -194,12 +188,12 @@ class Dashboard extends React.Component<Props> {
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Router>
-              <div>
+              <React.Fragment>
                 <Route exact path={HomeRoute} component={Home} />
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />
-              </div>
+              </React.Fragment>
             </Router>
           </main>
         </div>
