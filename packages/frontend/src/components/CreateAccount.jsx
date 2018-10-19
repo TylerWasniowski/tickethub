@@ -2,42 +2,32 @@
 import React from 'react';
 import type { Node } from 'react';
 
-import BoxContainer from './BoxContainer';
+import Paper from '@material-ui/core/Paper';
 
 const CreateAccount = (): Node => (
-  <BoxContainer>
+  <Paper class="box-container">
     <h1>Create an Account</h1>
     <form action="createaccount/submit" method="post">
       <br />
       <p>
-        Name 
-        {' '}
-        <input type="text" name="name" />
+        Name <input type="text" name="name" />
       </p>
       <p>
-        Username 
-        {' '}
-        <input type="text" name="username" />
+        Username <input type="text" name="username" />
       </p>
       <p>
-        Email 
-        {' '}
-        <input type="text" name="email" />
+        Email <input type="text" name="email" />
       </p>
       <p>
-        Password 
-        {' '}
-        <input type="password" name="password" />
+        Password <input type="password" name="password" />
       </p>
       <p>
-        Re-enter 
-        {' '}
-        <input type="password" name="password2" />
+        Re-enter <input type="password" name="password2" />
       </p>
       <button type="submit">Submit</button>
       <br />
     </form>
-  </BoxContainer>
+  </Paper>
 );
 
 export default CreateAccount;

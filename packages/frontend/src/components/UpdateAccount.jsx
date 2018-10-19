@@ -2,10 +2,10 @@
 import React from 'react';
 import type { Node } from 'react';
 
-import BoxContainer from './BoxContainer';
+import Paper from '@material-ui/core/Paper';
 
 const UpdateAccount = (): Node => (
-  <BoxContainer>
+  <Paper class="box-container">
     <h1>Update Account</h1>
     <form action="/account/submit" method="post">
       <br />
@@ -28,7 +28,7 @@ const UpdateAccount = (): Node => (
       <button type="submit">Submit</button>
       <br />
     </form>
-  </BoxContainer>
+  </Paper>
 );
 
 export default UpdateAccount;
