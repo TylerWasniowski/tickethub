@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 const CreateAccount = (): Node => (
   <Paper class="box-container">
     <h1>Create an Account</h1>
-    <form action="createaccount/submit" method="post">
+    <form action="create-account/submit" method="post">
       <br />
       <p>
         Name <input type="text" name="name" />

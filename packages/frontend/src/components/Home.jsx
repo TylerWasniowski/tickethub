@@ -58,19 +58,17 @@ class Home extends React.Component {
   }
 
   updateSuggestions() {
-    const { query } = this.state;
+    const home = this;
+    const { query } = home.state;
 
-    // Only for testing suggestions.
-    // TODO: Make call to backend for suggestions
-    this.setState({
-      suggestions: query
-        .split('')
-        .sort(() => 0.5 - Math.random())
-        .slice(
-          Math.floor(Math.random() * process.env.MAX_SUGGESTIONS),
-          process.env.MAX_SUGGESTIONS
-        ),
-    });
+    if (query) {
+      fetch(`search/suggestions/${query}`)
+        .then(res => res.json())
+        .then(suggestions => home.setState({ suggestions }))
+        .catch(alert);
+    } else {
+      home.setState({ suggestions: [] });
+    }
   }
 
   handleQueryChange(event) {
