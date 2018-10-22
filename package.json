@@ -19,9 +19,6 @@
     "start": "yarn workspace tickethub-backend start",
     "test": "jest"
   },
-  "dependencies": {
-    "request": "^2.88.0"
-  },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",

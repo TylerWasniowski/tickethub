@@ -13,7 +13,7 @@ import usersRouter from './routes/users';
 // import homeRouter from './routes/home';
 import createaccountRouter from './routes/createaccount';
 import loginRouter from './routes/login';
-import distanceRouter from './lib/distanceMatrix';
+import checkoutRouter from './routes/checkout';
 
 const port = process.env.PORT || 2000;
 
@@ -44,7 +44,7 @@ process.on('unhandledRejection', err => {
   // app.use('/home', homeRouter);
   app.use('/createaccount', createaccountRouter);
   app.use('/login', loginRouter);
-  app.use('/distance', distanceRouter);
+  app.use('/checkout', checkoutRouter);
 
   // wait until the app starts
   await promisify(app.listen).bind(app)(port);

@@ -1,53 +1,42 @@
-import express from 'express';
-import mysql from 'mysql';
-import request from 'request';
+import distance from 'google-distance-matrix';
 
-const router = express.Router();
+async function deliveryBy(buyerAddress, sellerAddress) {
+  const origins = [buyerAddress];
+  const destinations = [sellerAddress];
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
+  distance.key('YOUR-API-KEY');
+  distance.units('imperial');
+  distance.mode('driving');
 
-let buyerAddress = '';
-let sellerAddress = '';
-
-// Retrieve address from buyer with id=1.
-// When login integrate with this function, id would be retrived from username and password
-connection.query(
-  'SELECT * FROM users WHERE id = ?',
-  1,
-  (error, results, fields) => {
-    if (error) throw error;
-    buyerAddress += results[0].address;
-  }
-);
-
-// Retrieve address from sellers with id=2.
-// When login integrate with this function, id would be retrived from username and password
-connection.query(
-  'SELECT * FROM sellers WHERE id = ?',
-  2,
-  (error, results, fields) => {
-    if (error) throw error;
-    sellerAddress += results[0].address;
-  }
-);
-
-// Get time it takes based on addresses of buyer and seller.
-// The 'howlong' variable is a string. Need to convert to integer if needs calculation.
-router.get('/', (req, res, next) => {
-  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${buyerAddress}&destinations=${sellerAddress}&key=YOUR-API-KEY`;
-  request(url, (error, response, body) => {
-    if (!error && response.statusCode === 200) {
-      const data = JSON.parse(body, true);
-      const rowStr = JSON.stringify(data.rows);
-      const howlong = rowStr.split(':')[6].split(',')[0];
-      res.send(howlong);
-    }
+  const durations = await new Promise((resolve, reject) => {
+    distance.matrix(origins, destinations, (err, dura) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(dura);
+      }
+    });
   });
-});
 
-export default router;
+  if (!durations) {
+    throw new Error('no duration');
+  }
+
+  if (durations.status === 'OK') {
+    for (let i = 0; i < origins.length; i += 1) {
+      for (let j = 0; j < destinations.length; j += 1) {
+        const origin = durations.origin_addresses[i];
+        const destination = durations.destination_addresses[j];
+        if (durations.rows[0].elements[j].status === 'OK') {
+          const duration = durations.rows[i].elements[j].duration.text;
+          return duration;
+        }
+        return `${destination} is not reachable by land from ${origin}`;
+      }
+    }
+    return 'result was not found in the above loops';
+  }
+  return 'status is not ok';
+}
+
+export default deliveryBy;
