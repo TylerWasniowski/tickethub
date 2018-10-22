@@ -4,11 +4,6 @@ import db from '../lib/database';
 
 const router = express.Router();
 
-// TODOD: Move to frontend
-router.get('/', (req, res, next) => {
-  res.render('createaccount');
-});
-
 router.post('/submit', (req, res, next) => {
   const ret = {
     name: req.body.name,
