@@ -3,13 +3,15 @@ import db from '../lib/database';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/suggestions/:query', (req, res, next) => {
   db.query(
-    `SELECT Name FROM events WHERE Name LIKE${db.escape(`${req.query.name}%`)}`,
+    `SELECT Name FROM events WHERE Name LIKE${db.escape(
+      `${req.params.query}%`
+    )}`,
     (error, results, fields) => {
       if (error) throw error;
 
-      res.json(results);
+      res.json(results.map(event => event.Name));
     }
   );
 });
