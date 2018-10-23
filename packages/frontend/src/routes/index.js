@@ -2,6 +2,9 @@
 
 export const HomeRoute: string = '/';
 
+export const SearchSuggestionsRoute: string => string = query =>
+  `search/suggestions/${query}`;
+
 export const LoginRoute: string = '/login';
 export const LoginSubmitRoute: string = '/login/submit';
 
