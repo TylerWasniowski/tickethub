@@ -30,10 +30,14 @@ class Home extends React.Component {
     query: string,
     suggestions: Array<string>,
     tickets: Array<string>,
+    id: number,
+    suggestionsId: number,
   } = {
     query: '',
     suggestions: [],
     tickets: [],
+    id: 0,
+    suggestionsId: 0,
   };
 
   getSuggestionComponents(): Array<Node> {
@@ -47,10 +51,10 @@ class Home extends React.Component {
   }
 
   handleSuggestion(suggestion) {
-    this.setState({ query: suggestion }, () => {
-      this.handleSearch();
-      this.updateSuggestions();
-    });
+    this.handleQueryChange(
+      { target: { value: suggestion } },
+      this.handleSearch
+    );
   }
 
   getTicketComponents(): Array<Node> {
@@ -59,22 +63,31 @@ class Home extends React.Component {
     return tickets.map(ticket => <ListItem>{ticket}</ListItem>);
   }
 
-  updateSuggestions() {
-    const home = this;
-    const { query } = home.state;
+  async updateSuggestions() {
+    const { query, id } = this.state;
 
+    let suggestions;
     if (query) {
-      fetch(SearchSuggestionsRoute(query))
+      suggestions = await fetch(SearchSuggestionsRoute(query))
         .then(res => res.json())
-        .then(suggestions => home.setState({ suggestions }))
         .catch(alert);
     } else {
-      home.setState({ suggestions: [] });
+      suggestions = [];
     }
+
+    // Check if suggestions are more recent than old suggestions
+    const { suggestionsId } = this.state;
+    if (id > suggestionsId) this.setState({ suggestions, suggestionsId: id });
   }
 
-  handleQueryChange(event) {
-    this.setState({ query: event.target.value }, this.updateSuggestions);
+  handleQueryChange(event, callback) {
+    const { id } = this.state;
+    this.setState({ query: event.target.value }, () => {
+      this.setState({ id: id + 1 }, () => {
+        if (callback) callback();
+        this.updateSuggestions();
+      });
+    });
   }
 
   handleKeyPress(event) {
