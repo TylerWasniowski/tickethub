@@ -9,6 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
 
+import { SearchSuggestionsRoute } from '../routes';
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ class Home extends React.Component {
     const { query } = home.state;
 
     if (query) {
-      fetch(`search/suggestions/${query}`)
+      fetch(SearchSuggestionsRoute(query))
         .then(res => res.json())
         .then(suggestions => home.setState({ suggestions }))
         .catch(alert);

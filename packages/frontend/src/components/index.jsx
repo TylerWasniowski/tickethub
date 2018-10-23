@@ -32,7 +32,7 @@ import {
   LoginRoute,
   CreateAccountRoute,
   UpdateAccountRoute,
-} from './routes';
+} from '../routes';
 
 const drawerWidth = 240;
 
