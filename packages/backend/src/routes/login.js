@@ -47,25 +47,29 @@ router.post('/submit', (req, res, next) => {
   //   }
   // );
 
-  db.query(
-    'SELECT * FROM users WHERE username = ?',
-    username,
-    (error, results, fields) => {
-      if (error) throw error;
+  // db.query(
+  //   `SELECT Name FROM events WHERE Name LIKE ${db.escape(
+  //     `%${username}%`
+  //   )}`,
+  //   (error, results, fields) => {
+  //     if (error) throw error;
 
-      if (results.length === 0) res.send('WRONG USERNAME OR PASSWORD!');
+  //     if (results.length === 0) res.send('WRONG USERNAME OR PASSWORD!');
 
-      if (results[0].username.toLowerCase() !== username.toLowerCase())
-        res.send('WRONG USERNAME!');
+  //     if (results[0].username.toLowerCase() !== username.toLowerCase())
+  //       res.send('WRONG USERNAME!');
 
-      bcrypt.compare(password, results[0].password, (err, response) => {
-        if (response) {
-          req.session.success = true;
-          req.session.username = results[0].username;
-        } else res.send('WRONG PASSWORD!');
-      });
-    }
-  );
+  //     bcrypt.compare(password, results[0].password, (err, response) => {
+  //       if (response) {
+  //         req.session.success = true;
+  //         req.session.username = results[0].username;
+  //         res.send('LOGIN SUCCESSFUL');
+  //       } else res.send('WRONG PASSWORD!');
+  //     });
+  //   }
+  // );
+
+  res.json({ user: username, pass: password, some: 'blah' });
 });
 
 export default router;
