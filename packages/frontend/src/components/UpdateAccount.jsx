@@ -4,10 +4,12 @@ import type { Node } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
+import { UpdateAccountSubmitRoute } from '../routes';
+
 const UpdateAccount = (): Node => (
   <Paper class="box-container">
     <h1>Update Account</h1>
-    <form action="/account/submit" method="post">
+    <form action={UpdateAccountSubmitRoute} method="post">
       <br />
       <p>
         Name
