@@ -4,12 +4,12 @@ import type { Node } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { CreateAccountRoute } from '../routes';
+import { CreateAccountSubmitRoute } from '../routes';
 
 const CreateAccount = (): Node => (
   <Paper class="box-container">
     <h1>Create an Account</h1>
-    <form action={CreateAccountRoute} method="post">
+    <form action={CreateAccountSubmitRoute} method="post">
       <br />
       <p>
         Name <input type="text" name="name" />
