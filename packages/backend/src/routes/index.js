@@ -1,14 +1,7 @@
 import express from 'express';
-import mysql from 'mysql';
+import db from '../lib/database';
 
 const router = express.Router();
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
 
 // TODO: Add to frontend
 // router.get('/account',function (req, res, next) {
@@ -29,7 +22,7 @@ router.post('/account/submit', (req, res, next) => {
     res.send('not logged in');
   }
 
-  connection.query(
+  db.query(
     'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
     [item.name, item.email, item.password, req.session.username],
     (error, results, fields) => {
@@ -47,7 +40,7 @@ router.get('/logout', (req, res, next) => {
 });
 
 router.get('/ticket/:id', (req, res, next) => {
-  connection.query(
+  db.query(
     'SELECT * FROM events WHERE id = ?',
     req.params.id,
     (error, results, fields) => {
