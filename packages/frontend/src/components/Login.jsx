@@ -12,6 +12,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 
+import { LoginSubmitRoute } from '../routes';
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +45,7 @@ class Login extends React.Component {
 
     console.log(event);
 
-    fetch('/login/submit', {
+    fetch(LoginSubmitRoute, {
       headers: {
         'Content-Type': 'application/json',
       },
