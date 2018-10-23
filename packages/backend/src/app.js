@@ -16,8 +16,6 @@ import loginRouter from './routes/login';
 import checkOut from './routes/checkOut';
 import searchRouter from './routes/search';
 
-// const port = process.env.PORT || 3000;
-
 const port = process.env.PORT || 2000;
 
 process.on('unhandledRejection', err => {
