@@ -1,6 +1,13 @@
 {
-  "extends": ["config:base", ":preserveSemverRanges"],
+  "extends": ["config:base"],
   "assignees": ["tylerwasniowski"],
+
+  "devDependencies": {
+    "rangeStrategy": "bump"
+  },
+
+  "rangeStrategy": "bump",
+
   "packageRules": [
     {
       "paths": ["packages/frontend/**"],

@@ -1,41 +1,49 @@
-var express = require('express');
-var router = express.Router();
+import mysql from 'mysql';
+import express from 'express';
+import expressSession from 'express-session';
 
+const router = express.Router();
 
-var mongo = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/';
-
-
-router.get('/', function(req, res, next){
-    res.render('login', {});
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
-
-router.post('/submit',  function(req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
-
-    mongo.connect(url, function(err, db) {
-        var dbo = db.db('tickethub');
-        var query = { username: username, password: password};
-        dbo.collection('user-data').find(query).toArray(function(err, result) {
-            if (err) throw err;
-            console.log(result);
-            db.close();
-            console.log(result.length);
-
-            if (result.length == 1) {
-                req.session.success = true;
-                req.session.username = result[0].username;
-                req.session.name = result[0].name;
-                req.session.email = result[0].email;
-                res.redirect('/account');
-            }
-            else {
-                res.render('login', {error: 'invalid username or password'});
-            }
-        });
-    });
+router.get('/', (req, res, next) => {
+  res.render('login');
 });
 
-module.exports = router;
+router.post('/submit', (req, res, next) => {
+  // var username, password;
+  const { username, password } = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+
+  connection.query(
+    'SELECT * FROM users WHERE username = ?',
+    username,
+    (error, results, fields) => {
+      if (error) throw error;
+
+      // catch when result is empty
+      if (results.length === 0) {
+        res.send('WRONG USERNAME OR PASSWORD!');
+      } else if (
+        results[0].username.toLowerCase() === username.toLowerCase() &&
+        results[0].password === password
+      ) {
+        // connection.end();
+        req.session.success = true;
+        req.session.username = results[0].username;
+        res.redirect('/');
+      } else {
+        res.send('WRONG USERNAME OR PASSWORD!');
+      }
+    }
+  );
+});
+
+export default router;
