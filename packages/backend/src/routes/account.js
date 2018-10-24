@@ -1,33 +1,83 @@
-import mysql from 'mysql';
 import express from 'express';
-import expressSession from 'express-session';
 import bcrypt from 'bcrypt';
-import { type } from 'os';
 import db from '../lib/database';
 
 const router = express.Router();
 
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USERNAME,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE,
-// });
+router.post('/create-account/submit', (req, res, next) => {
+  // const ret = {
+  //   name: req.body.name,
+  //   username: req.body.username,
+  //   email: req.body.email,
+  //   password: req.body.password,
+  // };
 
-router.get('/', (req, res, next) => {
-  res.render('login');
+  // db.query('INSERT INTO users SET ?', ret, (error, results, fields) => {
+  //   if (error) throw error;
+  //   res.redirect('/');
+  // });
+
+  bcrypt.hash(
+    req.body.password,
+    parseInt(process.env.BCRYPT_SALT, 10),
+    (hashErr, hash) => {
+      if (hashErr) throw hashErr;
+
+      const ret = {
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        password: hash,
+      };
+
+      db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
+        if (err) throw err;
+        res.redirect('/');
+      });
+    }
+  );
 });
 
-router.post('/submit', (req, res, next) => {
-  // var username, password;
+router.post('/update/submit', (req, res, next) => {
+  const item = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+  };
+
+  console.log(item);
+
+  if (!req.session.success) {
+    res.send('not logged in');
+  }
+
+  db.query(
+    'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
+    [item.name, item.email, item.password, req.session.username],
+    (error, results, fields) => {
+      if (error) throw error;
+    }
+  );
+
+  res.redirect('/');
+});
+
+router.get('/logout', (req, res, next) => {
+  req.session.destroy();
+  res.send('logged out');
+});
+
+router.post('/login/submit', (req, res, next) => {
   const { username, password } = {
     username: req.body.username,
     password: req.body.password,
   };
 
+  console.log(username + password);
+
   // db.query(
   //   'SELECT * FROM users WHERE username = ?',
-  //   username,
+  //   [username],
   //   (error, results, fields) => {
   //     if (error) throw error;
 
@@ -74,18 +124,8 @@ router.post('/submit', (req, res, next) => {
           } else res.json('WRONG PASSWORD!');
         });
       }
-
-      // bcrypt.compare(password, results[0].password, (err, response) => {
-      //   if (response) {
-      //     req.session.success = true;
-      //     req.session.username = results[0].username;
-      //     res.json({msg: 'LOGIN SUCCESSFUL'});
-      //   } else res.send('WRONG PASSWORD!');
-      // });
     }
   );
-
-  // res.json({ user: username, pass: password, some: 'blah' });
 });
 
 export default router;
