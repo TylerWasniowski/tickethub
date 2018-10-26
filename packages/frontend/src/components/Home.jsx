@@ -81,13 +81,9 @@ class Home extends React.Component {
     if (query.trim()) {
       suggestions = await fetch(SearchSuggestionsRoute(query))
         .then(res => (res.ok ? res.json() : []))
-        .catch(err => {
-          console.log(err);
-          return [];
-        });
-    } else {
-      suggestions = [];
+        .catch(console.log);
     }
+    if (!suggestions) suggestions = [];
 
     // Check if suggestions are more recent than old suggestions
     const { suggestionsId } = this.state;
