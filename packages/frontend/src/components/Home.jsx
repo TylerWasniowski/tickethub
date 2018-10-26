@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
 
+import { error } from 'util';
 import { SearchSuggestionsRoute } from '../routes';
 
 class Home extends React.Component {
@@ -69,8 +70,11 @@ class Home extends React.Component {
     let suggestions;
     if (query) {
       suggestions = await fetch(SearchSuggestionsRoute(query))
-        .then(res => res.json())
-        .catch(alert);
+        .then(res => (res.ok ? res.json() : []))
+        .catch(err => {
+          console.log(err);
+          return [];
+        });
     } else {
       suggestions = [];
     }
