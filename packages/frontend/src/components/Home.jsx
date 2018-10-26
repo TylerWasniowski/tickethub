@@ -8,6 +8,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 import { SearchSuggestionsRoute } from '../routes';
 
@@ -60,14 +65,19 @@ class Home extends React.Component {
   getTicketComponents(): Array<Node> {
     const { tickets } = this.state;
 
-    return tickets.map(ticket => <ListItem>{ticket}</ListItem>);
+    return tickets.map(ticket => (
+      <TableRow hover>
+        <TableCell>{ticket}</TableCell>
+        <TableCell>$42.42</TableCell>
+      </TableRow>
+    ));
   }
 
   async updateSuggestions() {
     const { query, id } = this.state;
 
     let suggestions;
-    if (query) {
+    if (query.trim()) {
       suggestions = await fetch(SearchSuggestionsRoute(query))
         .then(res => res.json())
         .catch(alert);
@@ -127,7 +137,17 @@ class Home extends React.Component {
             tickets.length && tickets[0] !== '' ? '' : 'hide'
           }`}
         >
-          <List>{this.getTicketComponents()}</List>
+          <Paper className="table">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Seat</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{this.getTicketComponents()}</TableBody>
+            </Table>
+          </Paper>
         </Paper>
       </div>
     );
