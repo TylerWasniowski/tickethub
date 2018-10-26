@@ -9,9 +9,12 @@ router.get('/suggestions/:query', (req, res, next) => {
       `%${req.params.query}%`
     )}`,
     (error, results, fields) => {
-      if (error) throw error;
-
-      res.json(results.map(event => event.Name));
+      if (error) {
+        console.log(`Error contacting database: ${JSON.stringify(error)}`);
+        res.json(500, error);
+      } else {
+        res.json(results.map(event => event.Name));
+      }
     }
   );
 });

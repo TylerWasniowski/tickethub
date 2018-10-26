@@ -14,6 +14,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
+import { error } from 'util';
 import { SearchSuggestionsRoute } from '../routes';
 
 class Home extends React.Component {
@@ -79,8 +80,11 @@ class Home extends React.Component {
     let suggestions;
     if (query.trim()) {
       suggestions = await fetch(SearchSuggestionsRoute(query))
-        .then(res => res.json())
-        .catch(alert);
+        .then(res => (res.ok ? res.json() : []))
+        .catch(err => {
+          console.log(err);
+          return [];
+        });
     } else {
       suggestions = [];
     }
