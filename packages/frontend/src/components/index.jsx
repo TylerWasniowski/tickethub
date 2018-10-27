@@ -18,9 +18,11 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
+import PeopleIcon from '@material-ui/icons/People';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import { Icon } from '@material-ui/core';
 import ListItems from './ListItems';
 
 import Home from './Home';
@@ -160,6 +162,9 @@ class Dashboard extends React.Component<Props> {
               >
                 TicketHub
               </Typography>
+              <IconButton color="inherit">
+                <PeopleIcon />
+              </IconButton>
               <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
                   <NotificationsIcon />
