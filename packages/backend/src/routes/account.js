@@ -1,5 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
+import status from 'http-status';
 import db from '../lib/database';
 
 const router = express.Router();
@@ -20,7 +21,7 @@ router.post('/create-account/submit', (req, res, next) => {
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
         if (err) throw err;
-        res.redirect('/');
+        res.send(status.OK);
       });
     }
   );
@@ -47,7 +48,7 @@ router.post('/update/submit', (req, res, next) => {
     }
   );
 
-  res.redirect('/');
+  res.send(status.OK);
 });
 
 router.get('/logout', (req, res, next) => {
@@ -61,8 +62,6 @@ router.post('/login/submit', (req, res, next) => {
     password: req.body.password,
   };
 
-  console.log(username + password);
-
   db.query(
     'SELECT * FROM users WHERE username = ?',
     username,
@@ -73,7 +72,7 @@ router.post('/login/submit', (req, res, next) => {
         results.length === 0 ||
         results[0].username.toLowerCase() !== username.toLowerCase()
       )
-        res.json('WRONG USERNAME!');
+        res.send(status.NOT_ACCEPTABLE);
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {
           if (err) throw err;
@@ -81,8 +80,8 @@ router.post('/login/submit', (req, res, next) => {
           if (response) {
             req.session.success = true;
             req.session.username = results[0].username;
-            res.json('LOGIN SUCCESSFUL');
-          } else res.json('WRONG PASSWORD!');
+            res.send(status.OK);
+          } else res.send(status.NOT_ACCEPTABLE);
         });
       }
     }
