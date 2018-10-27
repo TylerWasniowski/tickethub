@@ -37,7 +37,8 @@ router.post('/update/submit', (req, res, next) => {
   console.log(item);
 
   if (!req.session.success) {
-    res.send('not logged in');
+    // res.send('not logged in');
+    res.send(status.IM_A_TEAPOT);
   }
 
   db.query(
@@ -53,7 +54,8 @@ router.post('/update/submit', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
-  res.send('logged out');
+  // res.send('logged out');
+  res.send(status.OK);
 });
 
 router.post('/login/submit', (req, res, next) => {
