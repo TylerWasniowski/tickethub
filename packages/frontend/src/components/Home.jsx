@@ -2,9 +2,12 @@
 import '../styles/home.css';
 import React from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 import Search from './Search';
 
@@ -24,7 +27,12 @@ class Home extends React.Component {
   getTicketComponents(): Array<Node> {
     const { tickets } = this.state;
 
-    return tickets.map(ticket => <ListItem>{ticket}</ListItem>);
+    return tickets.map(ticket => (
+      <TableRow hover>
+        <TableCell>{ticket}</TableCell>
+        <TableCell>$42.42</TableCell>
+      </TableRow>
+    ));
   }
 
   handleSearch(query) {
@@ -42,7 +50,17 @@ class Home extends React.Component {
             tickets.length && tickets[0] !== '' ? '' : 'hide'
           }`}
         >
-          <List>{this.getTicketComponents()}</List>
+          <Paper className="table">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Seat</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{this.getTicketComponents()}</TableBody>
+            </Table>
+          </Paper>
         </Paper>
       </div>
     );

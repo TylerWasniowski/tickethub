@@ -94,24 +94,22 @@ class Home extends React.Component<Props> {
     const { query } = this.state;
 
     return (
-      <div className="home">
-        <div className="search-container">
-          <div className="searchbar-container">
-            <input
-              className="searchbar"
-              placeholder="Search TicketHub"
-              onChange={this.handleQueryChange}
-              onKeyPress={this.handleKeyPress}
-              value={query}
-            />
-            <IconButton className="search-button" onClick={this.handleSearch}>
-              <SearchIcon />
-            </IconButton>
-          </div>
-          <List className="search-suggestions">
-            {this.getSuggestionComponents()}
-          </List>
+      <div className="search-container">
+        <div className="searchbar-container">
+          <input
+            className="searchbar"
+            placeholder="Search TicketHub"
+            onChange={this.handleQueryChange}
+            onKeyPress={this.handleKeyPress}
+            value={query}
+          />
+          <IconButton className="search-button" onClick={this.handleSearch}>
+            <SearchIcon />
+          </IconButton>
         </div>
+        <List className="search-suggestions">
+          {this.getSuggestionComponents()}
+        </List>
       </div>
     );
   }
