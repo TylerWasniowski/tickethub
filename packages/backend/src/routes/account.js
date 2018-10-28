@@ -1,20 +1,30 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
+import status from 'http-status';
 import db from '../lib/database';
 
 const router = express.Router();
 
 router.post('/create-account/submit', (req, res, next) => {
-  const ret = {
-    name: req.body.name,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  };
+  bcrypt.hash(
+    req.body.password,
+    parseInt(process.env.BCRYPT_SALT, 10),
+    (hashErr, hash) => {
+      if (hashErr) throw hashErr;
 
-  db.query('INSERT INTO users SET ?', ret, (error, results, fields) => {
-    if (error) throw error;
-    res.redirect('/');
-  });
+      const ret = {
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        password: hash,
+      };
+
+      db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
+        if (err) throw err;
+        res.send(status.OK);
+      });
+    }
+  );
 });
 
 router.post('/update/submit', (req, res, next) => {
@@ -27,7 +37,8 @@ router.post('/update/submit', (req, res, next) => {
   console.log(item);
 
   if (!req.session.success) {
-    res.send('not logged in');
+    // res.send('not logged in');
+    res.send(status.IM_A_TEAPOT);
   }
 
   db.query(
@@ -38,12 +49,13 @@ router.post('/update/submit', (req, res, next) => {
     }
   );
 
-  res.redirect('/');
+  res.send(status.OK);
 });
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
-  res.send('logged out');
+  // res.send('logged out');
+  res.send(status.OK);
 });
 
 router.post('/login/submit', (req, res, next) => {
@@ -52,27 +64,27 @@ router.post('/login/submit', (req, res, next) => {
     password: req.body.password,
   };
 
-  console.log(username + password);
-
   db.query(
     'SELECT * FROM users WHERE username = ?',
-    [username],
+    username,
     (error, results, fields) => {
       if (error) throw error;
 
-      // catch when result is empty
-      if (results.length === 0) {
-        res.send('WRONG USERNAME OR PASSWORD!');
-      } else if (
-        results[0].username.toLowerCase() === username.toLowerCase() &&
-        results[0].password === password
-      ) {
-        // connection.end();
-        req.session.success = true;
-        req.session.username = results[0].username;
-        res.redirect('/');
-      } else {
-        res.send('WRONG USERNAME OR PASSWORD!');
+      if (
+        results.length === 0 ||
+        results[0].username.toLowerCase() !== username.toLowerCase()
+      )
+        res.send(status.NOT_ACCEPTABLE);
+      else {
+        bcrypt.compare(password, results[0].password, (err, response) => {
+          if (err) throw err;
+
+          if (response) {
+            req.session.success = true;
+            req.session.username = results[0].username;
+            res.send(status.OK);
+          } else res.send(status.NOT_ACCEPTABLE);
+        });
       }
     }
   );
