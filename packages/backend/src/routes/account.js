@@ -10,7 +10,7 @@ router.post('/create-account/submit', (req, res, next) => {
     req.body.password,
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
-      if (hashErr) throw hashErr;
+      if (hashErr) res.send(hashErr);
 
       const ret = {
         name: req.body.name,
@@ -20,7 +20,7 @@ router.post('/create-account/submit', (req, res, next) => {
       };
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
-        if (err) throw err;
+        if (err) res.send(err);
         res.send(status.OK);
       });
     }
@@ -28,24 +28,30 @@ router.post('/create-account/submit', (req, res, next) => {
 });
 
 router.post('/update/submit', (req, res, next) => {
-  const item = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  };
-
-  console.log(item);
-
   if (!req.session.success) {
     // res.send('not logged in');
     res.send(status.IM_A_TEAPOT);
   }
 
-  db.query(
-    'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
-    [item.name, item.email, item.password, req.session.username],
-    (error, results, fields) => {
-      if (error) throw error;
+  bcrypt.hash(
+    req.body.password,
+    parseInt(process.env.BCRYPT_SALT, 10),
+    (hashErr, hash) => {
+      if (hashErr) res.send(status.INTERNAL_SERVER_ERROR);
+
+      const item = {
+        name: req.body.name,
+        email: req.body.email,
+        password: hash,
+      };
+
+      db.query(
+        'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
+        [item.name, item.email, item.password, req.session.username],
+        (error, results, fields) => {
+          if (error) res.send(status.INTERNAL_SERVER_ERROR);
+        }
+      );
     }
   );
 
@@ -68,7 +74,7 @@ router.post('/login/submit', (req, res, next) => {
     'SELECT * FROM users WHERE username = ?',
     username,
     (error, results, fields) => {
-      if (error) throw error;
+      if (error) res.send(status.INTERNAL_SERVER_ERROR);
 
       if (
         results.length === 0 ||
@@ -77,7 +83,7 @@ router.post('/login/submit', (req, res, next) => {
         res.send(status.NOT_ACCEPTABLE);
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {
-          if (err) throw err;
+          if (err) res.send(status.INTERNAL_SERVER_ERROR);
 
           if (response) {
             req.session.success = true;
