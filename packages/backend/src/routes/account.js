@@ -10,7 +10,7 @@ router.post('/create-account/submit', (req, res, next) => {
     req.body.password,
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
-      if (hashErr) res.send(hashErr);
+      if (hashErr) res.status(status.INTERNAL_SERVER_ERROR).json(hashErr);
 
       const ret = {
         name: req.body.name,
@@ -20,8 +20,8 @@ router.post('/create-account/submit', (req, res, next) => {
       };
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
-        if (err) res.send(err);
-        res.send(status.OK);
+        if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
+        res.status(status.OK).json();
       });
     }
   );
@@ -30,14 +30,14 @@ router.post('/create-account/submit', (req, res, next) => {
 router.post('/update/submit', (req, res, next) => {
   if (!req.session.success) {
     // res.send('not logged in');
-    res.send(status.IM_A_TEAPOT);
+    res.status(status.IM_A_TEAPOT).json();
   }
 
   bcrypt.hash(
     req.body.password,
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
-      if (hashErr) res.send(status.INTERNAL_SERVER_ERROR);
+      if (hashErr) res.status(status.INTERNAL_SERVER_ERROR).json();
 
       const item = {
         name: req.body.name,
@@ -49,19 +49,19 @@ router.post('/update/submit', (req, res, next) => {
         'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
         [item.name, item.email, item.password, req.session.username],
         (error, results, fields) => {
-          if (error) res.send(status.INTERNAL_SERVER_ERROR);
+          if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
         }
       );
     }
   );
 
-  res.send(status.OK);
+  res.status(status.OK).json();
 });
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
   // res.send('logged out');
-  res.send(status.OK);
+  res.status(status.OK).json();
 });
 
 router.post('/login/submit', (req, res, next) => {
@@ -74,16 +74,16 @@ router.post('/login/submit', (req, res, next) => {
     'SELECT * FROM users WHERE username = ?',
     username,
     (error, results, fields) => {
-      if (error) res.send(status.INTERNAL_SERVER_ERROR);
+      if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
       if (
         results.length === 0 ||
         results[0].username.toLowerCase() !== username.toLowerCase()
       )
-        res.send(status.NOT_ACCEPTABLE);
+        res.status(status.NOT_ACCEPTABLE).json();
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {
-          if (err) res.send(status.INTERNAL_SERVER_ERROR);
+          if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
 
           if (response) {
             req.session.success = true;
