@@ -28,26 +28,10 @@ router.post('/create-account/submit', (req, res, next) => {
 });
 
 router.post('/update/submit', (req, res, next) => {
-  // const item = {
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   password: req.body.password,
-  // };
-
-  // console.log(item);
-
   if (!req.session.success) {
     // res.send('not logged in');
     res.send(status.IM_A_TEAPOT);
   }
-
-  // db.query(
-  //   'UPDATE users SET name = ?, email = ?, password = ? WHERE username = ?',
-  //   [item.name, item.email, item.password, req.session.username],
-  //   (error, results, fields) => {
-  //     if (error) throw error;
-  //   }
-  // );
 
   bcrypt.hash(
     req.body.password,
