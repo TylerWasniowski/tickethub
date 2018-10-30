@@ -11,10 +11,9 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 // import ticketsRouter from './routes/tickets';
 // import homeRouter from './routes/home';
-import createAccountRouter from './routes/create-account';
-import loginRouter from './routes/login';
 import checkOutRouter from './routes/check-out';
 import sellTicketRouter from './routes/sell-ticket';
+import accountRouter from './routes/account';
 import searchRouter from './routes/search';
 
 const port = process.env.PORT || 2000;
@@ -44,9 +43,8 @@ process.on('unhandledRejection', err => {
   app.use('/users', usersRouter);
   // app.use('/tickets', ticketsRouter);
   // app.use('/home', homeRouter);
-  app.use('/create-account', createAccountRouter);
-  app.use('/login', loginRouter);
   app.use('/check-out', checkOutRouter);
+  app.use('/account', accountRouter);
   app.use('/search', searchRouter);
   app.use('/sell-ticket', sellTicketRouter);
 

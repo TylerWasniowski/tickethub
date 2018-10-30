@@ -37,3 +37,28 @@ main {
 .box-container.hide {
   top: 100%;
 }
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow-y: auto;
+
+  min-width: 250px;
+  width: 40%;
+  max-width: 626px;
+
+  padding: 10px 40px;
+}
+
+.form-title {
+  font-weight: 500;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+
+  letter-spacing: 0em;
+}
+
+.form-container .submit-button {
+  margin: 25px 0;
+}

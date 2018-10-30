@@ -17,6 +17,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "chalk": "^2.4.1",
     "cookie-parser": "~1.4.3",
     "debug": "~4.0.1",
@@ -25,6 +26,7 @@
     "express-session": "^1.15.6",
     "forever": "^0.15.3",
     "http-errors": "~1.7.1",
+    "http-status": "^1.2.0",
     "moment": "^2.22.2",
     "morgan": "~1.9.1",
     "mysql": "^2.16.0",
