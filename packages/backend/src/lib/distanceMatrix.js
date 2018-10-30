@@ -4,7 +4,7 @@ async function deliveryBy(buyerAddress, sellerAddress) {
   const origins = [buyerAddress];
   const destinations = [sellerAddress];
 
-  distance.key('YOUR-API-KEY');
+  distance.key(process.env.GOOGLE_API_KEY);
   distance.units('imperial');
   distance.mode('driving');
 
