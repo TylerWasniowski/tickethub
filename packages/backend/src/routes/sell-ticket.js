@@ -5,8 +5,13 @@ const router = express.Router();
 
 // function bankInfoExists(id) {
 //   db.query('SELECT email FROM Users WHERE Id = ?', 1, (error, results, fields) => {
-//     if(error) throw error;
-//     email = results[0].email; // just testing
+//     if(error) {
+//       console.log(`Error contacting database: ${JSON.stringify(error)}`);
+//       res.json(500, error);
+//     }
+//     else {
+//       email = results[0].email; // just testing
+//     }
 //   });
 // };
 
@@ -14,7 +19,7 @@ router.get('/check-email', (req, res, next) => {
   res.json('email'); // just testing
 });
 
-// bank info
+// bank info & ADDRESS
 // check if bank info exists using SELECT
 // if doesn't exist, ask for
 
@@ -25,7 +30,10 @@ router.post('/submit-bank', (req, res, next) => {
 
   // db.query('SELECT * FROM users WHERE username = ?', req.session.username, //?
   //   (error,results, fields) => {
-  //     if(error) throw error;
+  //     if(error) {
+  //       console.log(`Error contacting database: ${JSON.stringify(error)}`);
+  //       res.json(500, error);
+  //     }
   //     if(results) {
 
   //     }
@@ -49,7 +57,10 @@ router.post('/new-event', (req, res, next) => {
     'INSERT INTO events (eventName, dateTime, venue, city, details, artistName) SET ?',
     eventInfo,
     (error, results, fields) => {
-      if (error) throw error;
+      if (error) {
+        console.log(`Error contacting database: ${JSON.stringify(error)}`);
+        res.json(500, error);
+      }
     }
   );
 });
@@ -73,7 +84,10 @@ router.post('/submit-ticket', (req, res, next) => {
 
   // db.query('INSERT INTO ticket (sellUser, eventID, price, name, seat) SET sellUser=?, eventID=?, price=?,name=?,name=?,seat=?',
   //   [userID, eventID, ticketInfo.price, ticketInfo.eventName, ticketInfo.seat], (error, results, fields) => {
-  //     if (error) throw error;
+  //     if(error) {
+  //       console.log(`Error contacting database: ${JSON.stringify(error)}`);
+  //       res.json(500, error);
+  //     }
   //   }
   // );
 });
