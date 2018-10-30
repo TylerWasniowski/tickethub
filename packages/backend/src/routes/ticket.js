@@ -3,6 +3,23 @@ import db from '../lib/database';
 
 const router = express.Router();
 
+router.get('/:id', (req, res, next) => {
+  db.query(
+    'SELECT * FROM events WHERE id = ?',
+    req.params.id,
+    (error, results, fields) => {
+      if (error) throw error;
+
+      console.log(results);
+
+      if (!results.length) {
+        res.send('Ticket does not exist');
+      }
+      res.send(results[0]);
+    }
+  );
+});
+
 // function bankInfoExists(id) {
 //   db.query('SELECT email FROM Users WHERE Id = ?', 1, (error, results, fields) => {
 //     if(error) {
@@ -75,21 +92,25 @@ router.post('/new-event', (req, res, next) => {
 // };
 
 // ticket
-router.post('/submit-ticket', (req, res, next) => {
+router.post('/new/submit', (req, res, next) => {
   const ticketInfo = {
     price: req.body.price,
-    eventName: req.body.eventName,
+    eventId: req.body.eventId,
     seat: req.body.seat, // can be null, general seating
   };
 
-  // db.query('INSERT INTO ticket (sellUser, eventID, price, name, seat) SET sellUser=?, eventID=?, price=?,name=?,name=?,seat=?',
-  //   [userID, eventID, ticketInfo.price, ticketInfo.eventName, ticketInfo.seat], (error, results, fields) => {
-  //     if(error) {
-  //       console.log(`Error contacting database: ${JSON.stringify(error)}`);
-  //       res.json(500, error);
-  //     }
-  //   }
-  // );
+  db.query(
+    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
+    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
+    (error, results, fields) => {
+      if (error) {
+        console.log(`Error contacting database: ${JSON.stringify(error)}`);
+        res.json(500, error);
+      }
+
+      res.json('OK');
+    }
+  );
 });
 
 // leave ticketID blank, auto

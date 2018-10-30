@@ -12,7 +12,7 @@ import usersRouter from './routes/users';
 // import ticketsRouter from './routes/tickets';
 // import homeRouter from './routes/home';
 import checkOutRouter from './routes/check-out';
-import sellTicketRouter from './routes/sell-ticket';
+import ticketRouter from './routes/ticket';
 import accountRouter from './routes/account';
 import searchRouter from './routes/search';
 
@@ -46,7 +46,7 @@ process.on('unhandledRejection', err => {
   app.use('/check-out', checkOutRouter);
   app.use('/account', accountRouter);
   app.use('/search', searchRouter);
-  app.use('/sell-ticket', sellTicketRouter);
+  app.use('/ticket', ticketRouter);
 
   // wait until the app starts
   await promisify(app.listen).bind(app)(port);

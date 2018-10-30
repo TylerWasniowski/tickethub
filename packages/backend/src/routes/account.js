@@ -88,6 +88,7 @@ router.post('/login/submit', (req, res, next) => {
           if (response) {
             req.session.success = true;
             req.session.username = results[0].username;
+            req.session.id = results[0].Id;
             res.send(status.OK);
           } else res.send(status.NOT_ACCEPTABLE);
         });
