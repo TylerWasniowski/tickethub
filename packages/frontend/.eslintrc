@@ -28,6 +28,7 @@
     "no-console": 0,
     "no-magic-numbers": 0,
     "no-unused-vars": "warn",
+    "no-param-reassign": "warn",
     "quotes": [
       "error",
       "single",
