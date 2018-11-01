@@ -9,7 +9,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/submit', (req, res) => {
-  // var username, password;
   const { username, password } = {
     username: req.body.username,
     password: req.body.password,
