@@ -16,9 +16,8 @@ router.get('/', async (req, res) => {
     }
   }
 
+  // Check if session exists
   if (req.session && req.session.username) {
-    // Check if session exists
-
     // Retrieve seller id
     const selluserId = await new Promise((resolve, reject) => {
       db.query(
