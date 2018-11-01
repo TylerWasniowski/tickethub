@@ -1,22 +1,14 @@
-import mysql from 'mysql';
-
 import express from 'express';
+import db from '../lib/database';
 
 const router = express.Router();
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
-
 // TODOD: Move to frontend
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.send('createaccount');
 });
 
-router.post('/submit', (req, res, next) => {
+router.post('/submit', (req, res) => {
   const ret = {
     name: req.body.name,
     username: req.body.username,

@@ -1,52 +1,67 @@
 import express from 'express';
-import mysql from 'mysql';
-
+import db from '../lib/database';
 import deliveryBy from '../lib/distanceMatrix';
 
 const router = express.Router();
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
-
 let buyerAddress;
 let sellerAddress;
 
-// Retrieve address from buyer with id=1.
-// When login integrate with this function, id would be retrived from username and password
-connection.query(
-  'SELECT * FROM users WHERE id = ?',
-  1,
-  (error, results, fields) => {
-    if (error) throw error;
-    buyerAddress = [results[0].address];
-  }
-);
-
-// Retrieve address from sellers with id=2.
-// When login integrate with this function, id would be retrived from username and password
-connection.query(
-  'SELECT * FROM sellers WHERE id = ?',
-  2,
-  (error, results, fields) => {
-    if (error) throw error;
-    sellerAddress = [results[0].address];
-  }
-);
-
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res) => {
   async function run() {
     try {
-      res.send(await deliveryBy(buyerAddress, sellerAddress));
+      res.json(await deliveryBy(buyerAddress, sellerAddress));
     } catch (error) {
-      res.send(error);
+      res.json(error);
     }
   }
 
-  run();
+  if (req.session && req.session.username) {
+    // Check if session exists
+
+    // Retrieve seller id
+    const selluserId = await new Promise((resolve, reject) => {
+      db.query(
+        'SELECT * FROM tickets WHERE id = ?',
+        5, // [req.params.id],
+        (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results[0].sellUserId);
+          }
+        }
+      );
+    });
+
+    // Retrieve buyer's address from db using buyer's username
+    db.query(
+      'SELECT * FROM users WHERE  username = ?',
+      req.session.username,
+      (error, results) => {
+        if (error) throw error;
+        buyerAddress = [results[0].address];
+      }
+    );
+
+    if (!selluserId) {
+      throw new Error('no seller Id');
+    } else {
+      // Retrieve seller's address from db using ticket's info
+      db.query(
+        'SELECT * FROM users WHERE id = ?',
+        await selluserId,
+        (error, results) => {
+          if (error) throw error;
+          sellerAddress = [results[0].address];
+        }
+      );
+    }
+
+    run();
+  } else {
+    res.redirect('/login');
+  }
 });
 
 export default router;

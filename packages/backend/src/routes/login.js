@@ -1,31 +1,24 @@
-import mysql from 'mysql';
 import express from 'express';
 import expressSession from 'express-session';
+import db from '../lib/database';
 
 const router = express.Router();
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
-
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.render('login');
 });
 
-router.post('/submit', (req, res, next) => {
+router.post('/submit', (req, res) => {
   // var username, password;
   const { username, password } = {
     username: req.body.username,
     password: req.body.password,
   };
 
-  connection.query(
+  db.query(
     'SELECT * FROM users WHERE username = ?',
     username,
-    (error, results, fields) => {
+    (error, results) => {
       if (error) throw error;
 
       // catch when result is empty
@@ -35,7 +28,7 @@ router.post('/submit', (req, res, next) => {
         results[0].username.toLowerCase() === username.toLowerCase() &&
         results[0].password === password
       ) {
-        // connection.end();
+        // db.end();
         req.session.success = true;
         req.session.username = results[0].username;
         res.redirect('/');
