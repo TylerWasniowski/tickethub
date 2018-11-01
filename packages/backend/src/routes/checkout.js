@@ -7,7 +7,7 @@ const router = express.Router();
 let buyerAddress;
 let sellerAddress;
 
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   async function run() {
     try {
       res.json(await deliveryBy(buyerAddress, sellerAddress));
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     const selluserId = await new Promise((resolve, reject) => {
       db.query(
         'SELECT * FROM tickets WHERE id = ?',
-        5, // [req.params.id],
+        req.params.id,
         (error, results) => {
           if (error) {
             reject(error);
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
     );
 
     if (!selluserId) {
-      throw new Error('no seller Id');
+      throw new Error('No seller Id');
     } else {
       // Retrieve seller's address from db using ticket's info
       db.query(
