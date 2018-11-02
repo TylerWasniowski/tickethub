@@ -1,4 +1,5 @@
 import express from 'express';
+import db from '../lib/database';
 
 const router = express.Router();
 
@@ -7,15 +8,21 @@ const router = express.Router();
 //   res.render('account', {name : req.session.name, username : req.session.username, email : req.session.email, success : req.session.success,})
 // })
 
-// TODO: Move to it's own account routes file
-router.post('/account/submit', (req, res, next) => {
-  res.redirect('/account');
-});
+router.get('/ticket/:id', (req, res, next) => {
+  db.query(
+    'SELECT * FROM events WHERE id = ?',
+    req.params.id,
+    (error, results, fields) => {
+      if (error) throw error;
 
-// TODO: Move to other route file
-router.get('/logout', (req, res, next) => {
-  req.session.destroy();
-  res.redirect('login');
+      console.log(results);
+
+      if (!results.length) {
+        res.send('Ticket does not exist');
+      }
+      res.send(results[0]);
+    }
+  );
 });
 
 export default router;

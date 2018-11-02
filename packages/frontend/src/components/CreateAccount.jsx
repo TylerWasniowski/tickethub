@@ -1,32 +1,24 @@
 // @flow
 import React from 'react';
 import type { Node } from 'react';
-import { hot } from 'react-hot-loader';
+
+import Input from '@material-ui/core/Input';
+
+import { CreateAccountSubmitRoute } from '../routes';
+import SimpleForm from './SimpleForm';
 
 const CreateAccount = (): Node => (
-  <div>
-    <h1>Create an Account</h1>
-    <form action="createaccount/submit" method="post">
-      <br />
-      <p>
-        Name <input type="text" name="name" />
-      </p>
-      <p>
-        Username <input type="text" name="username" />
-      </p>
-      <p>
-        Email <input type="text" name="email" />
-      </p>
-      <p>
-        Password <input type="password" name="password" />
-      </p>
-      <p>
-        Re-enter <input type="password" name="password2" />
-      </p>
-      <button type="submit">Submit</button>
-      <br />
-    </form>
-  </div>
+  <SimpleForm
+    formName="Create Account"
+    submitText="Create"
+    submitRoute={CreateAccountSubmitRoute}
+  >
+    <Input id="username" autoComplete="username" required autoFocus />
+    <Input id="password" type="password" required />
+    <Input id="confirm-password" type="password" required />
+    <Input id="email" autoComplete="email" required />
+    <Input id="name" autoComplete="name" required />
+  </SimpleForm>
 );
 
 export default CreateAccount;
