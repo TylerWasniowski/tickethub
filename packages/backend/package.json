@@ -25,6 +25,7 @@
     "express": "~4.16.4",
     "express-session": "^1.15.6",
     "forever": "^0.15.3",
+    "google-distance-matrix": "^1.1.1",
     "http-errors": "~1.7.1",
     "http-status": "^1.2.0",
     "moment": "^2.22.2",
