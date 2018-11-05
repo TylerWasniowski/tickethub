@@ -18,13 +18,12 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
-import PeopleIcon from '@material-ui/icons/People';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import { Icon } from '@material-ui/core';
-import ListItems from './ListItems';
+import SidebarListItems from './SidebarListItems';
 
+import AccountMenu from './AccountMenu';
 import Home from './Home';
 import Login from './Login';
 import CreateAccount from './CreateAccount';
@@ -163,13 +162,11 @@ class Dashboard extends React.Component<Props> {
                 TicketHub
               </Typography>
               <IconButton color="inherit">
-                <PeopleIcon />
-              </IconButton>
-              <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+              <AccountMenu />
             </Toolbar>
           </AppBar>
           <Drawer
@@ -188,7 +185,7 @@ class Dashboard extends React.Component<Props> {
               </IconButton>
             </div>
             <Divider />
-            <List>{ListItems}</List>
+            <List>{SidebarListItems}</List>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />

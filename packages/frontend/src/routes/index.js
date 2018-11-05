@@ -3,10 +3,12 @@
 export const HomeRoute: string = '/';
 
 export const SearchSuggestionsRoute: string => string = query =>
-  `search/suggestions/${query}`;
+  `search/suggestions/${encodeURI(query)}`;
 
 export const LoginRoute: string = '/account/login';
 export const LoginSubmitRoute: string = '/account/login/submit';
+
+export const LogoutSubmitRoute: string = '/account/logout';
 
 export const CreateAccountRoute: string = '/account/create-account';
 export const CreateAccountSubmitRoute: string =

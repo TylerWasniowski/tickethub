@@ -60,7 +60,9 @@ router.post('/update/submit', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy();
-  // res.send('logged out');
+
+  res.cookie('email', '');
+  res.cookie('name', '');
   res.status(status.OK).json();
 });
 
@@ -87,7 +89,10 @@ router.post('/login/submit', (req, res, next) => {
 
           if (response) {
             req.session.success = true;
-            req.session.username = results[0].username;
+            req.session.username = username;
+
+            res.cookie('email', results[0].email);
+            res.cookie('name', results[0].name);
             res.status(status.OK).json();
           } else res.status(status.NOT_ACCEPTABLE).json();
         });
