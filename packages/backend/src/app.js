@@ -11,7 +11,7 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 // import ticketsRouter from './routes/tickets';
 // import homeRouter from './routes/home';
-import checkOutRouter from './routes/check-out';
+import checkoutRouter from './routes/checkout';
 import ticketRouter from './routes/ticket';
 import accountRouter from './routes/account';
 import searchRouter from './routes/search';
@@ -43,7 +43,7 @@ process.on('unhandledRejection', err => {
   app.use('/users', usersRouter);
   // app.use('/tickets', ticketsRouter);
   // app.use('/home', homeRouter);
-  app.use('/check-out', checkOutRouter);
+  app.use('/checkout', checkoutRouter);
   app.use('/account', accountRouter);
   app.use('/search', searchRouter);
   app.use('/ticket', ticketRouter);

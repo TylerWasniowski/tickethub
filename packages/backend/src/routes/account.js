@@ -70,25 +70,28 @@ router.post('/login/submit', (req, res, next) => {
     password: req.body.password,
   };
 
+  console.log(username);
+  console.log(password);
+  console.log();
+
   db.query(
     'SELECT * FROM users WHERE username = ?',
-    username,
+    [username],
     (error, results, fields) => {
-      if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+      if (error) throw error;
 
       if (
         results.length === 0 ||
         results[0].username.toLowerCase() !== username.toLowerCase()
       )
-        res.status(status.NOT_ACCEPTABLE).json();
+        res.send(status.NOT_ACCEPTABLE);
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {
-          if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
+          if (err) throw err;
 
           if (response) {
             req.session.success = true;
             req.session.username = results[0].username;
-            req.session.id = results[0].Id;
             res.send(status.OK);
           } else res.send(status.NOT_ACCEPTABLE);
         });
