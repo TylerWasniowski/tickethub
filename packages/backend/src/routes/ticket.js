@@ -24,29 +24,12 @@ router.get('/:id', (req, res, next) => {
   );
 });
 
-router.get('/email', (req, res, next) => {
-  db.query(
-    'SELECT email FROM Users WHERE Id = ?',
-    req.session.id,
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
-      }
-      if (!results.length) {
-        res.send('email does not exist');
-      }
-      res.send(results[0]);
-    }
-  );
-});
-
 // check if bank info exists using SELECT
 // if doesn't exist, ask for
 // call function - later, currently in check-out
 
-// choose from existing events or create new
-// new event
+// choose from existing events or create new event
+// not tested yet
 router.post('/new-event/submit', (req, res, next) => {
   const eventInfo = {
     eventName: req.body.eventName,

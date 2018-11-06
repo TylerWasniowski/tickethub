@@ -12,12 +12,11 @@ import usersRouter from './routes/users';
 // import ticketsRouter from './routes/tickets';
 // import homeRouter from './routes/home';
 import checkoutRouter from './routes/checkout';
-import ticketRouter from './routes/ticket';
 import accountRouter from './routes/account';
 import searchRouter from './routes/search';
+import ticketRouter from './routes/ticket';
 
 const port = process.env.PORT || 2000;
-
 process.on('unhandledRejection', err => {
   throw err;
 });
