@@ -42,7 +42,7 @@ class Checkout extends React.Component<Props> {
     fetch(TicketLockRoute(id), { method: 'POST' })
       .then(res => res.json())
       .then(lockedUntil => this.setState({ lockedUntil: moment(lockedUntil) }))
-      .then(_ => setInterval(this.updateTimeLeft, 1000))
+      .then(() => setInterval(this.updateTimeLeft, 1000))
       .catch(alert);
   }
 

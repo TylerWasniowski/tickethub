@@ -38,7 +38,7 @@ router.get('/:query', (req, res, next) => {
           });
         } else
           res.json({
-            name: results[0].name,
+            name: '',
             tickets: [],
           });
       } else {

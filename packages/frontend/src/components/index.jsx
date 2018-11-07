@@ -133,7 +133,6 @@ class Dashboard extends React.Component<Props> {
   render() {
     const { classes } = this.props;
     const { open } = this.state;
-    console.log(TicketCheckoutRoute(':id'));
 
     return (
       <React.Fragment>

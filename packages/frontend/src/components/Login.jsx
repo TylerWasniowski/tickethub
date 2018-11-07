@@ -17,7 +17,7 @@ const Login = (): Node => (
     submitText="Login"
     submitRoute={LoginSubmitRoute}
   >
-    <Input id="username" autoComplete="username" required autoFocus />
+    <Input id="email" autoComplete="email" required autoFocus />
     <Input
       id="password"
       autoComplete="current-password"

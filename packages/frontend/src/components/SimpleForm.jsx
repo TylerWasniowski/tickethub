@@ -48,7 +48,10 @@ class SimpleForm extends React.Component<Props> {
   }
 
   createFormComponent(input): FormControl {
-    const { id, required, value } = input.props;
+    const { id, required, defaultValue } = input.props;
+    const { inputValues } = this.state;
+
+    if (defaultValue) inputValues.set(id, defaultValue);
 
     return (
       <FormControl margin="normal" required={required} fullWidth>

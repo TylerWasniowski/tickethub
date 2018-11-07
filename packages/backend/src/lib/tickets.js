@@ -26,7 +26,6 @@ export async function lockTicket(id) {
     .add(LOCK_TIME_MINUTES, 'minutes')
     .utc();
 
-  console.log(lockedTimestamp);
   return dbQueryPromise('UPDATE tickets SET lockedUntil = ? WHERE id = ?', [
     lockedTimestamp,
     id,

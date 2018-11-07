@@ -5,11 +5,6 @@ import { lockTicket, hasTicket, getTicketInfo } from '../lib/tickets';
 
 const router = express.Router();
 
-// TODO: Add to frontend
-// router.get('/account',function (req, res, next) {
-//   res.render('account', {name : req.session.name, username : req.session.username, email : req.session.email, success : req.session.success,})
-// })
-
 router.get('/:id', (req, res, next) => {
   const id = hasTicket(req.session) ? req.session.ticketId : req.params.id;
   db.query(
