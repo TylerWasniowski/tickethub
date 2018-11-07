@@ -6,7 +6,7 @@ const router = express.Router();
 // get ticket
 router.get('/:id', (req, res, next) => {
   db.query(
-    'SELECT * FROM events WHERE id = ?',
+    'SELECT * FROM tickets WHERE id = ?',
     req.params.id,
     (error, results, fields) => {
       if (error) {
@@ -32,7 +32,7 @@ router.get('/:id', (req, res, next) => {
 // not tested yet
 router.post('/new-event/submit', (req, res, next) => {
   const eventInfo = {
-    eventName: req.body.eventName,
+    name: req.body.eventName,
     dateTime: req.body.dateTime,
     venue: req.body.vanue,
     city: req.body.city,
@@ -41,8 +41,15 @@ router.post('/new-event/submit', (req, res, next) => {
   };
 
   db.query(
-    'INSERT INTO events (eventName, dateTime, venue, city, details, artistName) SET ?',
-    eventInfo,
+    'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
+    [
+      eventInfo.name,
+      eventInfo.dateTime,
+      eventInfo.venue,
+      eventInfo.city,
+      eventInfo.details,
+      eventInfo.artistName,
+    ],
     (error, results, fields) => {
       if (error) {
         console.log(`Error contacting database: ${JSON.stringify(error)}`);
