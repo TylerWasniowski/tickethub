@@ -21,9 +21,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import ListItems from './ListItems';
+import SidebarListItems from './SidebarListItems';
 
+import AccountMenu from './AccountMenu';
 import Home from './Home';
+import Checkout from './Checkout';
 import Login from './Login';
 import CreateAccount from './CreateAccount';
 import UpdateAccount from './UpdateAccount';
@@ -32,6 +34,7 @@ import {
   LoginRoute,
   CreateAccountRoute,
   UpdateAccountRoute,
+  TicketCheckoutRoute,
 } from '../routes';
 
 const drawerWidth = 240;
@@ -130,6 +133,7 @@ class Dashboard extends React.Component<Props> {
   render() {
     const { classes } = this.props;
     const { open } = this.state;
+    console.log(TicketCheckoutRoute(':id'));
 
     return (
       <React.Fragment>
@@ -165,6 +169,7 @@ class Dashboard extends React.Component<Props> {
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+              <AccountMenu />
             </Toolbar>
           </AppBar>
           <Drawer
@@ -183,7 +188,7 @@ class Dashboard extends React.Component<Props> {
               </IconButton>
             </div>
             <Divider />
-            <List>{ListItems}</List>
+            <List>{SidebarListItems}</List>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
@@ -193,6 +198,7 @@ class Dashboard extends React.Component<Props> {
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />
+                <Route path={TicketCheckoutRoute()} component={Checkout} />
               </React.Fragment>
             </Router>
           </main>

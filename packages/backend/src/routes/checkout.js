@@ -4,6 +4,7 @@ import deliveryBy from '../lib/distanceMatrix';
 
 const router = express.Router();
 
+
 router.post('/buy/submit', (req, res, next) => {
   const ticketInfo = {
     boughtUserId: req.session.id, // check
@@ -62,6 +63,7 @@ router.post('/payment/submit', (req, res, next) => {
 });
 
 // delivery
+
 let buyerAddress;
 let sellerAddress;
 
