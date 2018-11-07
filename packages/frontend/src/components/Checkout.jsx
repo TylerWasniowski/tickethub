@@ -55,12 +55,12 @@ class Checkout extends React.Component<Props> {
 
   render() {
     const { match } = this.props;
-    const { id } = match.params;
+    const { event } = match.params;
     const { timeLeftDisplay } = this.state;
 
     return (
       <SimpleForm
-        formName={`Checkout Ticket ${id}`}
+        formName={`Checkout Ticket for ${event}`}
         submitText="Checkout"
         submitRoute={UpdateAccountSubmitRoute}
       >

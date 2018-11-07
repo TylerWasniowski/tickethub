@@ -7,8 +7,8 @@ export const SearchSuggestionsRoute: string => string = query =>
 export const SearchRoute: string => string = query =>
   `/search/${encodeURI(query || ':query')}`;
 
-export const TicketCheckoutRoute: string => string = id =>
-  `/ticket/checkout/${encodeURI(id || ':id')}`;
+export const TicketCheckoutRoute: string => string = (event, id) =>
+  `/ticket/checkout/${encodeURI(event || ':event')}/${encodeURI(id || ':id')}`;
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
 

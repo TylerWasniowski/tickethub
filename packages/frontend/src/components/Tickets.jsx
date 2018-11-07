@@ -5,6 +5,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -27,9 +28,13 @@ class Tickets extends React.Component<Props> {
   }
 
   state: {
+    event: string,
     tickets: Array<object>,
+    ticketsQuery: string,
   } = {
+    event: '',
     tickets: [],
+    ticketsQuery: '',
   };
 
   componentDidUpdate() {
@@ -41,12 +46,13 @@ class Tickets extends React.Component<Props> {
   updateTickets = memoize(query =>
     fetch(SearchRoute(query))
       .then(res => res.json())
-      .then(tickets => this.setState({ tickets }))
+      .then(res => this.setState({ event: res.event, tickets: res.tickets }))
+      .then(() => this.setState({ ticketsQuery: query }))
       .catch(alert)
   );
 
   getTicketComponents(): Array<Node> {
-    const { tickets } = this.state;
+    const { event, tickets } = this.state;
 
     return tickets.map(ticket => (
       <TableRow hover>
@@ -57,7 +63,7 @@ class Tickets extends React.Component<Props> {
         <TableCell>
           <Button
             fullWidth
-            href={`/#${TicketCheckoutRoute(ticket.id)}`}
+            href={`/#${TicketCheckoutRoute(event, ticket.id)}`}
             color="primary"
             className="buy-button"
             variant="contained"
@@ -70,20 +76,26 @@ class Tickets extends React.Component<Props> {
   }
 
   render(): Node {
-    return (
-      <Paper className="table">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Seat</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Buy</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{this.getTicketComponents()}</TableBody>
-        </Table>
-      </Paper>
-    );
+    const { query } = this.props;
+    const { ticketsQuery } = this.state;
+
+    if (ticketsQuery === query)
+      return (
+        <Paper className="table">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Seat</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Buy</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{this.getTicketComponents()}</TableBody>
+          </Table>
+        </Paper>
+      );
+
+    return <CircularProgress size={60} />;
   }
 }
 
