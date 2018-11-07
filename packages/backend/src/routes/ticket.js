@@ -1,7 +1,5 @@
 import express from 'express';
 
-import moment from 'moment';
-
 import db from '../lib/database';
 import { lockTicket, hasTicket, getTicketInfo } from '../lib/tickets';
 
@@ -34,7 +32,6 @@ router.post('/lock/:id', async (req, res, next) => {
     const { id } = req.params;
 
     const lockedUntil = await lockTicket(id);
-    console.log(lockedUntil);
     req.session.ticketId = id;
     req.session.lockedUntil = lockedUntil;
 

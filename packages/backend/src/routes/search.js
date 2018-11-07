@@ -23,15 +23,24 @@ router.get('/suggestions/:query', (req, res, next) => {
 
 router.get('/:query', (req, res, next) => {
   db.query(
-    `SELECT id FROM events WHERE
+    `SELECT name, id FROM events WHERE
       name LIKE ${db.escape(`%${req.params.query}%`)}
     `,
     async (error, results, fields) => {
       if (!error) {
         if (results.length) {
           const tickets = await getAvailableTickets(results[0].id);
-          res.json(tickets.map(getTicketInfo));
-        } else res.json([]);
+          const ticketInfo = tickets.map(getTicketInfo);
+
+          res.json({
+            event: results[0].name,
+            tickets: ticketInfo,
+          });
+        } else
+          res.json({
+            name: results[0].name,
+            tickets: [],
+          });
       } else {
         console.log(`Error contacting database: ${JSON.stringify(error)}`);
         res.json(500, error);

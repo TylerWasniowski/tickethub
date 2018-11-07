@@ -90,6 +90,7 @@ router.post('/login/submit', (req, res, next) => {
           if (response) {
             req.session.success = true;
             req.session.username = username;
+            req.session.userId = results[0].userId;
 
             res.cookie('email', results[0].email);
             res.cookie('name', results[0].name);

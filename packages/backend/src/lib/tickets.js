@@ -22,21 +22,25 @@ export async function lockTicket(id) {
   const lockedTimestamp = mysql.raw(
     `UTC_TIMESTAMP() + INTERVAL ${LOCK_TIME_MINUTES} MINUTE`
   );
-  const lockedMoment = moment.add(LOCK_TIME_MINUTES, 'minutes').utc();
+  const lockedMoment = moment()
+    .add(LOCK_TIME_MINUTES, 'minutes')
+    .utc();
 
   console.log(lockedTimestamp);
   return dbQueryPromise('UPDATE tickets SET lockedUntil = ? WHERE id = ?', [
     lockedTimestamp,
     id,
   ])
-    .then(() => lockedMoment)
+    .then(() => lockedMoment.format())
     .catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
 }
 
 export function hasTicket(session) {
-  return session.lockedUntil && moment.utc().isBefore(session.lockedUntil);
+  return (
+    session.lockedUntil && moment.utc().isBefore(moment(session.lockedUntil))
+  );
 }
 
 export function getTicketInfo(ticket) {
