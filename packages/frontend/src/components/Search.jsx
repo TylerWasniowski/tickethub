@@ -13,7 +13,7 @@ type Props = {
   onSearch: search => void,
 };
 
-class Home extends React.Component<Props> {
+class Search extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -121,4 +121,4 @@ class Home extends React.Component<Props> {
   }
 }
 
-export default Home;
+export default Search;

@@ -25,6 +25,7 @@ import SidebarListItems from './SidebarListItems';
 
 import AccountMenu from './AccountMenu';
 import Home from './Home';
+import Checkout from './Checkout';
 import Login from './Login';
 import CreateAccount from './CreateAccount';
 import UpdateAccount from './UpdateAccount';
@@ -33,6 +34,7 @@ import {
   LoginRoute,
   CreateAccountRoute,
   UpdateAccountRoute,
+  TicketCheckoutRoute,
 } from '../routes';
 
 const drawerWidth = 240;
@@ -131,6 +133,7 @@ class Dashboard extends React.Component<Props> {
   render() {
     const { classes } = this.props;
     const { open } = this.state;
+    console.log(TicketCheckoutRoute(':id'));
 
     return (
       <React.Fragment>
@@ -195,6 +198,7 @@ class Dashboard extends React.Component<Props> {
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />
+                <Route path={TicketCheckoutRoute()} component={Checkout} />
               </React.Fragment>
             </Router>
           </main>

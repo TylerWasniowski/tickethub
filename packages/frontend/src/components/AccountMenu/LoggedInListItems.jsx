@@ -10,7 +10,7 @@ const LoggedInListItems = (
   <div>
     <a href={`/#${UpdateAccountRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
-        <ListItemText primary="EditAccount" />
+        <ListItemText primary="Edit Account" />
       </ListItem>
     </a>
     <ListItem button onClick={() => fetch(LogoutSubmitRoute)}>

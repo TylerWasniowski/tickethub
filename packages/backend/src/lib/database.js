@@ -1,5 +1,4 @@
 import mysql from 'mysql';
-import assert from 'assert';
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -7,5 +6,13 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
 });
+
+export const dbQueryPromise = (sql, args) =>
+  new Promise((resolve, reject) => {
+    db.query(sql, args, (error, results) => {
+      if (error) return reject(error);
+      return resolve(results);
+    });
+  });
 
 export default db;
