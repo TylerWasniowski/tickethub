@@ -26,10 +26,9 @@ router.get('/:id', (req, res, next) => {
 
 // check if bank info exists using SELECT
 // if doesn't exist, ask for
-// call function - later, currently in check-out
 
-// choose from existing events or create new event
-// not tested yet
+// idea: choose from existing events or create new event
+
 router.post('/new-event/submit', (req, res, next) => {
   const eventInfo = {
     name: req.body.name,
