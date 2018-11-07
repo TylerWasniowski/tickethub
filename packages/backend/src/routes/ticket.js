@@ -29,6 +29,7 @@ router.get('/:id', (req, res, next) => {
 
 // idea: choose from existing events or create new event
 
+// new event
 router.post('/new-event/submit', (req, res, next) => {
   const eventInfo = {
     name: req.body.name,
