@@ -1,33 +1,9 @@
 import express from 'express';
-import db from '../lib/database';
 import moment from 'moment';
+import db from '../lib/database';
 import { lockTicket, hasTicket, getTicketInfo } from '../lib/tickets';
 
-
 const router = express.Router();
-
-// get ticket
-router.get('/:id', (req, res, next) => {
-  db.query(
-    'SELECT * FROM tickets WHERE id = ?',
-    req.params.id,
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
-      }
-
-      console.log(results);
-
-      if (!results.length) {
-        res.send('Ticket does not exist');
-      }
-      res.send(results[0]);
-    }
-  );
-});
-
-
 
 // TODO: Add to frontend
 // router.get('/account',function (req, res, next) {
@@ -49,7 +25,6 @@ router.get('/:id', (req, res, next) => {
     }
   );
 });
-
 
 // idea: choose from existing events or create new event
 // new event
@@ -110,10 +85,7 @@ router.get('/sale-charge/:price', (req, res, next) => {
   res.json(ret);
 });
 
-
 // delivery instructions?
-
-
 
 router.post('/lock/:id', async (req, res, next) => {
   if (hasTicket(req.session)) res.json(req.session.lockedUntil);
@@ -128,6 +100,5 @@ router.post('/lock/:id', async (req, res, next) => {
     res.json(lockedUntil);
   }
 });
-
 
 export default router;
