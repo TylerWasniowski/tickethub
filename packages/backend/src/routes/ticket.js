@@ -32,9 +32,9 @@ router.get('/:id', (req, res, next) => {
 // not tested yet
 router.post('/new-event/submit', (req, res, next) => {
   const eventInfo = {
-    name: req.body.eventName,
+    name: req.body.name,
     dateTime: req.body.dateTime,
-    venue: req.body.vanue,
+    venue: req.body.venue,
     city: req.body.city,
     details: req.body.details, // can be null
     artistName: req.body.artistName,
