@@ -72,6 +72,10 @@ router.post('/login/submit', (req, res, next) => {
     password: req.body.password,
   };
 
+  console.log(username);
+  console.log(password);
+  console.log();
+
   db.query(
     'SELECT * FROM users WHERE username = ?',
     username,
