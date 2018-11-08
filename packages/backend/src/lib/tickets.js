@@ -3,6 +3,21 @@ import mysql from 'mysql';
 
 import { dbQueryPromise } from './database';
 
+export function getTicketInfo(ticket) {
+  return {
+    id: ticket.id,
+    eventId: ticket.eventId,
+    seat: ticket.seat,
+    price: ticket.price,
+  };
+}
+
+export function hasTicket(session) {
+  return (
+    session.lockedUntil && moment.utc().isBefore(moment(session.lockedUntil))
+  );
+}
+
 export async function getAvailableTickets(eventId) {
   const currentTimestamp = mysql.raw('UTC_TIMESTAMP()');
   return dbQueryPromise(
@@ -15,6 +30,21 @@ export async function getAvailableTickets(eventId) {
   ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
+}
+
+export async function getTicket(id) {
+  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', id)
+    .then(results => {
+      if (!results.length) return 'Ticket does not exist';
+
+      return getTicketInfo(results[0]);
+    })
+    .catch(console.log);
+}
+
+export async function getAssignedTicket(session) {
+  if (!hasTicket(session)) return undefined;
+  return getTicket(session.ticketId);
 }
 
 export async function lockTicket(id) {
@@ -34,19 +64,4 @@ export async function lockTicket(id) {
     .catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
-}
-
-export function hasTicket(session) {
-  return (
-    session.lockedUntil && moment.utc().isBefore(moment(session.lockedUntil))
-  );
-}
-
-export function getTicketInfo(ticket) {
-  return {
-    id: ticket.id,
-    eventId: ticket.eventId,
-    seat: ticket.seat,
-    price: ticket.price,
-  };
 }

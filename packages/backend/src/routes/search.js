@@ -1,6 +1,6 @@
 import express from 'express';
 
-import db from '../lib/database';
+import { db } from '../lib/database';
 import { getAvailableTickets, getTicketInfo } from '../lib/tickets';
 
 const router = express.Router();

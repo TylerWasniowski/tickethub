@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import status from 'http-status';
-import db from '../lib/database';
+import { db } from '../lib/database';
 
 const router = express.Router();
 
@@ -78,7 +78,6 @@ router.post('/login/submit', (req, res, next) => {
     password: req.body.password,
   };
 
-  console.log(email);
   db.query(
     'SELECT * FROM users WHERE email = ?',
     email,

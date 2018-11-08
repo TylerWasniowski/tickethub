@@ -1,16 +1,17 @@
 // @flow
 import '../styles/checkout.css';
 import React from 'react';
-import type { Node } from 'react';
 
+import Cookies from 'js-cookie';
 import moment from 'moment';
 
 import Input from '@material-ui/core/Input';
 
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import { TicketLockRoute, UpdateAccountSubmitRoute } from '../routes';
 
 import SimpleForm from './SimpleForm';
+import TotalPrice from './TotalPrice';
 
 type Props = {
   match: object,
@@ -55,7 +56,7 @@ class Checkout extends React.Component<Props> {
 
   render() {
     const { match } = this.props;
-    const { event } = match.params;
+    const { event, id } = match.params;
     const { timeLeftDisplay } = this.state;
 
     return (
@@ -69,12 +70,20 @@ class Checkout extends React.Component<Props> {
           variant="title"
           color="inherit"
           noWrap
-          className="timer form-title"
+          className="center form-title"
         >
           {timeLeftDisplay}
         </Typography>
-        <Input id="address" autoComplete="address" required />
-        <Input id="paymentInfo" required />
+        <Input id="cardNumber" required />
+        <Input id="expirationDate" required />
+        <Input id="securityCode" required />
+        <Input id="nameOnCard" required />
+        <Input
+          id="billingAddress"
+          defaultValue={Cookies.get('address')}
+          required
+        />
+        <TotalPrice id={id} />
       </SimpleForm>
     );
   }
