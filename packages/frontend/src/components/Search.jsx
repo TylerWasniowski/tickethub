@@ -13,7 +13,7 @@ type Props = {
   onSearch: search => void,
 };
 
-class Home extends React.Component<Props> {
+class Search extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -23,6 +23,8 @@ class Home extends React.Component<Props> {
 
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.updateQuery = this.updateQuery.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   state: {
@@ -37,12 +39,8 @@ class Home extends React.Component<Props> {
     lastUpdate: 0,
   };
 
-  handleSuggestionClick(suggestion) {
-    const { onSearch } = this.props;
-    this.handleQueryChange(
-      { target: { value: suggestion } },
-      onSearch(suggestion)
-    );
+  handleSuggestionClick(event) {
+    this.updateQuery(event.target.innerText, this.handleSearch);
   }
 
   async updateSuggestions() {
@@ -67,14 +65,22 @@ class Home extends React.Component<Props> {
     const { suggestions } = this.state;
 
     return suggestions.slice(0, process.env.MAX_SUGGESTIONS).map(suggestion => (
-      <ListItem onClick={() => this.handleSuggestionClick(suggestion)} button>
+      <ListItem onClick={this.handleSuggestionClick} button>
         <ListItemText>{suggestion}</ListItemText>
       </ListItem>
     ));
   }
 
-  handleQueryChange(event, callback) {
-    this.setState({ query: event.target.value }, () => {
+  handleQueryChange(event) {
+    this.updateQuery(event.target.value);
+  }
+
+  handleKeyPress(event) {
+    if (event.key === 'Enter') this.handleSearch();
+  }
+
+  updateQuery(query, callback) {
+    this.setState({ query }, () => {
       const { updateCount } = this.state;
       this.setState({ updateCount: updateCount + 1 }, () => {
         if (callback) callback();
@@ -83,11 +89,11 @@ class Home extends React.Component<Props> {
     });
   }
 
-  handleKeyPress(event) {
+  handleSearch() {
     const { onSearch } = this.props;
     const { query } = this.state;
 
-    if (event.key === 'Enter') onSearch(query);
+    onSearch(query);
   }
 
   render(): Node {
@@ -115,4 +121,4 @@ class Home extends React.Component<Props> {
   }
 }
 
-export default Home;
+export default Search;

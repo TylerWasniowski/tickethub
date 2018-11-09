@@ -8,13 +8,10 @@ import expressSession from 'express-session';
 import assets from 'tickethub-frontend';
 
 import indexRouter from './routes/index';
-import usersRouter from './routes/users';
-// import ticketsRouter from './routes/tickets';
-// import homeRouter from './routes/home';
-
 import accountRouter from './routes/account';
 import searchRouter from './routes/search';
 import checkoutRouter from './routes/checkout';
+import ticketRouter from './routes/ticket';
 
 const port = process.env.PORT || 2000;
 process.on('unhandledRejection', err => {
@@ -39,13 +36,10 @@ process.on('unhandledRejection', err => {
   // set API routes here
 
   app.use('/', indexRouter);
-  app.use('/users', usersRouter);
-  // app.use('/tickets', ticketsRouter);
-  // app.use('/home', homeRouter);
-
   app.use('/account', accountRouter);
   app.use('/search', searchRouter);
   app.use('/checkout', checkoutRouter);
+  app.use('/ticket', ticketRouter);
 
   // wait until the app starts
   await promisify(app.listen).bind(app)(port);

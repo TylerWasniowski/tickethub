@@ -2,6 +2,8 @@
 import React from 'react';
 import type { Node } from 'react';
 
+import Cookies from 'js-cookie';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
@@ -15,7 +17,7 @@ const Login = (): Node => (
     submitText="Login"
     submitRoute={LoginSubmitRoute}
   >
-    <Input id="username" autoComplete="username" required autoFocus />
+    <Input id="email" autoComplete="email" required autoFocus />
     <Input
       id="password"
       autoComplete="current-password"

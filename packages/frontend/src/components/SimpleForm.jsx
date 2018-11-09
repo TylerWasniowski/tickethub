@@ -14,6 +14,7 @@ type Props = {
   formName: string,
   submitText: string,
   submitRoute: string,
+  onSubmit?: any => void,
 
   children: React.Component | Array<React.Component>,
 };
@@ -47,7 +48,10 @@ class SimpleForm extends React.Component<Props> {
   }
 
   createFormComponent(input): FormControl {
-    const { id, required } = input.props;
+    const { id, required, defaultValue } = input.props;
+    const { inputValues } = this.state;
+
+    if (defaultValue) inputValues.set(id, defaultValue);
 
     return (
       <FormControl margin="normal" required={required} fullWidth>
@@ -66,7 +70,7 @@ class SimpleForm extends React.Component<Props> {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { submitRoute } = this.props;
+    const { onSubmit, submitRoute } = this.props;
     const { inputValues } = this.state;
 
     const body = {};
@@ -82,8 +86,7 @@ class SimpleForm extends React.Component<Props> {
       body: JSON.stringify(body),
     })
       .then(response => response.json())
-      .then(response => JSON.stringify(response))
-      .then(alert)
+      .then(onSubmit)
       .catch(console.log);
   }
 
@@ -112,5 +115,6 @@ class SimpleForm extends React.Component<Props> {
     );
   }
 }
+SimpleForm.defaultProps = { onSubmit: () => {} };
 
 export default SimpleForm;
