@@ -14,7 +14,7 @@ export async function buyerTransaction(buyerAcc, amount) {
      SET balance=balance-? 
      WHERE number=?`,
     [buyerCharge, buyerAcc]
-  ).thencatch(err =>
+  ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
 }
@@ -32,7 +32,7 @@ export async function sellerTransaction(sellerAcc, amount) {
      SET balance=balance+? 
      WHERE number=?`,
     [sellerPayment, sellerAcc]
-  ).thencatch(err =>
+  ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
 }
@@ -50,7 +50,7 @@ export async function tickethubPayment(amount) {
      SET balance=balance+? 
      WHERE number=?`,
     [tickethubPay, tickethubCard]
-  ).thencatch(err =>
+  ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
 }
