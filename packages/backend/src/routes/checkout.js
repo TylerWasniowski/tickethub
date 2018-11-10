@@ -1,9 +1,8 @@
 import express from 'express';
-import { dbQueryPromise } from '../lib/database';
+import { db, dbQueryPromise } from '../lib/database';
 import deliveryBy from '../lib/distanceMatrix';
 
 const router = express.Router();
-
 
 router.post('/buy/submit', (req, res, next) => {
   const ticketInfo = {
@@ -58,10 +57,11 @@ router.post('/payment/submit', (req, res, next) => {
         res.json(500, error);
       }
       res.json('OK');
+
+      // subtract from buyer, add to seller and admin bank
     }
   );
 });
-
 
 router.get('/:id', async (req, res) => {
   // Check if session exists
