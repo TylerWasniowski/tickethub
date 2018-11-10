@@ -1,6 +1,6 @@
 import express from 'express';
 
-import db from '../lib/database';
+import { db } from '../lib/database';
 import { getAvailableTickets, getTicketInfo } from '../lib/tickets';
 
 const router = express.Router();
@@ -38,7 +38,7 @@ router.get('/:query', (req, res, next) => {
           });
         } else
           res.json({
-            name: results[0].name,
+            name: '',
             tickets: [],
           });
       } else {

@@ -82,11 +82,12 @@ router.get('/:id', async (req, res) => {
       );
 
       const sellerAddressPromise = dbQueryPromise(
-        'SELECT * FROM users WHERE id = ?',
+        'SELECT address FROM users WHERE id = ?',
         sellerId
       );
 
       Promise.all([buyerAddressPromise, sellerAddressPromise])
+        .then(bothResults => bothResults.map(results => results[0].address))
         .then(addresses => deliveryBy(addresses[0], addresses[1]))
         .catch(console.log);
     }

@@ -42,7 +42,7 @@ class AccountMenu extends React.Component {
         </IconButton>
         <div className={`menu-arrow ${showMenu ? '' : 'hide'}`} />
         <List className={`menu ${showMenu ? '' : 'hide'}`}>
-          {Cookies.get('name') ? LoggedInListItems : LoggedOutListItems}
+          {Cookies.get('email') ? LoggedInListItems : LoggedOutListItems}
         </List>
       </div>
     );

@@ -13,11 +13,9 @@ const CreateAccount = (): Node => (
     submitText="Create"
     submitRoute={CreateAccountSubmitRoute}
   >
-    <Input id="username" autoComplete="username" required autoFocus />
+    <Input id="email" autoComplete="email" required />
     <Input id="password" type="password" required />
     <Input id="confirm-password" type="password" required />
-    <Input id="email" autoComplete="email" required />
-    <Input id="name" autoComplete="name" required />
   </SimpleForm>
 );
 
