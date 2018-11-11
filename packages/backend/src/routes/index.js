@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { checkCreditCard, validCreditCard } from '../lib/creditcard';
+import { ticketTransaction } from '../lib/bank';
 
 const router = express.Router();
 
@@ -20,6 +21,11 @@ router.post('/check/creditcard/', async (req, res, next) => {
 
   if (success) res.send('success');
   else res.send('false');
+});
+
+router.post('/check/', (req, res, next) => {
+  ticketTransaction(req.body.buyer, req.body.seller, req.body.amount);
+  res.send('OK');
 });
 
 export default router;
