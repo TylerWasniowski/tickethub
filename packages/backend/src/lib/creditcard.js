@@ -1,4 +1,4 @@
-import { dbQueryPromise } from './database';
+import { db, dbQueryPromise } from './database';
 
 // returns true or false if the credit card number is a valid credit card
 
@@ -30,16 +30,14 @@ export function validCreditCard(input) {
 }
 
 export async function checkCreditCard(number, name, cvv, exp) {
-  dbQueryPromise(
-    `SELECT * 
-     FROM credit_cards
-     WHERE number=? AND name=? AND cvv=? AND experation=?`,
+  return dbQueryPromise(
+    'SELECT * FROM credit_cards WHERE number=? AND name=? AND cvv=? AND expiration=?',
     [number, name, cvv, exp]
   )
     .then(results => {
-      if (!results) return 'Invalid Credit Card Info';
+      if (results.length === 1) return true;
 
-      return results[0].name;
+      return false;
     })
-    .catch(console.log('Error connecting to db'));
+    .catch(console.log);
 }
