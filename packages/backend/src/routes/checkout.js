@@ -1,33 +1,40 @@
 import express from 'express';
-import { db, dbQueryPromise } from '../lib/database';
-import deliveryBy from '../lib/distanceMatrix';
+import { db } from '../lib/database';
+import { getDurationAndDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
 router.post('/buy/submit', (req, res, next) => {
-  const ticketInfo = {
-    boughtUserId: req.session.id, // check
-    deliveryMethod: req.body.deliveryMethod,
-    address: req.body.address,
-    ticketId: req.body.ticketId,
-  };
+  if (req.session && req.session.userId) {
+    const ticketInfo = {
+      boughtUserId: req.session.id, // check
+      deliveryMethod: req.body.deliveryMethod,
+      address: req.body.address,
+      ticketId: req.body.ticketId,
+    };
 
-  db.query(
-    'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
-    [
-      ticketInfo.boughtUserId,
-      ticketInfo.deliveryMethod,
-      ticketInfo.address,
-      ticketInfo.ticketId,
-    ],
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
+    db.query(
+      'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
+      [
+        ticketInfo.boughtUserId,
+        ticketInfo.deliveryMethod,
+        ticketInfo.address,
+        ticketInfo.ticketId,
+      ],
+      (error, results, fields) => {
+        if (error) {
+          console.log(`Error contacting database: ${JSON.stringify(error)}`);
+          res.json(500, error);
+        } else res.json('OK');
       }
-      res.json('OK');
-    }
-  );
+    );
+
+    // Get Duration and Distance
+    const { duration, distance } = getDurationAndDistance(
+      ticketInfo.ticketId,
+      ticketInfo.boughtUserId
+    );
+  } else res.json(401, 'Error: Not logged in');
 });
 
 // not in database yet
@@ -61,35 +68,12 @@ router.post('/payment/submit', (req, res, next) => {
   );
 });
 
-router.get('/:id', async (req, res) => {
-  // Check if session exists
-  if (req.session && req.session.userId) {
-    const sellerId = dbQueryPromise(
-      'SELECT sellerId FROM tickets WHERE id = ?',
-      req.params.id
-    )
-      .then(results => results[0].sellerId)
-      .catch(console.log);
-
-    if (!sellerId) {
-      throw new Error('No seller Id');
-    } else {
-      const buyerAddressPromise = dbQueryPromise(
-        'SELECT address FROM users WHERE id = ?',
-        req.session.userId
-      );
-
-      const sellerAddressPromise = dbQueryPromise(
-        'SELECT address FROM users WHERE id = ?',
-        sellerId
-      );
-
-      Promise.all([buyerAddressPromise, sellerAddressPromise])
-        .then(bothResults => bothResults.map(results => results[0].address))
-        .then(addresses => deliveryBy(addresses[0], addresses[1]))
-        .catch(console.log);
-    }
-  } else res.json(401, 'Error: Not logged in');
-});
+// Get Duration and Distance
+// router.get('/:id', async (req, res) => {
+//   // Check if session exists
+//   if (req.session && req.session.userId) {
+//     return await getDurationAndDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
+//   } res.json(401, 'Error: Not logged in');
+// });
 
 export default router;

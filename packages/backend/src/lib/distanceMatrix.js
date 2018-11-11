@@ -1,6 +1,7 @@
 import distance from 'google-distance-matrix';
+import { dbQueryPromise } from './database';
 
-async function deliveryBy(buyerAddress, sellerAddress) {
+export async function deliveryBy(buyerAddress, sellerAddress) {
   const origins = [buyerAddress];
   const destinations = [sellerAddress];
 
@@ -29,14 +30,45 @@ async function deliveryBy(buyerAddress, sellerAddress) {
         const destination = durations.destination_addresses[j];
         if (durations.rows[0].elements[j].status === 'OK') {
           const duration = durations.rows[i].elements[j].duration.text;
-          return duration;
+          const dist = durations.rows[i].elements[j].distance.text;
+          return { duration, dist };
         }
         return `${destination} is not reachable by land from ${origin}`;
       }
     }
-    return 'result was not found in the above loops';
+    return console.log('result was not found in the above loops');
   }
-  return 'status is not ok';
+  return console.log('status is not ok');
 }
 
-export default deliveryBy;
+export function getDurationAndDistance(ticketid, userid) {
+  const buyerAddressPromise = dbQueryPromise(
+    'SELECT address FROM users WHERE id = ?',
+    userid
+  );
+
+  let sellerAddressPromise;
+
+  const sellerId = dbQueryPromise(
+    'SELECT sellerId FROM tickets WHERE id = ?',
+    ticketid
+  )
+    .then(results => results[0])
+    .catch(console.log);
+
+  if (!sellerId) {
+    throw new Error('No seller Id');
+  } else {
+    sellerAddressPromise = dbQueryPromise(
+      'SELECT address FROM users WHERE id = ?',
+      sellerId
+    );
+  }
+
+  Promise.all([buyerAddressPromise, sellerAddressPromise])
+    .then(bothResults => bothResults.map(results => results[0].address))
+    .then(addresses => deliveryBy(addresses[0], addresses[1]))
+    .catch(console.log);
+}
+
+export default getDurationAndDistance;
