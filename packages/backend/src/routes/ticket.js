@@ -1,5 +1,5 @@
 import express from 'express';
-import { db } from '../lib/database';
+import { db, dbQueryPromise } from '../lib/database';
 import {
   getAssignedTicket,
   lockTicket,
@@ -28,6 +28,19 @@ router.post('/new-event/submit', (req, res, next) => {
     artistName: req.body.artistName,
   };
 
+  /* dbQueryPromise(
+    'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
+    [
+      eventInfo.name,
+      eventInfo.dateTime,
+      eventInfo.venue,
+      eventInfo.city,
+      eventInfo.details,
+      eventInfo.artistName,
+    ]).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`));
+  */
+
   db.query(
     'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
     [
@@ -55,6 +68,12 @@ router.post('/new/submit', (req, res, next) => {
     eventId: req.body.eventId,
     seat: req.body.seat, // can be null, general seating
   };
+
+  /* dbQueryPromise(
+    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
+    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`));
+      */
 
   db.query(
     'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
