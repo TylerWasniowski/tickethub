@@ -69,12 +69,4 @@ router.post('/payment/submit', (req, res, next) => {
   );
 });
 
-// //Get Duration and Distance
-// router.get('/:id', async (req, res) => {
-//   // Check if session exists
-//   if (req.session && req.session.userId) {
-//     return await getDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
-//   } res.json(401, 'Error: Not logged in');
-// });
-
 export default router;
