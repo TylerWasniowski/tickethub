@@ -14,23 +14,27 @@ router.post('/buy/submit', (req, res, next) => {
     };
 
     db.query(
-      'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, available=0 WHERE id=?',
+      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
       [
         ticketInfo.boughtUserId,
         ticketInfo.deliveryMethod,
         // ticketInfo.address,
         ticketInfo.ticketId,
       ],
-      (error, results, fields) => {
+      async (error, results, fields) => {
         if (error) {
           console.log(`Error contacting database: ${JSON.stringify(error)}`);
           res.json(500, error);
-        } else res.json('OK');
+        } else {
+          // Get Distance
+          const distance = await getDistance(
+            ticketInfo.ticketId,
+            ticketInfo.boughtUserId
+          );
+          res.json(`The distance is: ${distance}`);
+        }
       }
     );
-
-    // Get Distance
-    const distance = getDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
   } else res.json(401, 'Error: Not logged in');
 });
 
@@ -65,11 +69,11 @@ router.post('/payment/submit', (req, res, next) => {
   );
 });
 
-// Get Duration and Distance
+// //Get Duration and Distance
 // router.get('/:id', async (req, res) => {
 //   // Check if session exists
 //   if (req.session && req.session.userId) {
-//     return await getDurationAndDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
+//     return await getDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
 //   } res.json(401, 'Error: Not logged in');
 // });
 

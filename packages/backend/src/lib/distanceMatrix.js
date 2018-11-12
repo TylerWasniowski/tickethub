@@ -36,9 +36,9 @@ export async function deliveryBy(buyerAddress, sellerAddress) {
         return `${destination} is not reachable by land from ${origin}`;
       }
     }
-    return console.log('result was not found in the above loops');
+    return 'result was not found in the above loops';
   }
-  return console.log('status is not ok');
+  return 'status is not ok';
 }
 
 export function getDistance(ticketid, userid) {
@@ -50,10 +50,10 @@ export function getDistance(ticketid, userid) {
   let sellerAddressPromise;
 
   const sellerId = dbQueryPromise(
-    'SELECT sellerId FROM tickets WHERE id = ?',
+    'SELECT * FROM tickets WHERE id = ?',
     ticketid
   )
-    .then(results => results[0])
+    .then(results => results[0].sellerId)
     .catch(console.log);
 
   if (!sellerId) {
