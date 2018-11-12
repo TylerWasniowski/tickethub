@@ -106,7 +106,7 @@ router.post('/login/submit', (req, res, next) => {
   );
 });
 
-router.post('/creditcard/submit', async (req, res, next) => {
+router.post('/payment-info/submit', async (req, res, next) => {
   const { number, name, cvv, exp } = {
     number: req.body.number,
     name: req.body.name,
