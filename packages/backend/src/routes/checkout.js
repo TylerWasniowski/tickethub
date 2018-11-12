@@ -1,6 +1,6 @@
 import express from 'express';
 import { db } from '../lib/database';
-import { getDurationAndDistance } from '../lib/distanceMatrix';
+import { getDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
@@ -9,30 +9,31 @@ router.post('/buy/submit', (req, res, next) => {
     const ticketInfo = {
       boughtUserId: req.session.id, // check
       deliveryMethod: req.body.deliveryMethod,
-      address: req.body.address,
+      // address: req.body.address,
       ticketId: req.body.ticketId,
     };
 
     db.query(
-      'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
+      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
       [
         ticketInfo.boughtUserId,
         ticketInfo.deliveryMethod,
-        ticketInfo.address,
+        // ticketInfo.address,
         ticketInfo.ticketId,
       ],
-      (error, results, fields) => {
+      async (error, results, fields) => {
         if (error) {
           console.log(`Error contacting database: ${JSON.stringify(error)}`);
           res.json(500, error);
-        } else res.json('OK');
+        } else {
+          // Get Distance
+          const distance = await getDistance(
+            ticketInfo.ticketId,
+            ticketInfo.boughtUserId
+          );
+          res.json(`The distance is: ${distance}`);
+        }
       }
-    );
-
-    // Get Duration and Distance
-    const { duration, distance } = getDurationAndDistance(
-      ticketInfo.ticketId,
-      ticketInfo.boughtUserId
     );
   } else res.json(401, 'Error: Not logged in');
 });
@@ -67,13 +68,5 @@ router.post('/payment/submit', (req, res, next) => {
     }
   );
 });
-
-// Get Duration and Distance
-// router.get('/:id', async (req, res) => {
-//   // Check if session exists
-//   if (req.session && req.session.userId) {
-//     return await getDurationAndDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
-//   } res.json(401, 'Error: Not logged in');
-// });
 
 export default router;
