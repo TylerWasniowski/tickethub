@@ -1,6 +1,6 @@
 import express from 'express';
 import { db } from '../lib/database';
-import { getDurationAndDistance } from '../lib/distanceMatrix';
+import { getDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
@@ -9,16 +9,16 @@ router.post('/buy/submit', (req, res, next) => {
     const ticketInfo = {
       boughtUserId: req.session.id, // check
       deliveryMethod: req.body.deliveryMethod,
-      address: req.body.address,
+      // address: req.body.address,
       ticketId: req.body.ticketId,
     };
 
     db.query(
-      'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
+      'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, available=0 WHERE id=?',
       [
         ticketInfo.boughtUserId,
         ticketInfo.deliveryMethod,
-        ticketInfo.address,
+        // ticketInfo.address,
         ticketInfo.ticketId,
       ],
       (error, results, fields) => {
@@ -29,11 +29,8 @@ router.post('/buy/submit', (req, res, next) => {
       }
     );
 
-    // Get Duration and Distance
-    const { duration, distance } = getDurationAndDistance(
-      ticketInfo.ticketId,
-      ticketInfo.boughtUserId
-    );
+    // Get Distance
+    const distance = getDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
   } else res.json(401, 'Error: Not logged in');
 });
 
