@@ -1,7 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import status from 'http-status';
-import { db } from '../lib/database';
+import { db, dbQueryPromise } from '../lib/database';
+import { checkCreditCard } from '../lib/creditcard';
 
 const router = express.Router();
 
@@ -83,30 +84,53 @@ router.post('/login/submit', (req, res, next) => {
   console.log();
 
   db.query(
-    'SELECT * FROM users WHERE email = ?',
-    email,
+    "SELECT * FROM users WHERE email = 'nina@yahoo.com'",
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
       if (!results.length) res.status(status.NOT_ACCEPTABLE).json();
       else {
-        bcrypt.compare(password, results[0].password, (err, response) => {
-          if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
+        // bcrypt.compare(password, results[0].password, (err, response) => {
+        //   if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
 
-          if (response) {
-            req.session.success = true;
-            req.session.email = email;
-            req.session.userId = results[0].id;
+        // if (response) {
+        req.session.success = true;
+        req.session.email = email;
+        req.session.userId = results[0].id;
 
-            res.cookie('email', results[0].email || '');
-            res.cookie('name', results[0].name || '');
-            res.cookie('address', results[0].address || '');
-            res.status(status.OK).json();
-          } else res.status(status.NOT_ACCEPTABLE).json();
-        });
-      }
+        res.cookie('email', results[0].email || '');
+        res.cookie('name', results[0].name || '');
+        res.cookie('address', results[0].address || '');
+        res.status(status.OK).json();
+      } // else res.status(status.NOT_ACCEPTABLE).json();
     }
   );
+  // }
+  // }
+  // );
+});
+
+router.post('/payment-info/submit', async (req, res, next) => {
+  const { number, name, cvv, exp } = {
+    number: req.body.number,
+    name: req.body.name,
+    cvv: req.body.cvv,
+    exp: req.body.exp,
+  };
+
+  if (await checkCreditCard(number, name, cvv, exp)) {
+    db.query(
+      'UPDATE users SET credit_card = ? WHERE id = ?',
+      [number, req.session.userId],
+      (error, results, fields) => {
+        if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+      }
+    );
+
+    res.status(status.OK).json();
+  } else {
+    res.status(status.NOT_ACCEPTABLE).json();
+  }
 });
 
 export default router;

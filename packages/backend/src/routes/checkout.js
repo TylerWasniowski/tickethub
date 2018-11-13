@@ -1,7 +1,7 @@
 import express from 'express';
 import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
-import deliveryBy from '../lib/distanceMatrix';
+import { deliveryBy } from '../lib/distanceMatrix';
 import { ticketTransaction } from '../lib/bank';
 import {
   checkCreditCard,
