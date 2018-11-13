@@ -3,7 +3,11 @@ import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
 import deliveryBy from '../lib/distanceMatrix';
 import ticketTransaction from '../lib/bank';
-import { checkCreditCard, validCreditCard } from '../lib/creditcard';
+import {
+  checkCreditCard,
+  validCreditCard,
+  getCardNumber,
+} from '../lib/creditcard';
 
 const router = express.Router();
 
@@ -39,7 +43,7 @@ router.post('/billing/submit', (req, res, next) => {
     cvv: req.body.cvv,
     name: req.body.name,
     address: req.body.address,
-    // ticketId: //need for sellerAcc and price for ticket
+    ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
   };
 
   // check if existing
@@ -64,7 +68,28 @@ router.post('/billing/submit', (req, res, next) => {
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
 
-    //    ticketTransaction(paymentInfo.number, sellerAcc, amount); // need to get sellerAcc and amount
+    // get sellerAcc and price of ticket
+    let sellerId = 0;
+    let amount = 0;
+    let sellerAcc = 0;
+
+    db.query(
+      'SELECT * FROM tickets WHERE id = ?',
+      paymentInfo.ticketId,
+      (error, results, fields) => {
+        if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+
+        if (!results.length) res.status(status.NOT_ACCEPTABLE).json();
+        else {
+          [sellerId] = results[0].sellerId;
+          [amount] = results[0].price;
+        }
+      }
+    );
+
+    sellerAcc = getCardNumber(sellerId);
+
+    ticketTransaction(paymentInfo.number, sellerAcc, amount);
   } else {
     res.status(status.BAD_REQUEST).json();
   }

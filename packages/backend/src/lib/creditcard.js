@@ -15,6 +15,18 @@ export function cardExists(sessionId) {
     .catch(console.log('Error connecting to db'));
 }
 
+// returns credit card number of user when given userid
+export function getCardNumber(userId) {
+  dbQueryPromise(
+    `SELECT * 
+     FROM users
+     WHERE id=?`,
+    [userId]
+  )
+    .then(results => results[0].cardId)
+    .catch(console.log('Error connecting to db'));
+}
+
 // returns true or false if the credit card number is a valid credit card
 
 export function validCreditCard(input) {
