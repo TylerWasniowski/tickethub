@@ -1,7 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import status from 'http-status';
-import { db } from '../lib/database';
+import { db, dbQueryPromise } from '../lib/database';
+import { checkCreditCard } from '../lib/creditcard';
 
 const router = express.Router();
 
@@ -103,6 +104,29 @@ router.post('/login/submit', (req, res, next) => {
   // }
   // }
   // );
+});
+
+router.post('/payment-info/submit', async (req, res, next) => {
+  const { number, name, cvv, exp } = {
+    number: req.body.number,
+    name: req.body.name,
+    cvv: req.body.cvv,
+    exp: req.body.exp,
+  };
+
+  if (await checkCreditCard(number, name, cvv, exp)) {
+    db.query(
+      'UPDATE users SET credit_card = ? WHERE id = ?',
+      [number, req.session.userId],
+      (error, results, fields) => {
+        if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+      }
+    );
+
+    res.status(status.OK).json();
+  } else {
+    res.status(status.NOT_ACCEPTABLE).json();
+  }
 });
 
 export default router;
