@@ -18,7 +18,7 @@ router.get('/:id', (req, res, next) => {
 
 // idea: choose from existing events or create new event
 // new event
-router.post('/new-event/submit', (req, res, next) => {
+router.post('/new-event/submit', async (req, res, next) => {
   const eventInfo = {
     name: req.body.name,
     dateTime: req.body.dateTime,
@@ -28,7 +28,7 @@ router.post('/new-event/submit', (req, res, next) => {
     artistName: req.body.artistName,
   };
 
-  /* dbQueryPromise(
+  dbQueryPromise(
     'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
     [
       eventInfo.name,
@@ -37,11 +37,12 @@ router.post('/new-event/submit', (req, res, next) => {
       eventInfo.city,
       eventInfo.details,
       eventInfo.artistName,
-    ]).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`));
-  */
+    ]
+  ).catch(err =>
+    console.log(`Error contacting database: ${JSON.stringify(err)}`)
+  );
 
-  db.query(
+  /* db.query(
     'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
     [
       eventInfo.name,
@@ -59,23 +60,25 @@ router.post('/new-event/submit', (req, res, next) => {
       res.json('OK');
     }
   );
+  */
 });
 
 // new ticket
-router.post('/new/submit', (req, res, next) => {
+router.post('/new/submit', async (req, res, next) => {
   const ticketInfo = {
     price: req.body.price,
     eventId: req.body.eventId,
     seat: req.body.seat, // can be null, general seating
   };
 
-  /* dbQueryPromise(
+  dbQueryPromise(
     'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`));
-      */
+    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
+  ).catch(err =>
+    console.log(`Error contacting database: ${JSON.stringify(err)}`)
+  );
 
-  db.query(
+  /* db.query(
     'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
     [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
     (error, results, fields) => {
@@ -87,6 +90,7 @@ router.post('/new/submit', (req, res, next) => {
       res.json('OK');
     }
   );
+  */
 });
 
 router.get('/sale-charge/:id', async (req, res, next) => {

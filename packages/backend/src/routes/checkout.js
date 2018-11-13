@@ -11,9 +11,8 @@ import {
 
 const router = express.Router();
 
-router.post('/shipping/submit', (req, res, next) => {
+router.post('/shipping/submit', async (req, res, next) => {
   const ticketInfo = {
-    boughtUserId: req.session.id, // check
     deliveryMethod: req.body.deliveryMethod,
     address: req.body.address,
     ticketId: req.body.ticketId,
@@ -22,7 +21,7 @@ router.post('/shipping/submit', (req, res, next) => {
   dbQueryPromise(
     'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
     [
-      ticketInfo.boughtUserId,
+      req.session.id,
       ticketInfo.deliveryMethod,
       ticketInfo.address,
       ticketInfo.ticketId,
@@ -35,9 +34,8 @@ router.post('/shipping/submit', (req, res, next) => {
   // add to current price -database (display new price)
 });
 
-router.post('/billing/submit', (req, res, next) => {
+router.post('/billing/submit', async (req, res, next) => {
   const paymentInfo = {
-    boughtUserId: req.session.id, // check
     number: req.body.number,
     expiration: req.body.expiration,
     cvv: req.body.cvv,
@@ -53,7 +51,7 @@ router.post('/billing/submit', (req, res, next) => {
       paymentInfo.name,
       paymentInfo.cvv,
       paymentInfo.expiration
-    ) === 'Invalid Credit Card Info'
+    ) === false
   ) {
     res.status(status.BAD_REQUEST).json();
   }
@@ -87,7 +85,7 @@ router.post('/billing/submit', (req, res, next) => {
       }
     );
 
-    sellerAcc = getCardNumber(sellerId);
+    sellerAcc = await getCardNumber(sellerId);
 
     ticketTransaction(paymentInfo.number, sellerAcc, amount);
   } else {

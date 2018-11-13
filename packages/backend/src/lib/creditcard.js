@@ -1,7 +1,7 @@
 import { db, dbQueryPromise } from './database';
 
 // returns true if user has credit card
-export function cardExists(sessionId) {
+export async function cardExists(sessionId) {
   dbQueryPromise(
     `SELECT * 
      FROM users
@@ -16,7 +16,7 @@ export function cardExists(sessionId) {
 }
 
 // returns credit card number of user when given userid
-export function getCardNumber(userId) {
+export async function getCardNumber(userId) {
   dbQueryPromise(
     `SELECT * 
      FROM users
