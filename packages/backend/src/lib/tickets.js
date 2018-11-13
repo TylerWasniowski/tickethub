@@ -65,3 +65,17 @@ export async function lockTicket(id) {
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
 }
+
+// given ticket id, gets seller id
+export async function getSellerId(ticketId) {
+  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
+    .then(results => results[0].sellerId)
+    .catch(console.log('Error connecting to db'));
+}
+
+// given ticket id, gets price
+export async function getPrice(ticketId) {
+  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
+    .then(results => results[0].price)
+    .catch(console.log('Error connecting to db'));
+}

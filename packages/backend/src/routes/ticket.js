@@ -1,4 +1,5 @@
 import express from 'express';
+import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
 import {
   getAssignedTicket,
@@ -7,6 +8,7 @@ import {
   getTicketInfo,
   getTicket,
 } from '../lib/tickets';
+import { cardExists } from '../lib/creditcard';
 
 const router = express.Router();
 
@@ -71,23 +73,29 @@ router.post('/new/submit', async (req, res, next) => {
     seat: req.body.seat, // can be null, general seating
   };
 
-  dbQueryPromise(
-    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
-  ).catch(err =>
-    console.log(`Error contacting database: ${JSON.stringify(err)}`)
-  );
+  if ((await cardExists(req.session.userId)) === false) {
+    res
+      .status(status.NOT_ACCEPTABLE)
+      .send('User does not have a credit card on file');
+  } else {
+    dbQueryPromise(
+      'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
+      [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
+    ).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+    );
+    res.status(status.OK).json();
+  }
 
   /* db.query(
-    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
+    'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
+    [req.session.userId, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
     (error, results, fields) => {
       if (error) {
         console.log(`Error contacting database: ${JSON.stringify(error)}`);
         res.json(500, error);
       }
-
-      res.json('OK');
+      else res.json('OK');
     }
   );
   */

@@ -2,7 +2,7 @@ import { db, dbQueryPromise } from './database';
 
 // returns true if user has credit card
 export async function cardExists(sessionId) {
-  dbQueryPromise(
+  return dbQueryPromise(
     `SELECT * 
      FROM users
      WHERE id=?`,
@@ -17,13 +17,16 @@ export async function cardExists(sessionId) {
 
 // returns credit card number of user when given userid
 export async function getCardNumber(userId) {
-  dbQueryPromise(
+  return dbQueryPromise(
     `SELECT * 
      FROM users
      WHERE id=?`,
     [userId]
   )
-    .then(results => results[0].cardId)
+    .then(results => {
+      console.log(results[0].credit_card);
+      return results[0].credit_card;
+    })
     .catch(console.log('Error connecting to db'));
 }
 

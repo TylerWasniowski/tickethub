@@ -2,12 +2,13 @@ import express from 'express';
 import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
 import deliveryBy from '../lib/distanceMatrix';
-import ticketTransaction from '../lib/bank';
+import { ticketTransaction } from '../lib/bank';
 import {
   checkCreditCard,
   validCreditCard,
   getCardNumber,
 } from '../lib/creditcard';
+import { getSellerId, getPrice } from '../lib/tickets';
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.post('/shipping/submit', async (req, res, next) => {
   dbQueryPromise(
     'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
     [
-      req.session.id,
+      req.session.userId,
       ticketInfo.deliveryMethod,
       ticketInfo.address,
       ticketInfo.ticketId,
@@ -46,50 +47,46 @@ router.post('/billing/submit', async (req, res, next) => {
 
   // check if existing
   if (
-    checkCreditCard(
+    (await checkCreditCard(
       paymentInfo.number,
       paymentInfo.name,
       paymentInfo.cvv,
       paymentInfo.expiration
-    ) === false
+    )) === false
   ) {
-    res.status(status.BAD_REQUEST).json();
+    res.status(status.NOT_ACCEPTABLE).json();
   }
 
   // check if valid
   if (validCreditCard(paymentInfo.number) === true) {
     // if valid then connect to user? and make transaction
-    dbQueryPromise('UPDATE users SET credit_card=? WHERE id=?', [
+    /* dbQueryPromise('UPDATE users SET address=?,credit_card=? WHERE id=?', [
+      paymentInfo.address,
       paymentInfo.number,
-      req.session.id,
+      req.session.userId,
     ]).catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
-
-    // get sellerAcc and price of ticket
-    let sellerId = 0;
-    let amount = 0;
-    let sellerAcc = 0;
+    */
 
     db.query(
-      'SELECT * FROM tickets WHERE id = ?',
-      paymentInfo.ticketId,
+      'UPDATE users SET address=?,credit_card=? WHERE id=?',
+      [paymentInfo.address, paymentInfo.number, req.session.userId],
       (error, results, fields) => {
         if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
-
-        if (!results.length) res.status(status.NOT_ACCEPTABLE).json();
-        else {
-          [sellerId] = results[0].sellerId;
-          [amount] = results[0].price;
-        }
       }
     );
 
-    sellerAcc = await getCardNumber(sellerId);
+    // get sellerAcc and price of ticket
+    const sellerId = await getSellerId(paymentInfo.ticketId);
+    const amount = await getPrice(paymentInfo.ticketId);
+    const sellerAcc = await getCardNumber(sellerId);
 
     ticketTransaction(paymentInfo.number, sellerAcc, amount);
+
+    res.status(status.OK).json();
   } else {
-    res.status(status.BAD_REQUEST).json();
+    res.status(status.NOT_ACCEPTABLE).json();
   }
 });
 

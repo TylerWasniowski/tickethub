@@ -1,6 +1,10 @@
 import express from 'express';
 
-import { checkCreditCard, validCreditCard } from '../lib/creditcard';
+import {
+  checkCreditCard,
+  validCreditCard,
+  getCardNumber,
+} from '../lib/creditcard';
 import { ticketTransaction } from '../lib/bank';
 
 const router = express.Router();
@@ -26,6 +30,10 @@ router.post('/check/creditcard/', async (req, res, next) => {
 router.post('/check/', (req, res, next) => {
   ticketTransaction(req.body.buyer, req.body.seller, req.body.amount);
   res.send('OK');
+});
+
+router.get('/getCard/:id', async (req, res, next) => {
+  res.send(await getCardNumber(req.params.id));
 });
 
 export default router;
