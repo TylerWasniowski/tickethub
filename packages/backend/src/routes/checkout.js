@@ -60,7 +60,7 @@ router.post('/submit', async (req, res, next) => {
       paymentInfo.expiration
     )) === false
   ) {
-    res.status(status.NOT_ACCEPTABLE).json();
+    res.status(status.NOT_ACCEPTABLE).json('invalid credit card information');
   }
 
   // check if valid
