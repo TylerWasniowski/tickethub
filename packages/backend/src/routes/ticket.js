@@ -53,19 +53,17 @@ router.post('/new/submit', async (req, res, next) => {
     seat: req.body.seat, // can be null, general seating
   };
 
-  if ((await cardExists(req.session.userId)) === false) {
-    res
-      .status(status.NOT_ACCEPTABLE)
-      .send('User does not have a credit card on file');
-  } else {
-    dbQueryPromise(
-      'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
-      [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
-    ).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`)
-    );
-    res.status(status.OK).json();
-  }
+  // if ((await cardExists(req.session.userId)) === false) {
+  //  res.status(status.NOT_ACCEPTABLE).send('User does not have a credit card on file');
+  // } else {
+  dbQueryPromise(
+    'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
+    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
+  ).catch(err =>
+    console.log(`Error contacting database: ${JSON.stringify(err)}`)
+  );
+  res.status(status.OK).json();
+  // }
 });
 
 router.get('/sale-charge/:id', async (req, res, next) => {

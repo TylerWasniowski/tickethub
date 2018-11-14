@@ -1,5 +1,6 @@
 import { db, dbQueryPromise } from './database';
 
+// does not work
 // returns true if user has credit card
 export async function cardExists(userId) {
   return dbQueryPromise(
