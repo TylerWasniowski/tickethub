@@ -41,7 +41,7 @@ router.post('/shipping/submit', async (req, res, next) => {
   // add to current price -database (display new price)
 });
 
-router.post('/billing/submit', async (req, res, next) => {
+router.post('/submit', async (req, res, next) => {
   const paymentInfo = {
     number: req.body.number,
     expiration: req.body.expiration,
