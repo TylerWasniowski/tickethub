@@ -1,7 +1,7 @@
 import distance from 'google-distance-matrix';
 import { dbQueryPromise } from './database';
 
-export async function deliveryBy(buyerAddress, sellerAddress) {
+async function deliveryBy(buyerAddress, sellerAddress) {
   const origins = [buyerAddress];
   const destinations = [sellerAddress];
 
@@ -35,9 +35,8 @@ export async function deliveryBy(buyerAddress, sellerAddress) {
         return `${destination} is not reachable by land from ${origin}`;
       }
     }
-    return 'result was not found in the above loops';
   }
-  return 'status is not ok';
+  return '204 No Content';
 }
 
 export function getDistance(ticketid, userid) {
@@ -46,25 +45,17 @@ export function getDistance(ticketid, userid) {
     userid
   );
 
-  let sellerAddressPromise;
-
-  const sellerId = dbQueryPromise(
+  const sellerAddressPromise = dbQueryPromise(
     'SELECT * FROM tickets WHERE id = ?',
     ticketid
   )
     .then(results => results[0].sellerId)
+    .then(result =>
+      dbQueryPromise('SELECT address FROM users WHERE id = ?', result)
+    )
     .catch(console.log);
 
-  if (!sellerId) {
-    throw new Error('No seller Id');
-  } else {
-    sellerAddressPromise = dbQueryPromise(
-      'SELECT address FROM users WHERE id = ?',
-      sellerId
-    );
-  }
-
-  Promise.all([buyerAddressPromise, sellerAddressPromise])
+  return Promise.all([buyerAddressPromise, sellerAddressPromise])
     .then(bothResults => bothResults.map(results => results[0].address))
     .then(addresses => deliveryBy(addresses[0], addresses[1]))
     .catch(console.log);
