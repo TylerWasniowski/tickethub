@@ -29,7 +29,6 @@ export async function deliveryBy(buyerAddress, sellerAddress) {
         const origin = distances.origin_addresses[i];
         const destination = distances.destination_addresses[j];
         if (distances.rows[0].elements[j].status === 'OK') {
-          // const duration = distances.rows[i].elements[j].duration.text;
           const dist = distances.rows[i].elements[j].distance.text;
           return dist;
         }

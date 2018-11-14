@@ -1,7 +1,7 @@
 import express from 'express';
 import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
-import { deliveryBy } from '../lib/distanceMatrix';
+import { getDistance } from '../lib/distanceMatrix';
 import { ticketTransaction } from '../lib/bank';
 import {
   checkCreditCard,
@@ -13,25 +13,31 @@ import { getSellerId, getPrice } from '../lib/tickets';
 const router = express.Router();
 
 router.post('/shipping/submit', async (req, res, next) => {
-  const ticketInfo = {
-    deliveryMethod: req.body.deliveryMethod,
-    address: req.body.address,
-    ticketId: req.body.ticketId,
-  };
+  if (req.session && req.session.userId) {
+    const ticketInfo = {
+      deliveryMethod: req.body.deliveryMethod,
+      // address: req.body.address,
+      ticketId: req.body.ticketId,
+    };
 
-  dbQueryPromise(
-    'UPDATE tickets SET boughtUserId=?, deliveryMethod=?, address=?, available=0 WHERE id=?',
-    [
-      req.session.userId,
-      ticketInfo.deliveryMethod,
-      ticketInfo.address,
-      ticketInfo.ticketId,
-    ]
-  ).catch(err =>
-    console.log(`Error contacting database: ${JSON.stringify(err)}`)
-  );
+    dbQueryPromise(
+      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
+      [
+        req.session.userId,
+        ticketInfo.deliveryMethod,
+        // ticketInfo.address,
+        ticketInfo.ticketId,
+      ]
+    ).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+    );
 
-  // call function calculating shipping cost
+    // call function calculating shipping cost
+
+    // Get Distance
+    const distance = await getDistance(ticketInfo.ticketId, req.session.userId);
+    res.json(`The distance is: ${distance}`);
+  } else res.json(401, 'Error: Not logged in');
   // add to current price -database (display new price)
 });
 
@@ -88,37 +94,6 @@ router.post('/billing/submit', async (req, res, next) => {
   } else {
     res.status(status.NOT_ACCEPTABLE).json();
   }
-});
-
-router.get('/:id', async (req, res) => {
-  // Check if session exists
-  if (req.session && req.session.userId) {
-    const sellerId = dbQueryPromise(
-      'SELECT sellerId FROM tickets WHERE id = ?',
-      req.params.id
-    )
-      .then(results => results[0].sellerId)
-      .catch(console.log);
-
-    if (!sellerId) {
-      throw new Error('No seller Id');
-    } else {
-      const buyerAddressPromise = dbQueryPromise(
-        'SELECT address FROM users WHERE id = ?',
-        req.session.userId
-      );
-
-      const sellerAddressPromise = dbQueryPromise(
-        'SELECT address FROM users WHERE id = ?',
-        sellerId
-      );
-
-      Promise.all([buyerAddressPromise, sellerAddressPromise])
-        .then(bothResults => bothResults.map(results => results[0].address))
-        .then(addresses => deliveryBy(addresses[0], addresses[1]))
-        .catch(console.log);
-    }
-  } else res.json(401, 'Error: Not logged in');
 });
 
 export default router;

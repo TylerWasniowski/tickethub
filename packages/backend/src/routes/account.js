@@ -84,30 +84,30 @@ router.post('/login/submit', (req, res, next) => {
   console.log();
 
   db.query(
-    "SELECT * FROM users WHERE email = 'nina@yahoo.com'",
+    'SELECT * FROM users WHERE email = ?',
+    email,
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
       if (!results.length) res.status(status.NOT_ACCEPTABLE).json();
       else {
-        // bcrypt.compare(password, results[0].password, (err, response) => {
-        //   if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
+        bcrypt.compare(password, results[0].password, (err, response) => {
+          if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
 
-        // if (response) {
-        req.session.success = true;
-        req.session.email = email;
-        req.session.userId = results[0].id;
+          if (response) {
+            req.session.success = true;
+            req.session.email = email;
+            req.session.userId = results[0].id;
 
-        res.cookie('email', results[0].email || '');
-        res.cookie('name', results[0].name || '');
-        res.cookie('address', results[0].address || '');
-        res.status(status.OK).json();
-      } // else res.status(status.NOT_ACCEPTABLE).json();
+            res.cookie('email', results[0].email || '');
+            res.cookie('name', results[0].name || '');
+            res.cookie('address', results[0].address || '');
+            res.status(status.OK).json();
+          } else res.status(status.NOT_ACCEPTABLE).json();
+        });
+      }
     }
   );
-  // }
-  // }
-  // );
 });
 
 router.post('/payment-info/submit', async (req, res, next) => {
