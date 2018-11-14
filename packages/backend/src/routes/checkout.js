@@ -64,7 +64,7 @@ router.post('/submit', async (req, res, next) => {
   }
 
   // check if valid
-  if (validCreditCard(paymentInfo.number) === true) {
+  else if (validCreditCard(paymentInfo.number) === true) {
     db.query(
       'UPDATE users SET address=?,credit_card=? WHERE id=?',
       [paymentInfo.address, paymentInfo.number, req.session.userId],
