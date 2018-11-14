@@ -39,7 +39,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.20",
     "cross-env": "^5.2.0",
     "dotenv": "^6.1.0",
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
