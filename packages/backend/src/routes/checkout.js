@@ -33,11 +33,11 @@ router.post('/shipping/submit', async (req, res, next) => {
     );
 
     // call function calculating shipping cost
-
     // Get Distance
     const distance = await getDistance(ticketInfo.ticketId, req.session.userId);
     res.json(`The distance is: ${distance}`);
   } else res.json(401, 'Error: Not logged in');
+
   // add to current price -database (display new price)
 });
 
