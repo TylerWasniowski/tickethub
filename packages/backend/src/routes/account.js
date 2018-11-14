@@ -27,9 +27,8 @@ router.post('/create-account/submit', (req, res, next) => {
 });
 
 router.post('/update/submit', (req, res, next) => {
-  if (!req.session.success) {
-    // res.send('not logged in');
-    res.status(status.IM_A_TEAPOT).json();
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
   }
 
   bcrypt.hash(
@@ -89,7 +88,8 @@ router.post('/login/submit', (req, res, next) => {
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
-      if (!results.length) res.status(status.NOT_ACCEPTABLE).json();
+      if (!results.length)
+        res.status(status.NOT_ACCEPTABLE).json('invalid username or password');
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {
           if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
@@ -118,7 +118,9 @@ router.post('/payment-info/submit', async (req, res, next) => {
     exp: req.body.exp,
   };
 
-  if (await checkCreditCard(number, name, cvv, exp)) {
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  } else if (await checkCreditCard(number, name, cvv, exp)) {
     db.query(
       'UPDATE users SET credit_card = ? WHERE id = ?',
       [number, req.session.userId],
@@ -129,7 +131,7 @@ router.post('/payment-info/submit', async (req, res, next) => {
 
     res.status(status.OK).json();
   } else {
-    res.status(status.NOT_ACCEPTABLE).json();
+    res.status(status.NOT_ACCEPTABLE).json('Invalid Credit Card Information');
   }
 });
 

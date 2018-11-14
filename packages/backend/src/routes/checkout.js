@@ -51,8 +51,12 @@ router.post('/submit', async (req, res, next) => {
     ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
   };
 
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  }
+
   // check if existing
-  if (
+  else if (
     (await checkCreditCard(
       paymentInfo.number,
       paymentInfo.name,
@@ -60,11 +64,11 @@ router.post('/submit', async (req, res, next) => {
       paymentInfo.expiration
     )) === false
   ) {
-    res.status(status.NOT_ACCEPTABLE).json();
+    res.status(status.NOT_ACCEPTABLE).json('invalid credit card information');
   }
 
   // check if valid
-  if (validCreditCard(paymentInfo.number) === true) {
+  else if (validCreditCard(paymentInfo.number) === true) {
     db.query(
       'UPDATE users SET address=?,credit_card=? WHERE id=?',
       [paymentInfo.address, paymentInfo.number, req.session.userId],
