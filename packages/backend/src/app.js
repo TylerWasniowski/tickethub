@@ -9,6 +9,7 @@ import assets from 'tickethub-frontend';
 
 import indexRouter from './routes/index';
 import accountRouter from './routes/account';
+import eventRouter from './routes/event';
 import searchRouter from './routes/search';
 import checkoutRouter from './routes/checkout';
 import ticketRouter from './routes/ticket';
@@ -37,6 +38,7 @@ process.on('unhandledRejection', err => {
 
   app.use('/', indexRouter);
   app.use('/account', accountRouter);
+  app.use('/event', eventRouter);
   app.use('/search', searchRouter);
   app.use('/checkout', checkoutRouter);
   app.use('/ticket', ticketRouter);
