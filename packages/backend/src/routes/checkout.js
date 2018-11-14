@@ -59,16 +59,6 @@ router.post('/billing/submit', async (req, res, next) => {
 
   // check if valid
   if (validCreditCard(paymentInfo.number) === true) {
-    // if valid then connect to user? and make transaction
-    /* dbQueryPromise('UPDATE users SET address=?,credit_card=? WHERE id=?', [
-      paymentInfo.address,
-      paymentInfo.number,
-      req.session.userId,
-    ]).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`)
-    );
-    */
-
     db.query(
       'UPDATE users SET address=?,credit_card=? WHERE id=?',
       [paymentInfo.address, paymentInfo.number, req.session.userId],

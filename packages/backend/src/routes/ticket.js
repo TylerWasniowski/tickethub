@@ -43,26 +43,6 @@ router.post('/new-event/submit', async (req, res, next) => {
   ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
-
-  /* db.query(
-    'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
-    [
-      eventInfo.name,
-      eventInfo.dateTime,
-      eventInfo.venue,
-      eventInfo.city,
-      eventInfo.details,
-      eventInfo.artistName,
-    ],
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
-      }
-      res.json('OK');
-    }
-  );
-  */
 });
 
 // new ticket
@@ -86,19 +66,6 @@ router.post('/new/submit', async (req, res, next) => {
     );
     res.status(status.OK).json();
   }
-
-  /* db.query(
-    'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.userId, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
-      }
-      else res.json('OK');
-    }
-  );
-  */
 });
 
 router.get('/sale-charge/:id', async (req, res, next) => {

@@ -1,15 +1,15 @@
 import { db, dbQueryPromise } from './database';
 
 // returns true if user has credit card
-export async function cardExists(sessionId) {
+export async function cardExists(userId) {
   return dbQueryPromise(
     `SELECT * 
      FROM users
      WHERE id=?`,
-    [sessionId]
+    [userId]
   )
     .then(results => {
-      if (!results[0].cardId) return false;
+      if (!results[0].credit_card) return false;
       return true;
     })
     .catch(console.log('Error connecting to db'));
