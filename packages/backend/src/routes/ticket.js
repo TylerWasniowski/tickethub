@@ -30,19 +30,23 @@ router.post('/new-event/submit', async (req, res, next) => {
     artistName: req.body.artistName,
   };
 
-  dbQueryPromise(
-    'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
-    [
-      eventInfo.name,
-      eventInfo.dateTime,
-      eventInfo.venue,
-      eventInfo.city,
-      eventInfo.details,
-      eventInfo.artistName,
-    ]
-  ).catch(err =>
-    console.log(`Error contacting database: ${JSON.stringify(err)}`)
-  );
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  } else {
+    dbQueryPromise(
+      'INSERT INTO events (name, dateTime, venue, city, details, artistName) VALUES (?,?,?,?,?,?)',
+      [
+        eventInfo.name,
+        eventInfo.dateTime,
+        eventInfo.venue,
+        eventInfo.city,
+        eventInfo.details,
+        eventInfo.artistName,
+      ]
+    ).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+    );
+  }
 });
 
 // new ticket
@@ -53,17 +57,21 @@ router.post('/new/submit', async (req, res, next) => {
     seat: req.body.seat, // can be null, general seating
   };
 
-  // if ((await cardExists(req.session.userId)) === false) {
-  //  res.status(status.NOT_ACCEPTABLE).send('User does not have a credit card on file');
-  // } else {
-  dbQueryPromise(
-    'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
-  ).catch(err =>
-    console.log(`Error contacting database: ${JSON.stringify(err)}`)
-  );
-  res.status(status.OK).json();
-  // }
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  } else {
+    // if ((await cardExists(req.session.userId)) === false) {
+    //  res.status(status.NOT_ACCEPTABLE).send('User does not have a credit card on file');
+    // } else {
+    dbQueryPromise(
+      'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
+      [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
+    ).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+    );
+    res.status(status.OK).json();
+    // }
+  }
 });
 
 router.get('/sale-charge/:id', async (req, res, next) => {

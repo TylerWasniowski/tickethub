@@ -51,8 +51,12 @@ router.post('/submit', async (req, res, next) => {
     ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
   };
 
+  if (req.session.userId == null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  }
+
   // check if existing
-  if (
+  else if (
     (await checkCreditCard(
       paymentInfo.number,
       paymentInfo.name,
