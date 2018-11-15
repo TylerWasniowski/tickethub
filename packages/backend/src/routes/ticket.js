@@ -46,6 +46,7 @@ router.post('/new-event/submit', async (req, res, next) => {
     ).catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
+    res.status(status.OK).json();
   }
 });
 
@@ -59,10 +60,11 @@ router.post('/new/submit', async (req, res, next) => {
 
   if (req.session.userId == null) {
     res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  } else if ((await cardExists(req.session.userId)) === false) {
+    res
+      .status(status.NOT_ACCEPTABLE)
+      .send('User does not have a credit card on file');
   } else {
-    // if ((await cardExists(req.session.userId)) === false) {
-    //  res.status(status.NOT_ACCEPTABLE).send('User does not have a credit card on file');
-    // } else {
     dbQueryPromise(
       'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
       [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
@@ -70,7 +72,6 @@ router.post('/new/submit', async (req, res, next) => {
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
     res.status(status.OK).json();
-    // }
   }
 });
 
