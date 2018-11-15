@@ -9,6 +9,7 @@ export function getTicketInfo(ticket) {
     eventId: ticket.eventId,
     seat: ticket.seat,
     price: ticket.price,
+    deliveryMethod: ticket.deliveryMethod,
   };
 }
 

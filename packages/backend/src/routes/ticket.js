@@ -9,6 +9,7 @@ import {
   getTicket,
 } from '../lib/tickets';
 import { cardExists } from '../lib/creditcard';
+import { getDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
@@ -67,7 +68,12 @@ router.post('/new/submit', async (req, res, next) => {
   } else {
     dbQueryPromise(
       'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
-      [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat]
+      [
+        req.session.userId,
+        ticketInfo.eventId,
+        ticketInfo.price,
+        ticketInfo.seat,
+      ]
     ).catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
@@ -78,7 +84,14 @@ router.post('/new/submit', async (req, res, next) => {
 router.get('/sale-charge/:id', async (req, res, next) => {
   const ticket = await getTicket(req.params.id);
 
-  const ret = ticket.price * 1.05;
+  const distance = await getDistance(req.params.id, req.session.userId); // res.json(`The distance is: ${distance}`);
+
+  const ret = {
+    price: ticket.price,
+    fivePercent: ticket.price * 0.05,
+    shipping: ticket.deliveryMethod, // NEEDS METHOD, use distance
+  };
+
   res.json(ret);
 });
 
