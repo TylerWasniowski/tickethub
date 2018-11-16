@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 
 import { SearchSuggestionsRoute } from '../routes';
+import EventImage from './EventImage';
 
 type Props = {
   onSearch: search => void,
@@ -66,7 +67,8 @@ class Search extends React.Component<Props> {
 
     return suggestions.slice(0, process.env.MAX_SUGGESTIONS).map(suggestion => (
       <ListItem onClick={this.handleSuggestionClick} button>
-        <ListItemText>{suggestion}</ListItemText>
+        <EventImage id={suggestion.id} className="suggestion-image" />
+        <ListItemText>{suggestion.name}</ListItemText>
       </ListItem>
     ));
   }

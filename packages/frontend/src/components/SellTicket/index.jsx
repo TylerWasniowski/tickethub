@@ -1,14 +1,16 @@
 // @flow
-import '../styles/home.css';
+import '../../styles/home.css';
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
+import Input from '@material-ui/core/Input';
 import Typography from '@material-ui/core/Typography';
 
-import Search from './Search';
-import Tickets from './Tickets';
+import Search from '../Search';
+import SimpleForm from '../SimpleForm';
+import { SellTicketSubmitRoute } from '../../routes';
+import SellTicketForm from './SellTicketForm';
 
-class Home extends React.Component {
+class SellTicket extends React.Component {
   constructor(props) {
     super(props);
 
@@ -31,15 +33,13 @@ class Home extends React.Component {
     return (
       <div className="home">
         <Typography component="h1" variant="title" color="inherit" noWrap>
-          Buy Tickets
+          Sell Tickets
         </Typography>
         <Search onSearch={this.handleSearch} />
-        <Paper className={`box-container ${query ? '' : 'hide'}`}>
-          <Tickets query={query} />
-        </Paper>
+        <SellTicketForm query={query} />
       </div>
     );
   }
 }
 
-export default Home;
+export default SellTicket;

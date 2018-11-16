@@ -4,7 +4,6 @@ import {
   getAssignedTicket,
   lockTicket,
   hasTicket,
-  getTicketInfo,
   getTicket,
 } from '../lib/tickets';
 
@@ -17,16 +16,16 @@ router.get('/:id', (req, res, next) => {
 });
 
 // new ticket
-router.post('/new/submit', (req, res, next) => {
+router.post('/sell/submit', (req, res, next) => {
   const ticketInfo = {
-    price: req.body.price,
     eventId: req.body.eventId,
+    price: req.body.price,
     seat: req.body.seat, // can be null, general seating
   };
 
   db.query(
-    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
-    [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
+    'INSERT INTO tickets (sellerId, eventId, price, seat) VALUES (?,?,?,?)',
+    [req.session.userId, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
     (error, results, fields) => {
       if (error) {
         console.log(`Error contacting database: ${JSON.stringify(error)}`);

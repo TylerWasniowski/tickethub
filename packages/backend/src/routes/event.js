@@ -1,5 +1,6 @@
 import express from 'express';
-import { db } from '../lib/database';
+import { db, dbQueryPromise } from '../lib/database';
+import { getAvailableTickets, getTicketInfo } from '../lib/tickets';
 
 const router = express.Router();
 
@@ -33,6 +34,28 @@ router.post('/new/submit', (req, res, next) => {
       res.json('OK');
     }
   );
+});
+
+router.get('/:id', (req, res, next) => {
+  dbQueryPromise(
+    'SELECT name, dateTime, venue, city, details, artistName from events WHERE id = ?',
+    [req.params.id]
+  )
+    .then(results => res.json(results[0]))
+    .catch(err => res.status(500).json(err));
+});
+
+router.get('/image/:id', (req, res, next) => {
+  dbQueryPromise('SELECT image from events WHERE id = ?', [req.params.id])
+    .then(results => res.json(results[0].image))
+    .catch(err => res.status(500).json(err));
+});
+
+router.get('/tickets/:id', (req, res, next) => {
+  getAvailableTickets(req.params.id)
+    .then(results => results.map(getTicketInfo))
+    .then(tickets => res.json(tickets))
+    .catch(err => res.status(500).json(err));
 });
 
 export default router;

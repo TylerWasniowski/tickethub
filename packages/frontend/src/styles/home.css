@@ -82,6 +82,10 @@
   display: none !important;
 }
 
+.suggestion-image {
+  max-height: 50px;
+}
+
 .search-container:focus-within .search-suggestions {
   display: block;
 
