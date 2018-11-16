@@ -32,11 +32,11 @@ async function deliveryBy(buyerAddress, sellerAddress) {
           const dist = distances.rows[i].elements[j].distance.text;
           return dist;
         }
-        return `${destination} is not reachable by land from ${origin}`;
+        return '404 Not Found';
       }
     }
   }
-  return '204 No Content';
+  return '406 Not Acceptable';
 }
 
 export function getDistance(ticketid, userid) {
