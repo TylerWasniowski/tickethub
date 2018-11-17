@@ -21,10 +21,8 @@ class EventImage extends React.Component<Props> {
   state: {
     image: string,
     updateCount: number,
-    lastUpdate: number,
   } = {
     updateCount: 0,
-    lastUpdate: 0,
   };
 
   componentDidMount() {
@@ -38,6 +36,9 @@ class EventImage extends React.Component<Props> {
   }
 
   updateImage = memoize(id => {
+    if (!id) return;
+
+    this.setState({ image: undefined });
     let { updateCount } = this.state;
     updateCount += 1;
     this.setState({ updateCount }, async () => {
@@ -48,9 +49,8 @@ class EventImage extends React.Component<Props> {
         .then(blob => (blob ? Buffer.from(blob).toString() : ''))
         .catch(console.log);
 
-      const { lastUpdate } = this.state;
-      if (updateCount > lastUpdate)
-        this.setState({ image, lastUpdate: updateCount });
+      const currentUpdateCount = this.state.updateCount;
+      if (updateCount === currentUpdateCount) this.setState({ image });
     });
   });
 

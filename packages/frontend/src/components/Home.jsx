@@ -30,7 +30,13 @@ class Home extends React.Component {
 
     return (
       <div className="home">
-        <Typography component="h1" variant="title" color="inherit" noWrap>
+        <Typography
+          component="h1"
+          className="page-title"
+          variant="title"
+          color="inherit"
+          noWrap
+        >
           Buy Tickets
         </Typography>
         <Search onSearch={this.handleSearch} />
