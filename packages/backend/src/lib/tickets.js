@@ -80,14 +80,3 @@ export async function getPrice(ticketId) {
     .then(results => results[0].price)
     .catch(console.log('Error connecting to db'));
 }
-
-// given ticket id, returns delivery method
-export async function getDeliveryMethod(ticketId) {
-  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
-    .then(results => {
-      if (!results.length) return 'Ticket does not exist';
-
-      return results[0].deliveryMethod;
-    })
-    .catch(console.log('Error connecting to db'));
-}

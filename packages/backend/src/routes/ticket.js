@@ -7,7 +7,6 @@ import {
   hasTicket,
   getTicketInfo,
   getTicket,
-  getDeliveryMethod,
 } from '../lib/tickets';
 import { cardExists } from '../lib/creditcard';
 import { getDistance } from '../lib/distanceMatrix';
@@ -82,7 +81,7 @@ router.post('/new/submit', async (req, res, next) => {
   }
 });
 
-router.get('/sale-charge/:id', async (req, res, next) => {
+router.get('/sale-charge/:id/:deliveryMethod', async (req, res, next) => {
   const ticket = await getTicket(req.params.id);
 
   const distance = await getDistance(req.params.id, req.session.userId); // res.json(`The distance is: ${distance}`);
@@ -90,7 +89,7 @@ router.get('/sale-charge/:id', async (req, res, next) => {
   const ret = {
     price: ticket.price,
     fivePercent: ticket.price * 0.05,
-    shipping: await getDeliveryMethod(req.params.id), // NEEDS METHOD, use distance
+    shipping: req.params.deliveryMethod, // NEEDS METHOD, use distance
   };
 
   res.json(ret);
