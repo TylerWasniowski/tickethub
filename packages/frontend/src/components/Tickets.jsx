@@ -28,10 +28,12 @@ class Tickets extends React.Component<Props> {
   }
 
   state: {
+    eventId: string,
     eventName: string,
     tickets: Array<object>,
     ticketsQuery: string,
   } = {
+    eventId: '',
     eventName: '',
     tickets: [],
     ticketsQuery: '',
@@ -47,14 +49,18 @@ class Tickets extends React.Component<Props> {
     fetch(SearchTicketsRoute(query))
       .then(res => res.json())
       .then(res =>
-        this.setState({ eventName: res.eventName, tickets: res.tickets })
+        this.setState({
+          eventId: res.eventId,
+          eventName: res.eventName,
+          tickets: res.tickets,
+        })
       )
       .then(() => this.setState({ ticketsQuery: query }))
       .catch(alert)
   );
 
   getTicketComponents(): Array<Node> {
-    const { eventName, tickets } = this.state;
+    const { eventId, eventName, tickets } = this.state;
 
     return tickets.map(ticket => (
       <TableRow hover>
@@ -65,7 +71,7 @@ class Tickets extends React.Component<Props> {
         <TableCell>
           <Button
             fullWidth
-            href={`/#${TicketCheckoutRoute(eventName, ticket.id)}`}
+            href={`/#${TicketCheckoutRoute(eventName, eventId, ticket.id)}`}
             color="primary"
             className="buy-button"
             variant="contained"

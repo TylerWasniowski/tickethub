@@ -11,10 +11,14 @@ export const SearchTicketsRoute: string => string = query =>
 
 export const GetTicketsRoute: string => string = eventId =>
   `/event/tickets/${encodeURI(eventId || ':eventId')}`;
-export const TicketCheckoutRoute: string => string = (eventName, id) =>
-  `/ticket/checkout/${encodeURI(eventName || ':eventName')}/${encodeURI(
-    id || ':id'
-  )}`;
+export const TicketCheckoutRoute: string => string = (
+  eventName,
+  eventId,
+  ticketId
+) =>
+  `/ticket/checkout/${encodeURI(eventName || ':eventName')}` +
+  `/${encodeURI(eventId || ':eventId')}` +
+  `/${encodeURI(ticketId || ':ticketId')}`;
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
 export const TotalTicketPriceRoute: string => string = id =>

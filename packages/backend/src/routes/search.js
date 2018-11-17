@@ -40,6 +40,7 @@ router.get('/tickets/:query', (req, res, next) => {
   `)
     .then(events => events[0])
     .then(async event => ({
+      eventId: event.id,
       eventName: event.name,
       tickets: (await getAvailableTickets(event.id)).map(getTicketInfo),
     }))
