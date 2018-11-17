@@ -7,6 +7,7 @@ import {
   hasTicket,
   getTicketInfo,
   getTicket,
+  getDeliveryMethod,
 } from '../lib/tickets';
 import { cardExists } from '../lib/creditcard';
 import { getDistance } from '../lib/distanceMatrix';
@@ -89,7 +90,7 @@ router.get('/sale-charge/:id', async (req, res, next) => {
   const ret = {
     price: ticket.price,
     fivePercent: ticket.price * 0.05,
-    shipping: ticket.deliveryMethod, // NEEDS METHOD, use distance
+    shipping: await getDeliveryMethod(req.params.id), // NEEDS METHOD, use distance
   };
 
   res.json(ret);

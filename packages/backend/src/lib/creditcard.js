@@ -9,7 +9,7 @@ export async function cardExists(userId) {
     [userId]
   )
     .then(results => {
-      if (results[0].credit_card === null) return false;
+      if (!results[0].credit_card) return false;
       return true;
     })
     .catch(console.log('Error connecting to db'));

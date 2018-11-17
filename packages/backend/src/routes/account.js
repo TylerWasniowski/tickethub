@@ -27,7 +27,7 @@ router.post('/create-account/submit', (req, res, next) => {
 });
 
 router.post('/update/submit', (req, res, next) => {
-  if (req.session.userId == null) {
+  if (!req.session.userId) {
     res.status(status.NOT_ACCEPTABLE).json('Not logged in');
   }
 
