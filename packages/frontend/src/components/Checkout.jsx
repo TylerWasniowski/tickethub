@@ -10,6 +10,7 @@ import Input from '@material-ui/core/Input';
 import Typography from '@material-ui/core/Typography';
 import { TicketLockRoute, UpdateAccountSubmitRoute } from '../routes';
 
+import EventImage from './EventImage';
 import SimpleForm from './SimpleForm';
 import TotalPrice from './TotalPrice';
 
@@ -56,15 +57,16 @@ class Checkout extends React.Component<Props> {
 
   render() {
     const { match } = this.props;
-    const { event, id } = match.params;
+    const { eventName, eventId, ticketId } = match.params;
     const { timeLeftDisplay } = this.state;
 
     return (
       <SimpleForm
-        formName={`Checkout Ticket for ${event}`}
+        formName={`Checkout Ticket for ${eventName}`}
         submitText="Checkout"
         submitRoute={UpdateAccountSubmitRoute}
       >
+        <EventImage id={eventId} />
         <Typography
           component="h1"
           variant="title"
@@ -83,7 +85,7 @@ class Checkout extends React.Component<Props> {
           defaultValue={Cookies.get('address')}
           required
         />
-        <TotalPrice id={id} />
+        <TotalPrice id={ticketId} />
       </SimpleForm>
     );
   }

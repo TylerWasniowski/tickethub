@@ -87,8 +87,7 @@ router.post('/login/submit', (req, res, next) => {
     email,
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
-
-      if (!results.length)
+      else if (!results.length)
         res.status(status.NOT_ACCEPTABLE).json('invalid username or password');
       else {
         bcrypt.compare(password, results[0].password, (err, response) => {

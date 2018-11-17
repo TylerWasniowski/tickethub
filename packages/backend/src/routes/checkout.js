@@ -13,13 +13,13 @@ const router = express.Router();
 
 router.post('/submit', async (req, res, next) => {
   const checkoutInfo = {
-    deliveryMethod: req.body.deliveryMethod,
-    number: req.body.number,
-    expiration: req.body.expiration,
-    cvv: req.body.cvv,
-    name: req.body.name,
-    address: req.body.address,
-    ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
+    deliveryMethod: req.body.shippingMethod,
+    number: req.body.cardNumber,
+    expiration: req.body.expirationDate,
+    cvv: req.body.securityCode,
+    name: req.body.nameOnCard,
+    address: req.body.billingAddress,
+    ticketId: req.body.id, // need for sellerAcc and price for ticket
   };
 
   if (req.session.userId === null) {

@@ -6,9 +6,19 @@ export const SearchSuggestionsRoute: string => string = query =>
   `/search/suggestions/${encodeURI(query || ':query')}`;
 export const SearchRoute: string => string = query =>
   `/search/${encodeURI(query || ':query')}`;
+export const SearchTicketsRoute: string => string = query =>
+  `/search/tickets/${encodeURI(query || ':query')}`;
 
-export const TicketCheckoutRoute: string => string = (event, id) =>
-  `/ticket/checkout/${encodeURI(event || ':event')}/${encodeURI(id || ':id')}`;
+export const GetTicketsRoute: string => string = eventId =>
+  `/event/tickets/${encodeURI(eventId || ':eventId')}`;
+export const TicketCheckoutRoute: string => string = (
+  eventName,
+  eventId,
+  ticketId
+) =>
+  `/ticket/checkout/${encodeURI(eventName || ':eventName')}` +
+  `/${encodeURI(eventId || ':eventId')}` +
+  `/${encodeURI(ticketId || ':ticketId')}`;
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
 export const TotalTicketPriceRoute: string => string = id =>
@@ -25,3 +35,9 @@ export const CreateAccountSubmitRoute: string =
 
 export const UpdateAccountRoute: string = '/account/update';
 export const UpdateAccountSubmitRoute: string = '/account/update/submit';
+
+export const SellTicketRoute: string = '/ticket/sell';
+export const SellTicketSubmitRoute: string = '/ticket/sell/submit';
+
+export const GetEventImageRoute: string => string = id =>
+  `/event/image/${encodeURI(id || ':id')}`;

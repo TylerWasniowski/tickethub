@@ -11,6 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 
 type Props = {
+  className: string,
   formName: string,
   submitText: string,
   submitRoute: string,
@@ -48,10 +49,12 @@ class SimpleForm extends React.Component<Props> {
   }
 
   createFormComponent(input): FormControl {
-    const { id, required, defaultValue } = input.props;
+    const { id, required, defaultValue, hidden } = input.props;
     const { inputValues } = this.state;
 
     if (defaultValue) inputValues.set(id, defaultValue);
+
+    if (hidden) return <React.Fragment />;
 
     return (
       <FormControl margin="normal" required={required} fullWidth>
@@ -91,12 +94,12 @@ class SimpleForm extends React.Component<Props> {
   }
 
   render(): Node {
-    const { formName, submitText } = this.props;
+    const { className, formName, submitText } = this.props;
 
     return (
       <React.Fragment>
         <CssBaseline />
-        <Paper className="form-container">
+        <Paper className={`form-container ${className}`}>
           <h1 className="form-title">{formName}</h1>
           <form onSubmit={this.handleSubmit}>
             {this.getFormComponents()}
