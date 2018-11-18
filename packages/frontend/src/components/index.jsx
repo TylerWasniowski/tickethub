@@ -35,7 +35,9 @@ import {
   CreateAccountRoute,
   UpdateAccountRoute,
   TicketCheckoutRoute,
+  SellTicketRoute,
 } from '../routes';
+import SellTicket from './SellTicket';
 
 const drawerWidth = 240;
 
@@ -194,6 +196,7 @@ class Dashboard extends React.Component<Props> {
             <Router>
               <React.Fragment>
                 <Route exact path={HomeRoute} component={Home} />
+                <Route path={SellTicketRoute} component={SellTicket} />
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />

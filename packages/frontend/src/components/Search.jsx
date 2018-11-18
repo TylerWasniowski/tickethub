@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 
 import { SearchSuggestionsRoute } from '../routes';
+import EventImage from './EventImage';
 
 type Props = {
   onSearch: search => void,
@@ -39,8 +40,8 @@ class Search extends React.Component<Props> {
     lastUpdate: 0,
   };
 
-  handleSuggestionClick(event) {
-    this.updateQuery(event.target.innerText, this.handleSearch);
+  handleSuggestionClick(suggestion) {
+    this.updateQuery(suggestion, this.handleSearch);
   }
 
   async updateSuggestions() {
@@ -65,8 +66,12 @@ class Search extends React.Component<Props> {
     const { suggestions } = this.state;
 
     return suggestions.slice(0, process.env.MAX_SUGGESTIONS).map(suggestion => (
-      <ListItem onClick={this.handleSuggestionClick} button>
-        <ListItemText>{suggestion}</ListItemText>
+      <ListItem
+        onClick={() => this.handleSuggestionClick(suggestion.name)}
+        button
+      >
+        <EventImage id={suggestion.id} className="suggestion-image" />
+        <ListItemText>{suggestion.name}</ListItemText>
       </ListItem>
     ));
   }
@@ -93,6 +98,8 @@ class Search extends React.Component<Props> {
     const { onSearch } = this.props;
     const { query } = this.state;
 
+    console.log(query);
+    console.log(encodeURI(query));
     onSearch(query);
   }
 
