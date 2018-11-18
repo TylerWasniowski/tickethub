@@ -8,11 +8,11 @@ import moment from 'moment';
 import Input from '@material-ui/core/Input';
 
 import Typography from '@material-ui/core/Typography';
-import { TicketLockRoute, UpdateAccountSubmitRoute } from '../routes';
+import { TicketLockRoute, CheckoutSubmitRoute } from '../routes';
 
 import EventImage from './EventImage';
 import SimpleForm from './SimpleForm';
-import TotalPrice from './TotalPrice';
+import Price from './Price';
 
 type Props = {
   match: object,
@@ -24,13 +24,18 @@ class Checkout extends React.Component<Props> {
 
     this.lockTicket = this.lockTicket.bind(this);
     this.updateTimeLeft = this.updateTimeLeft.bind(this);
+    this.handleShippingMethodChange = this.handleShippingMethodChange.bind(
+      this
+    );
   }
 
   state: {
     lockedUntil: moment.Moment,
     timeLeftDisplay: string,
+    shippingMethod: string,
   } = {
     timeLeftDisplay: '',
+    shippingMethod: 'fedex',
   };
 
   componentDidMount() {
@@ -39,9 +44,9 @@ class Checkout extends React.Component<Props> {
 
   lockTicket() {
     const { match } = this.props;
-    const { id } = match.params;
+    const { ticketId } = match.params;
 
-    fetch(TicketLockRoute(id), { method: 'POST' })
+    fetch(TicketLockRoute(ticketId), { method: 'POST' })
       .then(res => res.json())
       .then(lockedUntil => this.setState({ lockedUntil: moment(lockedUntil) }))
       .then(() => setInterval(this.updateTimeLeft, 1000))
@@ -55,16 +60,20 @@ class Checkout extends React.Component<Props> {
     });
   }
 
+  handleShippingMethodChange(shippingMethod) {
+    this.setState({ shippingMethod });
+  }
+
   render() {
     const { match } = this.props;
     const { eventName, eventId, ticketId } = match.params;
-    const { timeLeftDisplay } = this.state;
+    const { timeLeftDisplay, shippingMethod } = this.state;
 
     return (
       <SimpleForm
         formName={`Checkout Ticket for ${eventName}`}
         submitText="Checkout"
-        submitRoute={UpdateAccountSubmitRoute}
+        submitRoute={CheckoutSubmitRoute(ticketId)}
       >
         <EventImage id={eventId} />
         <Typography
@@ -85,7 +94,13 @@ class Checkout extends React.Component<Props> {
           defaultValue={Cookies.get('address')}
           required
         />
-        <TotalPrice id={ticketId} />
+        <Input
+          id="shippingMethod"
+          defaultValue={shippingMethod}
+          hidden
+          required
+        />
+        <Price id={ticketId} onChange={this.handleShippingMethodChange} />
       </SimpleForm>
     );
   }
