@@ -19,7 +19,7 @@ router.post('/buy/submit/:id', async (req, res, next) => {
     cvv: req.body.securityCode,
     name: req.body.nameOnCard,
     address: req.body.address,
-    ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
+    ticketId: req.params.id, // need for sellerAcc and price for ticket
   };
 
   if (req.session.userId === null) {
