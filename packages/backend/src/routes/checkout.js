@@ -1,7 +1,7 @@
 import express from 'express';
 import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
-import { getDistance } from '../lib/distanceMatrix';
+import { getFee } from '../lib/shippingFee';
 import { ticketTransaction } from '../lib/bank';
 import {
   checkCreditCard,
@@ -13,30 +13,31 @@ import { getSellerId, getPrice } from '../lib/tickets';
 const router = express.Router();
 
 router.post('/shipping/submit', async (req, res, next) => {
-  if (req.session && req.session.userId) {
-    const ticketInfo = {
-      deliveryMethod: req.body.deliveryMethod,
-      // address: req.body.address,
-      ticketId: req.body.ticketId,
-    };
+  // if (req.session && req.session.userId) {
+  //   const ticketInfo = {
+  //     deliveryMethod: req.body.deliveryMethod,
+  //     // address: req.body.address,
+  //     ticketId: req.body.ticketId,
+  //   };
 
-    dbQueryPromise(
-      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
-      [
-        req.session.userId,
-        ticketInfo.deliveryMethod,
-        // ticketInfo.address,
-        ticketInfo.ticketId,
-      ]
-    ).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`)
-    );
+  //   dbQueryPromise(
+  //     'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
+  //     [
+  //       req.session.userId,
+  //       ticketInfo.deliveryMethod,
+  //       // ticketInfo.address,
+  //       ticketInfo.ticketId,
+  //     ]
+  //   ).catch(err =>
+  //     console.log(`Error contacting database: ${JSON.stringify(err)}`)
+  //   );
 
-    // call function calculating shipping cost
-    // Get Distance
-    const distance = await getDistance(ticketInfo.ticketId, req.session.userId);
-    res.json(`The distance is: ${distance}`);
-  } else res.json(401, 'Error: Not logged in');
+  // call function calculating shipping cost
+  // Get Distance
+  // const distance = await getDistance(ticketInfo.ticketId, req.session.userId);
+  const shippingFee = await getFee(56, 51, 'uber');
+  res.json(`The shipping fee is: $${shippingFee}`);
+  // } else res.json(401, 'Error: Not logged in');
 
   // add to current price -database (display new price)
 });
