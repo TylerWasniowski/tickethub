@@ -52,7 +52,7 @@ router.post('/new-event/submit', async (req, res, next) => {
 });
 
 // new ticket
-router.post('/new/submit', async (req, res, next) => {
+router.post('/sell/submit', async (req, res, next) => {
   const ticketInfo = {
     price: req.body.price,
     eventId: req.body.eventId,
