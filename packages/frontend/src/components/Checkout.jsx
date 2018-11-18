@@ -94,7 +94,12 @@ class Checkout extends React.Component<Props> {
           defaultValue={Cookies.get('address')}
           required
         />
-        <Input id="test" defaultValue={shippingMethod} hidden required />
+        <Input
+          id="shippingMethod"
+          defaultValue={shippingMethod}
+          hidden
+          required
+        />
         <Price id={ticketId} onChange={this.handleShippingMethodChange} />
       </SimpleForm>
     );

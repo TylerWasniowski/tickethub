@@ -38,6 +38,7 @@ class Price extends React.Component<Props> {
   updatePrice() {
     const { id } = this.props;
 
+    this.setState({ totalPrice: undefined });
     fetch(TotalTicketPriceRoute(id))
       .then(res => res.json())
       .then(totalPrice => (Math.round(totalPrice * 100) / 100).toFixed(2))
