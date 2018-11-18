@@ -13,7 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { SearchRoute, TicketCheckoutRoute } from '../routes';
+import { SearchTicketsRoute, TicketCheckoutRoute } from '../routes';
 
 type Props = {
   query: string,
@@ -28,11 +28,13 @@ class Tickets extends React.Component<Props> {
   }
 
   state: {
-    event: string,
+    eventId: string,
+    eventName: string,
     tickets: Array<object>,
     ticketsQuery: string,
   } = {
-    event: '',
+    eventId: '',
+    eventName: '',
     tickets: [],
     ticketsQuery: '',
   };
@@ -44,15 +46,21 @@ class Tickets extends React.Component<Props> {
   }
 
   updateTickets = memoize(query =>
-    fetch(SearchRoute(query))
+    fetch(SearchTicketsRoute(query))
       .then(res => res.json())
-      .then(res => this.setState({ event: res.event, tickets: res.tickets }))
+      .then(res =>
+        this.setState({
+          eventId: res.eventId,
+          eventName: res.eventName,
+          tickets: res.tickets,
+        })
+      )
       .then(() => this.setState({ ticketsQuery: query }))
       .catch(alert)
   );
 
   getTicketComponents(): Array<Node> {
-    const { event, tickets } = this.state;
+    const { eventId, eventName, tickets } = this.state;
 
     return tickets.map(ticket => (
       <TableRow hover>
@@ -63,7 +71,7 @@ class Tickets extends React.Component<Props> {
         <TableCell>
           <Button
             fullWidth
-            href={`/#${TicketCheckoutRoute(event, ticket.id)}`}
+            href={`/#${TicketCheckoutRoute(eventName, eventId, ticket.id)}`}
             color="primary"
             className="buy-button"
             variant="contained"

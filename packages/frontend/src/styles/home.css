@@ -82,6 +82,10 @@
   display: none !important;
 }
 
+.suggestion-image {
+  max-height: 50px;
+}
+
 .search-container:focus-within .search-suggestions {
   display: block;
 
@@ -105,4 +109,27 @@
   margin-top: 5%;
 
   z-index: 0;
+}
+
+.sell-ticket-form,
+.form-loading {
+  transition: 1200ms;
+  position: relative;
+  top: 0;
+  margin-top: 50px;
+}
+
+.sell-ticket-form.hide,
+.form-loading.hide {
+  position: absolute;
+  top: 100%;
+}
+
+.page-title {
+  margin: 5px 10px 15px 10px !important;
+  min-height: 25px;
+}
+
+.form-event-image {
+  height: 100px;
 }
