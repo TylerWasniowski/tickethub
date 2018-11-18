@@ -34,7 +34,7 @@ import {
   LoginRoute,
   CreateAccountRoute,
   UpdateAccountRoute,
-  TicketCheckoutRoute,
+  CheckoutRoute,
   SellTicketRoute,
 } from '../routes';
 import SellTicket from './SellTicket';
@@ -200,7 +200,7 @@ class Dashboard extends React.Component<Props> {
                 <Route path={LoginRoute} component={Login} />
                 <Route path={CreateAccountRoute} component={CreateAccount} />
                 <Route path={UpdateAccountRoute} component={UpdateAccount} />
-                <Route path={TicketCheckoutRoute()} component={Checkout} />
+                <Route path={CheckoutRoute()} component={Checkout} />
               </React.Fragment>
             </Router>
           </main>

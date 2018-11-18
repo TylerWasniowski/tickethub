@@ -4,7 +4,7 @@ import { getDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
-router.post('/buy/submit', (req, res, next) => {
+router.post('/buy/submit/:id', (req, res, next) => {
   if (req.session && req.session.userId) {
     const ticketInfo = {
       boughtUserId: req.session.id, // check
