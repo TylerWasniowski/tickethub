@@ -11,15 +11,15 @@ import { getSellerId, getPrice } from '../lib/tickets';
 
 const router = express.Router();
 
-router.post('/submit', async (req, res, next) => {
+router.post('/buy/submit/:id', async (req, res, next) => {
   const checkoutInfo = {
-    deliveryMethod: req.body.shippingMethod,
+    deliveryMethod: req.body.deliveryMethod,
     number: req.body.cardNumber,
     expiration: req.body.expirationDate,
     cvv: req.body.securityCode,
     name: req.body.nameOnCard,
-    address: req.body.billingAddress,
-    ticketId: req.body.id, // need for sellerAcc and price for ticket
+    address: req.body.address,
+    ticketId: req.body.ticketId, // need for sellerAcc and price for ticket
   };
 
   if (req.session.userId === null) {
