@@ -7,6 +7,7 @@ import {
   getTicketInfo,
   getTicket,
 } from '../lib/tickets';
+import { createEvent, checkEvents } from '../lib/event';
 
 const router = express.Router();
 
@@ -50,6 +51,26 @@ router.post('/new-event/submit', (req, res, next) => {
 
 // new ticket
 router.post('/new/submit', (req, res, next) => {
+  // const eventInfo = {
+  //   eventName: req.body.eventName,
+  //   eventDateTime: req.body.eventDateTime,
+  //   eventVenue: req.body.eventVenue,
+  //   eventCity: req.body.eventCity,
+  //   eventDetails: req.body.eventDetails,
+  // };
+
+  if (
+    !createEvent(
+      req.body.eventName,
+      req.body.eventDateTime,
+      req.body.eventVenue,
+      req.body.eventCity,
+      req.body.eventDetails
+    )
+  ) {
+    res.json(500);
+  }
+
   const ticketInfo = {
     price: req.body.price,
     eventId: req.body.eventId,
@@ -57,15 +78,15 @@ router.post('/new/submit', (req, res, next) => {
   };
 
   db.query(
-    'INSERT INTO tickets (sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
+    'INSERT INTO tickets VALUES(sellUserId, eventID, price, seat) VALUES (?,?,?,?)',
     [req.session.id, ticketInfo.eventId, ticketInfo.price, ticketInfo.seat],
     (error, results, fields) => {
       if (error) {
         console.log(`Error contacting database: ${JSON.stringify(error)}`);
         res.json(500, error);
+      } else {
+        res.json('OK');
       }
-
-      res.json('OK');
     }
   );
 });
