@@ -117,6 +117,10 @@ class Checkout extends React.Component<Props> {
           alert('Ticket purchased. Please wait for delivery.');
           window.location.href = `/#${HomeRoute}`;
         }}
+        onFail={() => {
+          this.componentWillUnmount();
+          window.location.href = `/#${LoginRoute}`;
+        }}
       >
         <EventImage id={eventId} />
         <Typography

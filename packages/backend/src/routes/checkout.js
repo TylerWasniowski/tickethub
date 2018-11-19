@@ -49,6 +49,11 @@ router.post('/buy/submit', async (req, res, next) => {
       }
     );
 
+    dbQueryPromise(
+      'UPDATE tickets SET available=0, buyerId=?, deliveryMethod=? WHERE id=?',
+      [req.session.userId, formData.shippingMethod, req.session.ticketId]
+    );
+
     // get sellerAcc and price of ticket
     const checkoutInfo = await getCheckoutInfo(
       formData.ticketId,
@@ -59,6 +64,7 @@ router.post('/buy/submit', async (req, res, next) => {
     const sellerAcc = await getCardNumber(sellerId);
 
     ticketTransaction(formData.number, sellerAcc, checkoutInfo);
+    res.status(200).json('Success');
   } else {
     res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
   }
