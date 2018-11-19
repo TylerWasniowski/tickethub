@@ -64,6 +64,11 @@ class Checkout extends React.Component<Props> {
 
   updateTimeLeft() {
     const { lockedUntil } = this.state;
+
+    if (lockedUntil.isSameOrAfter(moment())) {
+      window.location.href = `/#${HomeRoute}`;
+    }
+
     this.setState({
       timeLeftDisplay: moment(lockedUntil.diff(moment())).format('mm:ss'),
     });
