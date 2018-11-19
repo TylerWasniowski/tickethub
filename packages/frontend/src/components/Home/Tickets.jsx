@@ -44,19 +44,20 @@ class Tickets extends React.Component<Props> {
     this.updateTickets(query);
   }
 
-  updateTickets = memoize(query =>
-    fetch(SearchTicketsRoute(query))
-      .then(res => res.json())
-      .then(res =>
-        this.setState({
-          eventId: res.eventId,
-          eventName: res.eventName,
-          tickets: res.tickets,
-        })
-      )
-      .then(() => this.setState({ ticketsQuery: query }))
-      .catch(console.log)
-  );
+  updateTickets = memoize(query => {
+    if (query)
+      fetch(SearchTicketsRoute(query))
+        .then(res => res.json())
+        .then(res =>
+          this.setState({
+            eventId: res.eventId,
+            eventName: res.eventName,
+            tickets: res.tickets,
+          })
+        )
+        .then(() => this.setState({ ticketsQuery: query }))
+        .catch(console.log);
+  });
 
   getTicketComponents(): Array<Node> {
     const { eventId, eventName, tickets } = this.state;

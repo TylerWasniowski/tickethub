@@ -33,6 +33,11 @@ router.get('/:query', (req, res, next) => {
 });
 
 router.get('/tickets/:query', (req, res, next) => {
+  if (!req.params.query) {
+    res.json({ tickets: [] });
+    return;
+  }
+
   dbQueryPromise(`
     SELECT id, name FROM events WHERE
     name LIKE ${db.escape(`%${req.params.query}%`)}

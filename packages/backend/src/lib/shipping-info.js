@@ -134,15 +134,16 @@ async function uberDeliveryInfo(buyerAddress, sellerAddress) {
   const result = results.rows[0].elements[0];
   if (result.status === 'OK') {
     const distMiles = parseFloat(result.distance.text);
-    const durationMinutes = parseFloat(result.duration.text);
+    const durationSeconds = result.duration.value;
 
     // Your Fare (UberX type, US dollar) = Base Fare + (Cost per minute * time in ride)
     //            + (Cost per mile * ride distance) + Booking Fee + Other Fees
-    const yourFare = 0 + 0.24 * durationMinutes + 1.06 * distMiles + 2.3 + 7.3;
+    const yourFare =
+      0 + 0.24 * (durationSeconds / 60) + 1.06 * distMiles + 2.3 + 7.3;
     return {
       price: yourFare,
       eta: moment()
-        .add(durationMinutes, 'minutes')
+        .add(durationSeconds, 'seconds')
         .utc()
         .format(),
     };

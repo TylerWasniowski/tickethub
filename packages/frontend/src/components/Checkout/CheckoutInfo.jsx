@@ -79,13 +79,12 @@ class CheckoutInfo extends React.Component<Props> {
 
     if (shippingMethod === 'uber') {
       const diffMinutes = Math.round(
-        moment(eta).diff(moment.utc(), 'minutes', true)
+        moment.duration(moment(eta).diff(moment())).asMinutes()
       );
       if (diffMinutes === 1) return `${diffMinutes} minute`;
       return `${diffMinutes} minutes`;
     }
-    const diffDays = Math.round(moment(eta).diff(moment.utc(), 'days', true));
-
+    const diffDays = Math.round(moment(eta).diff(moment(), 'days', true));
     if (diffDays === 1) return `${diffDays} day`;
     return `${diffDays} days`;
   }
