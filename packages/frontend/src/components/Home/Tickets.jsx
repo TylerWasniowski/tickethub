@@ -1,5 +1,4 @@
 // @flow
-import '../styles/home.css';
 import React from 'react';
 
 import memoize from 'memoize-one';
@@ -13,7 +12,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { CheckoutRoute, SearchTicketsRoute } from '../routes';
+import { CheckoutRoute, SearchTicketsRoute } from '../../routes';
 
 type Props = {
   query: string,
@@ -56,7 +55,7 @@ class Tickets extends React.Component<Props> {
         })
       )
       .then(() => this.setState({ ticketsQuery: query }))
-      .catch(alert)
+      .catch(console.log)
   );
 
   getTicketComponents(): Array<Node> {

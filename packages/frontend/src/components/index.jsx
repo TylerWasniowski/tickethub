@@ -121,7 +121,7 @@ type Props = {
 
 class Dashboard extends React.Component<Props> {
   state = {
-    open: true,
+    open: false,
   };
 
   handleDrawerOpen = () => {
@@ -165,11 +165,6 @@ class Dashboard extends React.Component<Props> {
               >
                 TicketHub
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
               <AccountMenu />
             </Toolbar>
           </AppBar>

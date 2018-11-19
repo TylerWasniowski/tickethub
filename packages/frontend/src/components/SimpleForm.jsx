@@ -15,6 +15,7 @@ type Props = {
   formName: string,
   submitText: string,
   submitRoute: string,
+  onFail?: any => void,
   onSubmit?: any => void,
 
   children: React.Component | Array<React.Component>,
@@ -39,12 +40,10 @@ class SimpleForm extends React.Component<Props> {
   getFormComponents(): React.Component {
     const { children } = this.props;
 
-    return React.Children.map(
-      children,
-      child =>
-        child.type.displayName.match(/\(*Input\)*/)
-          ? this.createFormComponent(child)
-          : child
+    return React.Children.map(children, child =>
+      child.type.displayName.match(/\(*Input\)*/)
+        ? this.createFormComponent(child)
+        : child
     );
   }
 
@@ -73,7 +72,7 @@ class SimpleForm extends React.Component<Props> {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { onSubmit, submitRoute } = this.props;
+    const { onSubmit, onFail, submitRoute } = this.props;
     const { inputValues } = this.state;
 
     const body = {};
@@ -88,6 +87,7 @@ class SimpleForm extends React.Component<Props> {
       method: 'POST',
       body: JSON.stringify(body),
     })
+      .then(response => (response.status !== 200 ? onFail() : response))
       .then(response => response.json())
       .then(onSubmit)
       .catch(console.log);
@@ -118,6 +118,9 @@ class SimpleForm extends React.Component<Props> {
     );
   }
 }
-SimpleForm.defaultProps = { onSubmit: () => {} };
+SimpleForm.defaultProps = {
+  onFail: () => {},
+  onSubmit: () => {},
+};
 
 export default SimpleForm;

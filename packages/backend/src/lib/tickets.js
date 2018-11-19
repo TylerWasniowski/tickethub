@@ -2,6 +2,7 @@ import moment from 'moment';
 import mysql from 'mysql';
 
 import { dbQueryPromise } from './database';
+import getInfo from './shipping-info';
 
 export function getTicketInfo(ticket) {
   return {
@@ -64,4 +65,18 @@ export async function lockTicket(id) {
     .catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
+}
+
+export async function getCheckoutInfo(ticketId, userId, shippingMethod) {
+  const ticketPromise = getTicket(ticketId);
+  const shippingInfoPromise = getInfo(ticketId, userId, shippingMethod);
+
+  return Promise.all([ticketPromise, shippingInfoPromise])
+    .then(results => ({
+      ticketPrice: results[0].price,
+      fee: results[0].price * 0.05,
+      shippingPrice: results[1].price,
+      eta: results[1].eta,
+    }))
+    .catch(console.log);
 }

@@ -1,16 +1,17 @@
 import express from 'express';
 import { db } from '../lib/database';
-import { getDistance } from '../lib/distanceMatrix';
+import { getDistance } from '../lib/shipping-info';
+import { getCheckoutInfo } from '../lib/tickets';
 
 const router = express.Router();
 
-router.post('/buy/submit/:id', (req, res, next) => {
+router.post('/buy/submit/', (req, res, next) => {
   if (req.session && req.session.userId) {
     const ticketInfo = {
-      boughtUserId: req.session.id, // check
+      boughtUserId: req.session.userId, // check
       deliveryMethod: req.body.deliveryMethod,
       // address: req.body.address,
-      ticketId: req.body.ticketId,
+      ticketId: req.session.ticketId,
     };
 
     db.query(
@@ -41,7 +42,7 @@ router.post('/buy/submit/:id', (req, res, next) => {
 // not in database yet
 router.post('/payment/submit', (req, res, next) => {
   const paymentInfo = {
-    boughtUserId: req.session.id, // check
+    boughtUserId: req.session.userId, // check
     cardNumber: req.body.cardNumber,
     cardBrand: req.body.cardBrand,
     nameOnCard: req.body.cardNumber,
@@ -67,6 +68,18 @@ router.post('/payment/submit', (req, res, next) => {
       res.json('OK');
     }
   );
+});
+
+router.get('/info/:id/:shippingMethod', async (req, res, next) => {
+  if (!req.session.success) res.status(401).json('Not authorized.');
+  else
+    getCheckoutInfo(
+      req.params.id,
+      req.session.userId,
+      req.params.shippingMethod
+    )
+      .then(info => res.json(info))
+      .catch(err => res.status(500).json(err));
 });
 
 // //Get Duration and Distance

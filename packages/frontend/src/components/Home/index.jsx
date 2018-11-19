@@ -1,5 +1,5 @@
 // @flow
-import '../styles/home.css';
+import '../../styles/home.css';
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';

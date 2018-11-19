@@ -1,5 +1,5 @@
 // @flow
-import '../styles/checkout.css';
+import '../../styles/checkout.css';
 import React from 'react';
 
 import Cookies from 'js-cookie';
@@ -8,11 +8,11 @@ import moment from 'moment';
 import Input from '@material-ui/core/Input';
 
 import Typography from '@material-ui/core/Typography';
-import { TicketLockRoute, CheckoutSubmitRoute } from '../routes';
+import { TicketLockRoute, CheckoutSubmitRoute } from '../../routes';
 
-import EventImage from './EventImage';
-import SimpleForm from './SimpleForm';
-import Price from './Price';
+import EventImage from '../EventImage';
+import SimpleForm from '../SimpleForm';
+import CheckoutInfo from './CheckoutInfo';
 
 type Props = {
   match: object,
@@ -73,7 +73,7 @@ class Checkout extends React.Component<Props> {
       <SimpleForm
         formName={`Checkout Ticket for ${eventName}`}
         submitText="Checkout"
-        submitRoute={CheckoutSubmitRoute(ticketId)}
+        submitRoute={CheckoutSubmitRoute}
       >
         <EventImage id={eventId} />
         <Typography
@@ -94,13 +94,16 @@ class Checkout extends React.Component<Props> {
           defaultValue={Cookies.get('address')}
           required
         />
+        <CheckoutInfo
+          id={ticketId}
+          onChange={this.handleShippingMethodChange}
+        />
         <Input
           id="shippingMethod"
           defaultValue={shippingMethod}
           hidden
           required
         />
-        <Price id={ticketId} onChange={this.handleShippingMethodChange} />
       </SimpleForm>
     );
   }

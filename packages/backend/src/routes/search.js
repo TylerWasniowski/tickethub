@@ -45,7 +45,7 @@ router.get('/tickets/:query', (req, res, next) => {
       tickets: (await getAvailableTickets(event.id)).map(getTicketInfo),
     }))
     .then(results => res.json(results))
-    .catch(err => res.status(err).json());
+    .catch(err => res.status(500).json(err));
 });
 
 export default router;

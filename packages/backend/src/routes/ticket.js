@@ -37,13 +37,6 @@ router.post('/sell/submit', (req, res, next) => {
   );
 });
 
-router.get('/sale-charge/:id', async (req, res, next) => {
-  const ticket = await getTicket(req.params.id);
-
-  const ret = ticket.price * 1.05;
-  res.json(ret);
-});
-
 // delivery instructions?
 
 router.post('/lock/:id', async (req, res, next) => {

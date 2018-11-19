@@ -81,16 +81,21 @@ class SellTicketForm extends React.Component<Props> {
           formName={`Sell Ticket for ${eventName}`}
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
+          onFail={() => {
+            window.location.href = '/#/';
+          }}
           className="sell-ticket-form"
         >
           <EventImage id={eventId} className="form-event-image" />
-          <Input id="eventId" defaultValue={eventId} hidden required />
           <Input id="seat" required />
           <Input id="price" required />
+          <Input id="eventId" defaultValue={eventId} hidden required />
         </SimpleForm>
       );
 
-    return <CircularProgress class={`form-loading ${query ? '' : 'hide'}`} />;
+    return (
+      <CircularProgress className={`form-loading ${query ? '' : 'hide'}`} />
+    );
   }
 }
 
