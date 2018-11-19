@@ -51,7 +51,7 @@ router.post('/new-event/submit', async (req, res, next) => {
 });
 
 // new ticket
-router.post('/new/submit', async (req, res, next) => {
+router.post('/sell/submit', async (req, res, next) => {
   if (
     !(await createEvent(
       req.body.name,

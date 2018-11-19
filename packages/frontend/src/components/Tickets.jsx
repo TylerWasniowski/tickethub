@@ -13,7 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { SearchTicketsRoute, TicketCheckoutRoute } from '../routes';
+import { CheckoutRoute, SearchTicketsRoute } from '../routes';
 
 type Props = {
   query: string,
@@ -71,7 +71,7 @@ class Tickets extends React.Component<Props> {
         <TableCell>
           <Button
             fullWidth
-            href={`/#${TicketCheckoutRoute(eventName, eventId, ticket.id)}`}
+            href={`/#${CheckoutRoute(eventName, eventId, ticket.id)}`}
             color="primary"
             className="buy-button"
             variant="contained"
