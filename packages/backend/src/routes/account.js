@@ -103,7 +103,7 @@ router.post('/login/submit', (req, res, next) => {
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
-      if (!results.length || !results[0])
+      if (!results || !results.length || !results[0])
         res.status(status.NOT_ACCEPTABLE).json('Error');
       else
         bcrypt.compare(password, results[0].password, (err, response) => {
