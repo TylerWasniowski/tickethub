@@ -2,7 +2,7 @@ import moment from 'moment';
 import mysql from 'mysql';
 import { dbQueryPromise } from './database';
 
-export async function test() {
+export async function testAsync() {
   return true;
 }
 
