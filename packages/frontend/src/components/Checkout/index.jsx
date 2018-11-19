@@ -38,6 +38,7 @@ class Checkout extends React.Component<Props> {
     lockedUntil: moment.Moment,
     timeLeftDisplay: string,
     shippingMethod: string,
+    updateInterval: NodeJS.Timeout,
   } = {
     timeLeftDisplay: '',
     shippingMethod: 'fedex',
@@ -45,6 +46,12 @@ class Checkout extends React.Component<Props> {
 
   componentDidMount() {
     this.lockTicket();
+  }
+
+  componentWillUnmount() {
+    const { updateInterval } = this.state;
+
+    clearInterval(updateInterval);
   }
 
   lockTicket() {
@@ -58,16 +65,19 @@ class Checkout extends React.Component<Props> {
       })
       .then(res => res.json())
       .then(lockedUntil => this.setState({ lockedUntil: moment(lockedUntil) }))
-      .then(() => setInterval(this.updateTimeLeft, 1000))
+      .then(() =>
+        this.setState({
+          updateInterval: setInterval(this.updateTimeLeft, 1000),
+        })
+      )
       .catch(alert);
   }
 
   updateTimeLeft() {
     const { lockedUntil } = this.state;
 
-    if (moment().isSameOrAfter(lockedUntil)) {
+    if (moment().isSameOrAfter(lockedUntil))
       window.location.href = `/#${HomeRoute}`;
-    }
 
     this.setState({
       timeLeftDisplay: moment(lockedUntil.diff(moment())).format('mm:ss'),
