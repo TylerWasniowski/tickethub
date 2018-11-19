@@ -29,7 +29,7 @@ router.get('/:query', (req, res, next) => {
     name LIKE ${db.escape(`%${req.params.query}%`)}
   `)
     .then(events => res.json(events))
-    .catch(err => res.status(err).json());
+    .catch(err => res.status(err).json(err));
 });
 
 router.get('/tickets/:query', (req, res, next) => {

@@ -42,14 +42,20 @@ router.post('/new-event/submit', async (req, res, next) => {
         req.body.details
       ))
     ) {
-      res.status(status.INTERNAL_SERVER_ERROR).json();
+      res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+      return;
     }
-    res.status(status.OK).json();
+    res.status(status.OK).json('Successful');
   }
 });
 
 // new ticket
 router.post('/sell/submit', async (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    return;
+  }
+
   if (
     !(await createEvent(
       req.body.name,
@@ -59,7 +65,8 @@ router.post('/sell/submit', async (req, res, next) => {
       req.body.details
     ))
   ) {
-    res.status(status.INTERNAL_SERVER_ERROR).json();
+    res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+    return;
   }
 
   const ticketInfo = {
@@ -75,9 +82,7 @@ router.post('/sell/submit', async (req, res, next) => {
   }
   console.log(`EVENT ID: ${JSON.stringify(ticketInfo.eventId)}`);
 
-  if (req.session.userId == null) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
-  } else if ((await cardExists(req.session.userId)) === false) {
+  if ((await cardExists(req.session.userId)) === false) {
     res
       .status(status.NOT_ACCEPTABLE)
       .send('User does not have a credit card on file');
@@ -93,7 +98,7 @@ router.post('/sell/submit', async (req, res, next) => {
     ).catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
-    res.status(status.OK).json();
+    res.status(status.OK).json('Successful');
   }
 });
 

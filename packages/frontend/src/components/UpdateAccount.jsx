@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 
 import Input from '@material-ui/core/Input';
 
-import { UpdateAccountSubmitRoute } from '../routes';
+import { UpdateAccountSubmitRoute, LoginRoute } from '../routes';
 import SimpleForm from './SimpleForm';
 
 const UpdateAccount = (): Node => (
@@ -14,6 +14,10 @@ const UpdateAccount = (): Node => (
     formName="Update Account"
     submitText="Update"
     submitRoute={UpdateAccountSubmitRoute}
+    onSubmit={() => alert('Account updated.')}
+    onFail={() => {
+      window.location.href = `/#${LoginRoute}`;
+    }}
   >
     <Input
       id="name"
@@ -27,6 +31,7 @@ const UpdateAccount = (): Node => (
       defaultValue={Cookies.get('address')}
       required
     />
+    <Input id="bankAccount" />
     <Input
       id="email"
       autoComplete="email"

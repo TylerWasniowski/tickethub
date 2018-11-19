@@ -10,7 +10,7 @@ import {
   RadioGroup,
   Typography,
 } from '@material-ui/core';
-import { CheckoutInfoRoute } from '../../routes';
+import { CheckoutInfoRoute, LoginRoute } from '../../routes';
 
 type Props = {
   id: string,
@@ -46,6 +46,10 @@ class CheckoutInfo extends React.Component<Props> {
 
     this.setState({ totalPrice: undefined });
     fetch(CheckoutInfoRoute(id, shippingMethod))
+      .then(res => {
+        if (res.status !== 200) window.location.href = `/#${LoginRoute}`;
+        return res;
+      })
       .then(res => res.json())
       .then(info =>
         this.setState({

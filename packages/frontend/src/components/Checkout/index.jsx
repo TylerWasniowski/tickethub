@@ -8,7 +8,12 @@ import moment from 'moment';
 import Input from '@material-ui/core/Input';
 
 import Typography from '@material-ui/core/Typography';
-import { TicketLockRoute, CheckoutSubmitRoute } from '../../routes';
+import {
+  TicketLockRoute,
+  CheckoutSubmitRoute,
+  LoginRoute,
+  HomeRoute,
+} from '../../routes';
 
 import EventImage from '../EventImage';
 import SimpleForm from '../SimpleForm';
@@ -47,6 +52,10 @@ class Checkout extends React.Component<Props> {
     const { ticketId } = match.params;
 
     fetch(TicketLockRoute(ticketId), { method: 'POST' })
+      .then(res => {
+        if (res.status !== 200) window.location.href = `/#${LoginRoute}`;
+        return res;
+      })
       .then(res => res.json())
       .then(lockedUntil => this.setState({ lockedUntil: moment(lockedUntil) }))
       .then(() => setInterval(this.updateTimeLeft, 1000))
@@ -74,6 +83,10 @@ class Checkout extends React.Component<Props> {
         formName={`Checkout Ticket for ${eventName}`}
         submitText="Checkout"
         submitRoute={CheckoutSubmitRoute}
+        onSubmit={() => {
+          alert('Ticket purchased. Please wait for delivery.');
+          window.location.href = `/#${HomeRoute}`;
+        }}
       >
         <EventImage id={eventId} />
         <Typography

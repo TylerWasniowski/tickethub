@@ -7,7 +7,7 @@ import Input from '@material-ui/core/Input';
 
 import { CircularProgress } from '@material-ui/core';
 import SimpleForm from '../SimpleForm';
-import { SellTicketSubmitRoute, SearchRoute } from '../../routes';
+import { SellTicketSubmitRoute, SearchRoute, LoginRoute } from '../../routes';
 import EventImage from '../EventImage';
 
 type Props = {
@@ -61,6 +61,10 @@ class SellTicketForm extends React.Component<Props> {
           formName="Sell Ticket for New Event"
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
+          onSubmit={() => alert('Ticket posted.')}
+          onFail={() => {
+            window.location.href = `/#${LoginRoute}`;
+          }}
           className="sell-ticket-form"
         >
           <Input id="eventName" defaultValue={query} required />
@@ -81,8 +85,9 @@ class SellTicketForm extends React.Component<Props> {
           formName={`Sell Ticket for ${eventName}`}
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
+          onSubmit={() => alert('Ticket posted.')}
           onFail={() => {
-            window.location.href = '/#/';
+            window.location.href = `/#${LoginRoute}`;
           }}
           className="sell-ticket-form"
         >
