@@ -7,66 +7,79 @@ import {
   validCreditCard,
   getCardNumber,
 } from '../lib/creditcard';
-import { getSellerId, getPrice } from '../lib/tickets';
+import { getSellerId, getCheckoutInfo } from '../lib/tickets';
 
 const router = express.Router();
 
-router.post('/buy/submit/:id', async (req, res, next) => {
-  const checkoutInfo = {
+router.post('/buy/submit', async (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    return;
+  }
+
+  const formData = {
     deliveryMethod: req.body.deliveryMethod,
     number: req.body.cardNumber,
     expiration: req.body.expirationDate,
     cvv: req.body.securityCode,
     name: req.body.nameOnCard,
-    address: req.body.address,
-    ticketId: req.params.id, // need for sellerAcc and price for ticket
+    billingAddress: req.body.billingAddress,
+    shippingAddress: req.body.shippingAddress,
+    ticketId: req.session.ticketId, // need for sellerAcc and price for ticket
   };
 
-  if (req.session.userId === null) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
-  }
-
   // check if existing
-  else if (
-    (await checkCreditCard(
-      checkoutInfo.number,
-      checkoutInfo.name,
-      checkoutInfo.cvv,
-      checkoutInfo.expiration
-    )) === false
+  if (
+    !(await checkCreditCard(
+      formData.number,
+      formData.name,
+      formData.cvv,
+      formData.expiration
+    ))
   ) {
     res.status(status.NOT_ACCEPTABLE).json('invalid credit card information');
   }
-
   // check if valid
-  else if (validCreditCard(checkoutInfo.number) === true) {
+  else if (validCreditCard(formData.number)) {
     db.query(
       'UPDATE users SET address=?,credit_card=? WHERE id=?',
-      [checkoutInfo.address, checkoutInfo.number, req.session.userId],
+      [formData.shippingAddress, formData.number, req.session.userId],
       (error, results, fields) => {
         if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
       }
     );
 
-    // get sellerAcc and price of ticket
-    const sellerId = await getSellerId(checkoutInfo.ticketId);
-    const amount = await getPrice(checkoutInfo.ticketId);
-    const sellerAcc = await getCardNumber(sellerId);
-
-    ticketTransaction(checkoutInfo.number, sellerAcc, amount);
-
-    // mark ticket as sold
     dbQueryPromise(
-      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
-      [req.session.userId, checkoutInfo.deliveryMethod, checkoutInfo.ticketId]
-    ).catch(err =>
-      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+      'UPDATE tickets SET available=0, buyerId=?, deliveryMethod=? WHERE id=?',
+      [req.session.userId, formData.shippingMethod, req.session.ticketId]
     );
 
-    res.status(status.OK).json();
+    // get sellerAcc and price of ticket
+    const checkoutInfo = await getCheckoutInfo(
+      formData.ticketId,
+      formData.shippingAddress,
+      formData.shippingMethod
+    );
+    const sellerId = await getSellerId(formData.ticketId);
+    const sellerAcc = await getCardNumber(sellerId);
+
+    ticketTransaction(formData.number, sellerAcc, checkoutInfo);
+    res.status(200).json('Success');
   } else {
-    res.status(status.NOT_ACCEPTABLE).json();
+    res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
   }
+});
+
+router.get('/info/:id/:shippingMethod/:address', async (req, res, next) => {
+  if (!req.session.success) res.status(401).json('Not authorized.');
+  else
+    getCheckoutInfo(
+      req.params.id,
+      req.params.address,
+      req.params.shippingMethod
+    )
+      .then(info => res.json(info))
+      .catch(err => res.status(500).json(err));
 });
 
 export default router;

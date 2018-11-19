@@ -5,12 +5,10 @@ import {
   getAssignedTicket,
   lockTicket,
   hasTicket,
-  getTicketInfo,
   getTicket,
 } from '../lib/tickets';
 import { createEvent, checkEvents, getEventId } from '../lib/event';
 import { cardExists } from '../lib/creditcard';
-import { getDistance } from '../lib/distanceMatrix';
 
 const router = express.Router();
 
@@ -44,14 +42,20 @@ router.post('/new-event/submit', async (req, res, next) => {
         req.body.details
       ))
     ) {
-      res.status(status.INTERNAL_SERVER_ERROR).json();
+      res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+      return;
     }
-    res.status(status.OK).json();
+    res.status(status.OK).json('Successful');
   }
 });
 
 // new ticket
 router.post('/sell/submit', async (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    return;
+  }
+
   if (
     !(await createEvent(
       req.body.name,
@@ -61,7 +65,8 @@ router.post('/sell/submit', async (req, res, next) => {
       req.body.details
     ))
   ) {
-    res.status(status.INTERNAL_SERVER_ERROR).json();
+    res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+    return;
   }
 
   const ticketInfo = {
@@ -77,9 +82,7 @@ router.post('/sell/submit', async (req, res, next) => {
   }
   console.log(`EVENT ID: ${JSON.stringify(ticketInfo.eventId)}`);
 
-  if (req.session.userId == null) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
-  } else if ((await cardExists(req.session.userId)) === false) {
+  if ((await cardExists(req.session.userId)) === false) {
     res
       .status(status.NOT_ACCEPTABLE)
       .send('User does not have a credit card on file');
@@ -95,28 +98,15 @@ router.post('/sell/submit', async (req, res, next) => {
     ).catch(err =>
       console.log(`Error contacting database: ${JSON.stringify(err)}`)
     );
-    res.status(status.OK).json();
+    res.status(status.OK).json('Successful');
   }
-});
-
-router.get('/sale-charge/:id/:deliveryMethod', async (req, res, next) => {
-  const ticket = await getTicket(req.params.id);
-
-  const distance = await getDistance(req.params.id, req.session.userId); // res.json(`The distance is: ${distance}`);
-
-  const ret = {
-    price: ticket.price,
-    fivePercent: ticket.price * 0.05,
-    shipping: req.params.deliveryMethod, // NEEDS METHOD, use distance
-  };
-
-  res.json(ret);
 });
 
 // delivery instructions?
 
 router.post('/lock/:id', async (req, res, next) => {
-  if (hasTicket(req.session)) res.json(req.session.lockedUntil);
+  if (!req.session.success) res.status(401).json('Not logged in.');
+  else if (hasTicket(req.session)) res.json(req.session.lockedUntil);
   else {
     const { id } = req.params;
 

@@ -7,8 +7,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { SearchSuggestionsRoute } from '../routes';
-import EventImage from './EventImage';
+import { SearchSuggestionsRoute } from '../../routes';
+import EventImage from '../EventImage';
 
 type Props = {
   onSearch: search => void,
@@ -51,7 +51,7 @@ class Search extends React.Component<Props> {
     if (query) {
       suggestions = await fetch(SearchSuggestionsRoute(query))
         .then(res => res.json())
-        .catch(alert);
+        .catch(console.log);
     } else {
       suggestions = [];
     }
@@ -98,8 +98,6 @@ class Search extends React.Component<Props> {
     const { onSearch } = this.props;
     const { query } = this.state;
 
-    console.log(query);
-    console.log(encodeURI(query));
     onSearch(query);
   }
 

@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { LoginRoute, CreateAccountRoute } from '../../routes';
 
-const LoggedInListItems = (
+const LoggedOutListItem = (
   <div>
     <a href={`/#${CreateAccountRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
@@ -21,4 +21,4 @@ const LoggedInListItems = (
   </div>
 );
 
-export default LoggedInListItems;
+export default LoggedOutListItem;

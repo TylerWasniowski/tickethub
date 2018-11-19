@@ -1,5 +1,4 @@
 // @flow
-import '../styles/home.css';
 import React from 'react';
 
 import memoize from 'memoize-one';
@@ -13,7 +12,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { CheckoutRoute, SearchTicketsRoute } from '../routes';
+import { CheckoutRoute, SearchTicketsRoute } from '../../routes';
 
 type Props = {
   query: string,
@@ -45,19 +44,20 @@ class Tickets extends React.Component<Props> {
     this.updateTickets(query);
   }
 
-  updateTickets = memoize(query =>
-    fetch(SearchTicketsRoute(query))
-      .then(res => res.json())
-      .then(res =>
-        this.setState({
-          eventId: res.eventId,
-          eventName: res.eventName,
-          tickets: res.tickets,
-        })
-      )
-      .then(() => this.setState({ ticketsQuery: query }))
-      .catch(alert)
-  );
+  updateTickets = memoize(query => {
+    if (query)
+      fetch(SearchTicketsRoute(query))
+        .then(res => res.json())
+        .then(res =>
+          this.setState({
+            eventId: res.eventId,
+            eventName: res.eventName,
+            tickets: res.tickets,
+          })
+        )
+        .then(() => this.setState({ ticketsQuery: query }))
+        .catch(console.log);
+  });
 
   getTicketComponents(): Array<Node> {
     const { eventId, eventName, tickets } = this.state;

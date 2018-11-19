@@ -1,5 +1,9 @@
-.center {
-  text-align: center;
+.right-align {
+  text-align: right;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 .shipping-choices {
