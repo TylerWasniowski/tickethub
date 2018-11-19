@@ -50,7 +50,7 @@ router.post('/buy/submit', async (req, res, next) => {
     );
 
     // get sellerAcc and price of ticket
-    const amount = await getCheckoutInfo(
+    const checkoutInfo = await getCheckoutInfo(
       formData.ticketId,
       formData.shippingAddress,
       formData.shippingMethod
@@ -58,7 +58,11 @@ router.post('/buy/submit', async (req, res, next) => {
     const sellerId = await getSellerId(formData.ticketId);
     const sellerAcc = await getCardNumber(sellerId);
 
-    ticketTransaction(formData.number, sellerAcc, amount);
+    ticketTransaction(
+      formData.number,
+      sellerAcc,
+      checkoutInfo.ticketPrice + checkoutInfo.shippingPrice + checkoutInfo.fee
+    );
   } else {
     res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
   }
