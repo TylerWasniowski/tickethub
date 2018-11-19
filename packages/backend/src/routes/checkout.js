@@ -61,7 +61,7 @@ router.post('/buy/submit', async (req, res, next) => {
     ticketTransaction(
       formData.number,
       sellerAcc,
-      checkoutInfo.ticketPrice + checkoutInfo.shippingPrice + checkoutInfo.fee
+      checkoutInfo.ticketPrice + checkoutInfo.fee
     );
   } else {
     res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
