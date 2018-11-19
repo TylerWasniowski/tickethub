@@ -57,6 +57,7 @@ router.post('/sell/submit', async (req, res, next) => {
   }
 
   if (
+    req.body.name &&
     !(await createEvent(
       req.body.name,
       req.body.dateTime,
