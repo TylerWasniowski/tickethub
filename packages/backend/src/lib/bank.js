@@ -43,20 +43,19 @@ export async function tickethubPayment(amount) {
   param amount int: the amount of the ticket
   */
   const tickethubCard = '4012888888881881';
-  const tickethubPay = 2 * (amount * 0.05);
 
   return dbQueryPromise(
     `UPDATE credit_cards 
      SET balance=balance+? 
      WHERE number=?`,
-    [tickethubPay, tickethubCard]
+    [amount, tickethubCard]
   ).catch(err =>
     console.log(`Error contacting database: ${JSON.stringify(err)}`)
   );
 }
 
-export async function ticketTransaction(buyerAcc, sellerAcc, amount) {
-  buyerTransaction(buyerAcc, amount);
-  sellerTransaction(sellerAcc, amount);
-  tickethubPayment(amount);
+export async function ticketTransaction(buyerAcc, sellerAcc, info) {
+  buyerTransaction(buyerAcc, info.ticketPrice + info.fee + info.shippingPrice);
+  sellerTransaction(sellerAcc, info.ticketPrice);
+  tickethubPayment(info.fee);
 }

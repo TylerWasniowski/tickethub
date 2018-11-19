@@ -58,11 +58,7 @@ router.post('/buy/submit', async (req, res, next) => {
     const sellerId = await getSellerId(formData.ticketId);
     const sellerAcc = await getCardNumber(sellerId);
 
-    ticketTransaction(
-      formData.number,
-      sellerAcc,
-      checkoutInfo.ticketPrice + checkoutInfo.fee
-    );
+    ticketTransaction(formData.number, sellerAcc, checkoutInfo);
   } else {
     res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
   }
