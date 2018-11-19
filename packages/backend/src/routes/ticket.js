@@ -105,7 +105,8 @@ router.post('/sell/submit', async (req, res, next) => {
 // delivery instructions?
 
 router.post('/lock/:id', async (req, res, next) => {
-  if (hasTicket(req.session)) res.json(req.session.lockedUntil);
+  if (!req.session.success) res.status(401).json('Not logged in.');
+  else if (hasTicket(req.session)) res.json(req.session.lockedUntil);
   else {
     const { id } = req.params;
 

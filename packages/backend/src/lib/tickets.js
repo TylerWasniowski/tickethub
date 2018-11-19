@@ -68,9 +68,9 @@ export async function lockTicket(id) {
     );
 }
 
-export async function getCheckoutInfo(ticketId, userId, shippingMethod) {
+export async function getCheckoutInfo(ticketId, buyerAddress, shippingMethod) {
   const ticketPromise = getTicket(ticketId);
-  const shippingInfoPromise = getInfo(ticketId, userId, shippingMethod);
+  const shippingInfoPromise = getInfo(ticketId, buyerAddress, shippingMethod);
 
   return Promise.all([ticketPromise, shippingInfoPromise])
     .then(results => ({

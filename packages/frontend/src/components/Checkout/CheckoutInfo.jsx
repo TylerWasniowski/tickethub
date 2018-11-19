@@ -14,6 +14,7 @@ import { CheckoutInfoRoute, LoginRoute } from '../../routes';
 
 type Props = {
   id: string,
+  address: string,
   onChange?: string => void,
 };
 
@@ -41,11 +42,11 @@ class CheckoutInfo extends React.Component<Props> {
   }
 
   updatePrice() {
-    const { id } = this.props;
+    const { id, address } = this.props;
     const { shippingMethod } = this.state;
 
     this.setState({ totalPrice: undefined });
-    fetch(CheckoutInfoRoute(id, shippingMethod))
+    fetch(CheckoutInfoRoute(id, shippingMethod, address))
       .then(res => {
         if (res.status !== 200) window.location.href = `/#${LoginRoute}`;
         return res;

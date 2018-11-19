@@ -23,13 +23,15 @@ export const CheckoutRoute: (string, string, string) => string = (
 export const CheckoutSubmitRoute: string = '/checkout/buy/submit';
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
-export const CheckoutInfoRoute: (string, string) => string = (
+export const CheckoutInfoRoute: (string, string, string) => string = (
   id,
-  shippingMethod
+  shippingMethod,
+  address
 ) =>
   `/checkout/info` +
   `/${encodeURI(id || ':id')}` +
-  `/${encodeURI(shippingMethod || ':shippingMethod')}`;
+  `/${encodeURI(shippingMethod || ':shippingMethod')}` +
+  `/${encodeURI(address)}`;
 
 export const LoginRoute: string = '/account/login';
 export const LoginSubmitRoute: string = '/account/login/submit';

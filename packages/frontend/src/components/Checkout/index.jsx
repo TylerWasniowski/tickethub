@@ -29,6 +29,9 @@ class Checkout extends React.Component<Props> {
 
     this.lockTicket = this.lockTicket.bind(this);
     this.updateTimeLeft = this.updateTimeLeft.bind(this);
+    this.handleShippingAddressChange = this.handleShippingAddressChange.bind(
+      this
+    );
     this.handleShippingMethodChange = this.handleShippingMethodChange.bind(
       this
     );
@@ -37,9 +40,11 @@ class Checkout extends React.Component<Props> {
   state: {
     lockedUntil: moment.Moment,
     timeLeftDisplay: string,
+    shippingAddress: string,
     shippingMethod: string,
-    updateInterval: NodeJS.Timeout,
+    updateInterval: number,
   } = {
+    shippingAddress: Cookies.get('address') || '',
     timeLeftDisplay: '',
     shippingMethod: 'fedex',
   };
@@ -60,28 +65,38 @@ class Checkout extends React.Component<Props> {
 
     fetch(TicketLockRoute(ticketId), { method: 'POST' })
       .then(res => {
-        if (res.status !== 200) window.location.href = `/#${LoginRoute}`;
+        if (res.status !== 200) {
+          this.componentWillUnmount();
+          window.location.href = `/#${LoginRoute}`;
+        }
         return res;
       })
       .then(res => res.json())
-      .then(lockedUntil => this.setState({ lockedUntil: moment(lockedUntil) }))
-      .then(() =>
-        this.setState({
-          updateInterval: setInterval(this.updateTimeLeft, 1000),
+      .then(lockedUntil =>
+        this.setState({ lockedUntil: moment(lockedUntil) }, () => {
+          this.setState({
+            updateInterval: setInterval(this.updateTimeLeft, 1000),
+          });
         })
       )
-      .catch(alert);
+      .catch(console.log);
   }
 
   updateTimeLeft() {
     const { lockedUntil } = this.state;
 
-    if (moment().isSameOrAfter(lockedUntil))
+    if (!lockedUntil || moment().isSameOrAfter(lockedUntil)) {
+      this.componentWillUnmount();
       window.location.href = `/#${HomeRoute}`;
+    }
 
     this.setState({
       timeLeftDisplay: moment(lockedUntil.diff(moment())).format('mm:ss'),
     });
+  }
+
+  handleShippingAddressChange(event) {
+    this.setState({ shippingAddress: event.target.value });
   }
 
   handleShippingMethodChange(shippingMethod) {
@@ -91,7 +106,7 @@ class Checkout extends React.Component<Props> {
   render() {
     const { match } = this.props;
     const { eventName, eventId, ticketId } = match.params;
-    const { timeLeftDisplay, shippingMethod } = this.state;
+    const { timeLeftDisplay, shippingAddress, shippingMethod } = this.state;
 
     return (
       <SimpleForm
@@ -122,8 +137,15 @@ class Checkout extends React.Component<Props> {
           defaultValue={Cookies.get('address')}
           required
         />
+        <Input
+          id="shippingAddress"
+          defaultValue={Cookies.get('address')}
+          onChange={this.handleShippingAddressChange}
+          required
+        />
         <CheckoutInfo
           id={ticketId}
+          address={shippingAddress}
           onChange={this.handleShippingMethodChange}
         />
         <Input

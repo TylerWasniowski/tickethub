@@ -157,26 +157,23 @@ function getDeliveryFunction(shippingMethod) {
   return fedexDeliveryInfo;
 }
 
-export default async function getInfo(ticketId, userId, shippingChoice) {
-  const buyerAddressPromise = dbQueryPromise(
-    'SELECT address FROM users WHERE id = ?',
-    userId
-  );
-
-  const sellerAddressPromise = dbQueryPromise(
+export default async function getInfo(ticketId, buyerAddress, shippingMethod) {
+  const sellerAddress = await dbQueryPromise(
     'SELECT * FROM tickets WHERE id = ?',
     ticketId
   )
     .then(results => results[0].sellerId)
-    .then(result =>
-      dbQueryPromise('SELECT address FROM users WHERE id = ?', result)
+    .then(async sellerId =>
+      dbQueryPromise('SELECT address FROM users WHERE id = ?', sellerId).catch(
+        console.log
+      )
     )
+    .then(results => results[0].address)
     .catch(console.log);
 
-  return Promise.all([buyerAddressPromise, sellerAddressPromise])
-    .then(bothResults => bothResults.map(results => results[0].address))
-    .then(async addresses =>
-      getDeliveryFunction(shippingChoice)(addresses[0], addresses[1])
-    )
-    .catch(console.log);
+  console.log(buyerAddress);
+  console.log(sellerAddress);
+  return getDeliveryFunction(shippingMethod)(buyerAddress, sellerAddress).catch(
+    console.log
+  );
 }
