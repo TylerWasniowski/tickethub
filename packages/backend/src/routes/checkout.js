@@ -1,80 +1,72 @@
 import express from 'express';
-import { db } from '../lib/database';
-import { getDistance } from '../lib/distanceMatrix';
+import status from 'http-status';
+import { db, dbQueryPromise } from '../lib/database';
+import { ticketTransaction } from '../lib/bank';
+import {
+  checkCreditCard,
+  validCreditCard,
+  getCardNumber,
+} from '../lib/creditcard';
+import { getSellerId, getPrice } from '../lib/tickets';
 
 const router = express.Router();
 
-router.post('/buy/submit', (req, res, next) => {
-  if (req.session && req.session.userId) {
-    const ticketInfo = {
-      boughtUserId: req.session.id, // check
-      deliveryMethod: req.body.deliveryMethod,
-      // address: req.body.address,
-      ticketId: req.body.ticketId,
-    };
-
-    db.query(
-      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
-      [
-        ticketInfo.boughtUserId,
-        ticketInfo.deliveryMethod,
-        // ticketInfo.address,
-        ticketInfo.ticketId,
-      ],
-      async (error, results, fields) => {
-        if (error) {
-          console.log(`Error contacting database: ${JSON.stringify(error)}`);
-          res.json(500, error);
-        } else {
-          // Get Distance
-          const distance = await getDistance(
-            ticketInfo.ticketId,
-            ticketInfo.boughtUserId
-          );
-          res.json(`The distance is: ${distance}`);
-        }
-      }
-    );
-  } else res.json(401, 'Error: Not logged in');
-});
-
-// not in database yet
-router.post('/payment/submit', (req, res, next) => {
-  const paymentInfo = {
-    boughtUserId: req.session.id, // check
-    cardNumber: req.body.cardNumber,
-    cardBrand: req.body.cardBrand,
-    nameOnCard: req.body.cardNumber,
-    cardExpiration: req.body.cardExpiration,
+router.post('/buy/submit/:id', async (req, res, next) => {
+  const checkoutInfo = {
+    deliveryMethod: req.body.deliveryMethod,
+    number: req.body.cardNumber,
+    expiration: req.body.expirationDate,
+    cvv: req.body.securityCode,
+    name: req.body.nameOnCard,
+    address: req.body.address,
+    ticketId: req.params.id, // need for sellerAcc and price for ticket
   };
 
-  // check if valid
-  // if valid then add into database
-  db.query(
-    'UPDATE users SET cardNumber=?, cardBrand=?, nameOnCard=?, cardExpiration=? WHERE id=?',
-    [
-      paymentInfo.cardNumber,
-      paymentInfo.cardBrand,
-      paymentInfo.nameOnCard,
-      paymentInfo.cardExpiration,
-      paymentInfo.boughtUserId,
-    ],
-    (error, results, fields) => {
-      if (error) {
-        console.log(`Error contacting database: ${JSON.stringify(error)}`);
-        res.json(500, error);
-      }
-      res.json('OK');
-    }
-  );
-});
+  if (req.session.userId === null) {
+    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+  }
 
-// //Get Duration and Distance
-// router.get('/:id', async (req, res) => {
-//   // Check if session exists
-//   if (req.session && req.session.userId) {
-//     return await getDistance(ticketInfo.ticketId, ticketInfo.boughtUserId);
-//   } res.json(401, 'Error: Not logged in');
-// });
+  // check if existing
+  else if (
+    (await checkCreditCard(
+      checkoutInfo.number,
+      checkoutInfo.name,
+      checkoutInfo.cvv,
+      checkoutInfo.expiration
+    )) === false
+  ) {
+    res.status(status.NOT_ACCEPTABLE).json('invalid credit card information');
+  }
+
+  // check if valid
+  else if (validCreditCard(checkoutInfo.number) === true) {
+    db.query(
+      'UPDATE users SET address=?,credit_card=? WHERE id=?',
+      [checkoutInfo.address, checkoutInfo.number, req.session.userId],
+      (error, results, fields) => {
+        if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+      }
+    );
+
+    // get sellerAcc and price of ticket
+    const sellerId = await getSellerId(checkoutInfo.ticketId);
+    const amount = await getPrice(checkoutInfo.ticketId);
+    const sellerAcc = await getCardNumber(sellerId);
+
+    ticketTransaction(checkoutInfo.number, sellerAcc, amount);
+
+    // mark ticket as sold
+    dbQueryPromise(
+      'UPDATE tickets SET buyerId=?, deliveryMethod=?, available=0 WHERE id=?',
+      [req.session.userId, checkoutInfo.deliveryMethod, checkoutInfo.ticketId]
+    ).catch(err =>
+      console.log(`Error contacting database: ${JSON.stringify(err)}`)
+    );
+
+    res.status(status.OK).json();
+  } else {
+    res.status(status.NOT_ACCEPTABLE).json();
+  }
+});
 
 export default router;
