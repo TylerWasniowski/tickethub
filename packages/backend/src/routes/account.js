@@ -49,16 +49,22 @@ router.post('/update/submit', (req, res, next) => {
         userId: req.session.userId,
       };
 
+      const arr = item.bankAccount
+        ? [
+            item.name,
+            item.email,
+            item.address,
+            item.bankAccount,
+            item.password,
+            item.userId,
+          ]
+        : [item.name, item.email, item.address, item.password, item.userId];
+
       db.query(
-        'UPDATE users SET name = ?, email = ?, address = ?, credit_card = ?, password = ? WHERE id = ?',
-        [
-          item.name,
-          item.email,
-          item.address,
-          item.bankAccount,
-          item.password,
-          item.userId,
-        ],
+        `UPDATE users SET name = ?, email = ?, address = ?${
+          item.bankAccount ? ', credit_card = ?' : ''
+        }, password = ? WHERE id = ?`,
+        arr,
         (error, results, fields) => {
           if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 

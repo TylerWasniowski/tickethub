@@ -10,7 +10,7 @@ const LoggedInListItems = (props: object) => (
   <div>
     <a href={`/#${UpdateAccountRoute}`} style={{ textDecoration: 'none' }}>
       <ListItem button>
-        <ListItemText primary="Edit Account" />
+        <ListItemText primary="Update Account" />
       </ListItem>
     </a>
     <ListItem
