@@ -1,5 +1,35 @@
 import { db, dbQueryPromise } from './database';
 
+// returns true if user has credit card
+export async function cardExists(userId) {
+  return dbQueryPromise(
+    `SELECT * 
+     FROM users
+     WHERE id=?`,
+    [userId]
+  )
+    .then(results => {
+      if (!results[0].credit_card) return false;
+      return true;
+    })
+    .catch(console.log('Error connecting to db'));
+}
+
+// returns credit card number of user when given userid
+export async function getCardNumber(userId) {
+  return dbQueryPromise(
+    `SELECT * 
+     FROM users
+     WHERE id=?`,
+    [userId]
+  )
+    .then(results => {
+      console.log(results[0].credit_card);
+      return results[0].credit_card;
+    })
+    .catch(console.log('Error connecting to db'));
+}
+
 // returns true or false if the credit card number is a valid credit card
 
 export function validCreditCard(input) {

@@ -4,6 +4,7 @@ import mysql from 'mysql';
 import { dbQueryPromise } from './database';
 import getInfo from './shipping-info';
 
+// for client access
 export function getTicketInfo(ticket) {
   return {
     id: ticket.id,
@@ -79,4 +80,11 @@ export async function getCheckoutInfo(ticketId, userId, shippingMethod) {
       eta: results[1].eta,
     }))
     .catch(console.log);
+}
+
+// given ticket id, gets seller id
+export async function getSellerId(ticketId) {
+  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
+    .then(results => results[0].sellerId)
+    .catch(console.log('Error connecting to db'));
 }
