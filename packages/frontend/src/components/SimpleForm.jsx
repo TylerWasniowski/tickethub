@@ -39,12 +39,10 @@ class SimpleForm extends React.Component<Props> {
   getFormComponents(): React.Component {
     const { children } = this.props;
 
-    return React.Children.map(
-      children,
-      child =>
-        child.type.displayName.match(/\(*Input\)*/)
-          ? this.createFormComponent(child)
-          : child
+    return React.Children.map(children, child =>
+      child.type.displayName.match(/\(*Input\)*/)
+        ? this.createFormComponent(child)
+        : child
     );
   }
 
