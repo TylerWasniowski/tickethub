@@ -45,8 +45,8 @@ class CheckoutInfo extends React.Component<Props> {
     const { id, address } = this.props;
     const { shippingMethod } = this.state;
 
-    if (!address) return;
-    
+    if (!address.trim()) return;
+
     this.setState({ totalPrice: undefined });
     fetch(CheckoutInfoRoute(id, shippingMethod, address))
       .then(res => {
