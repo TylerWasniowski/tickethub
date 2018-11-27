@@ -133,7 +133,7 @@ async function uberDeliveryInfo(buyerAddress, sellerAddress) {
 
   const result = results.rows[0].elements[0];
   if (result.status === 'OK') {
-    const distMiles = parseFloat(result.distance.text);
+    const distMiles = result.distance.value;
     const durationSeconds = result.duration.value;
 
     // Your Fare (UberX type, US dollar) = Base Fare + (Cost per minute * time in ride)
