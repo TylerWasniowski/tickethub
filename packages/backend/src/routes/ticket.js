@@ -59,11 +59,12 @@ router.post('/sell/submit', async (req, res, next) => {
   if (
     req.body.name &&
     !(await createEvent(
-      req.body.name,
-      req.body.dateTime,
-      req.body.venue,
-      req.body.city,
-      req.body.details
+      req.body.eventName,
+      req.body.eventDate,
+      req.body.eventTime,
+      req.body.eventVenue,
+      req.body.eventCity,
+      req.body.eventDetails
     ))
   ) {
     res.status(status.INTERNAL_SERVER_ERROR).json('Error');
