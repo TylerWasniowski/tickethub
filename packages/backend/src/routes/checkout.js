@@ -18,7 +18,7 @@ router.post('/buy/submit', async (req, res, next) => {
   }
 
   const formData = {
-    deliveryMethod: req.body.deliveryMethod,
+    shippingMethod: req.body.shippingMethod,
     number: req.body.cardNumber,
     expiration: req.body.expirationDate,
     cvv: req.body.securityCode,
@@ -27,6 +27,8 @@ router.post('/buy/submit', async (req, res, next) => {
     shippingAddress: req.body.shippingAddress,
     ticketId: req.session.ticketId, // need for sellerAcc and price for ticket
   };
+
+  console.log(formData);
 
   // check if existing
   if (
@@ -43,7 +45,7 @@ router.post('/buy/submit', async (req, res, next) => {
   else if (validCreditCard(formData.number)) {
     db.query(
       'UPDATE users SET address=?,credit_card=? WHERE id=?',
-      [formData.shippingAddress, formData.number, req.session.userId],
+      [formData.billingAddress, formData.number, req.session.userId],
       (error, results, fields) => {
         if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
       }
@@ -56,8 +58,8 @@ router.post('/buy/submit', async (req, res, next) => {
 
     // get sellerAcc and price of ticket
     const checkoutInfo = await getCheckoutInfo(
-      formData.ticketId,
-      formData.shippingAddress,
+      req.session.ticketId,
+      formData.billingAddress,
       formData.shippingMethod
     );
     const sellerId = await getSellerId(formData.ticketId);
