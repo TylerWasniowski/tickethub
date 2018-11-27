@@ -20,7 +20,7 @@ router.post('/create-account/submit', (req, res, next) => {
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
         if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
-        res.status(status.OK).json();
+        res.status(status.OK).json('Successful');
       });
     }
   );
@@ -35,28 +35,43 @@ router.post('/update/submit', (req, res, next) => {
     req.body.password,
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
-      if (hashErr) res.status(status.INTERNAL_SERVER_ERROR).json();
+      if (hashErr) {
+        res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+        return;
+      }
 
       const item = {
         name: req.body.name,
         email: req.body.email,
         address: req.body.address,
+        bankAccount: req.body.bankAccount,
         password: hash,
         userId: req.session.userId,
       };
 
-      console.log(item.userId);
+      const arr = item.bankAccount
+        ? [
+            item.name,
+            item.email,
+            item.address,
+            item.bankAccount,
+            item.password,
+            item.userId,
+          ]
+        : [item.name, item.email, item.address, item.password, item.userId];
 
       db.query(
-        'UPDATE users SET name = ?, email = ?, address = ?, password = ? WHERE id = ?',
-        [item.name, item.email, item.address, item.password, item.userId],
+        `UPDATE users SET name = ?, email = ?, address = ?${
+          item.bankAccount ? ', credit_card = ?' : ''
+        }, password = ? WHERE id = ?`,
+        arr,
         (error, results, fields) => {
           if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
           res.cookie('email', item.email);
           res.cookie('name', item.name);
           res.cookie('address', item.address);
-          res.status(status.OK).json();
+          res.status(status.OK).json('Successful');
         }
       );
     }
@@ -69,7 +84,7 @@ router.get('/logout', (req, res, next) => {
   res.cookie('email', '');
   res.cookie('name', '');
   res.cookie('address', '');
-  res.status(status.OK).json();
+  res.status(status.OK).json('Successful');
 });
 
 router.post('/login/submit', (req, res, next) => {
@@ -87,9 +102,10 @@ router.post('/login/submit', (req, res, next) => {
     email,
     (error, results, fields) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
-      else if (!results.length)
-        res.status(status.NOT_ACCEPTABLE).json('invalid username or password');
-      else {
+
+      if (!results || !results.length || !results[0])
+        res.status(status.NOT_ACCEPTABLE).json('Error');
+      else
         bcrypt.compare(password, results[0].password, (err, response) => {
           if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
 
@@ -101,10 +117,9 @@ router.post('/login/submit', (req, res, next) => {
             res.cookie('email', results[0].email || '');
             res.cookie('name', results[0].name || '');
             res.cookie('address', results[0].address || '');
-            res.status(status.OK).json();
-          } else res.status(status.NOT_ACCEPTABLE).json();
+            res.status(status.OK).json('Successful');
+          } else res.status(status.NOT_ACCEPTABLE).json('Error');
         });
-      }
     }
   );
 });
@@ -128,7 +143,7 @@ router.post('/payment-info/submit', async (req, res, next) => {
       }
     );
 
-    res.status(status.OK).json();
+    res.status(status.OK).json('Successful');
   } else {
     res.status(status.NOT_ACCEPTABLE).json('Invalid Credit Card Information');
   }

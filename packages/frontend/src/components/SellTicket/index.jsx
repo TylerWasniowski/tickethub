@@ -2,12 +2,9 @@
 import '../../styles/home.css';
 import React from 'react';
 
-import Input from '@material-ui/core/Input';
 import Typography from '@material-ui/core/Typography';
 
-import Search from '../Search';
-import SimpleForm from '../SimpleForm';
-import { SellTicketSubmitRoute } from '../../routes';
+import Search from '../Home/Search';
 import SellTicketForm from './SellTicketForm';
 
 class SellTicket extends React.Component {

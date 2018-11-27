@@ -29,10 +29,15 @@ router.get('/:query', (req, res, next) => {
     name LIKE ${db.escape(`%${req.params.query}%`)}
   `)
     .then(events => res.json(events))
-    .catch(err => res.status(err).json());
+    .catch(err => res.status(err).json(err));
 });
 
 router.get('/tickets/:query', (req, res, next) => {
+  if (!req.params.query) {
+    res.json({ tickets: [] });
+    return;
+  }
+
   dbQueryPromise(`
     SELECT id, name FROM events WHERE
     name LIKE ${db.escape(`%${req.params.query}%`)}
@@ -45,7 +50,7 @@ router.get('/tickets/:query', (req, res, next) => {
       tickets: (await getAvailableTickets(event.id)).map(getTicketInfo),
     }))
     .then(results => res.json(results))
-    .catch(err => res.status(err).json());
+    .catch(err => res.status(500).json(err));
 });
 
 export default router;

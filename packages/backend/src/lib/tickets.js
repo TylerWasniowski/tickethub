@@ -2,6 +2,7 @@ import moment from 'moment';
 import mysql from 'mysql';
 
 import { dbQueryPromise } from './database';
+import getInfo from './shipping-info';
 
 // for client access
 export function getTicketInfo(ticket) {
@@ -67,16 +68,23 @@ export async function lockTicket(id) {
     );
 }
 
+export async function getCheckoutInfo(ticketId, buyerAddress, shippingMethod) {
+  const ticketPromise = getTicket(ticketId);
+  const shippingInfoPromise = getInfo(ticketId, buyerAddress, shippingMethod);
+
+  return Promise.all([ticketPromise, shippingInfoPromise])
+    .then(results => ({
+      ticketPrice: results[0].price,
+      fee: results[0].price * 0.05,
+      shippingPrice: results[1].price,
+      eta: results[1].eta,
+    }))
+    .catch(console.log);
+}
+
 // given ticket id, gets seller id
 export async function getSellerId(ticketId) {
   return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
     .then(results => results[0].sellerId)
-    .catch(console.log('Error connecting to db'));
-}
-
-// given ticket id, gets price
-export async function getPrice(ticketId) {
-  return dbQueryPromise('SELECT * FROM tickets WHERE id = ?', ticketId)
-    .then(results => results[0].price)
     .catch(console.log('Error connecting to db'));
 }

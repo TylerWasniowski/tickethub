@@ -11,17 +11,27 @@ export const SearchTicketsRoute: string => string = query =>
 
 export const GetTicketsRoute: string => string = eventId =>
   `/event/tickets/${encodeURI(eventId || ':eventId')}`;
-export const CheckoutRoute: string => string = (eventName, eventId, ticketId) =>
+export const CheckoutRoute: (string, string, string) => string = (
+  eventName,
+  eventId,
+  ticketId
+) =>
   `/ticket/checkout` +
   `/${encodeURI(eventName || ':eventName')}` +
   `/${encodeURI(eventId || ':eventId')}` +
   `/${encodeURI(ticketId || ':ticketId')}`;
-export const CheckoutSubmitRoute: string => string = id =>
-  `/checkout/buy/submit/${encodeURI(id || ':id')}`;
+export const CheckoutSubmitRoute: string = '/checkout/buy/submit';
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
-export const TotalTicketPriceRoute: string => string = id =>
-  `/ticket/sale-charge/${encodeURI(id || ':id')}`;
+export const CheckoutInfoRoute: (string, string, string) => string = (
+  id,
+  shippingMethod,
+  address
+) =>
+  `/checkout/info` +
+  `/${encodeURI(id || ':id')}` +
+  `/${encodeURI(shippingMethod || ':shippingMethod')}` +
+  `/${encodeURI(address)}`;
 
 export const LoginRoute: string = '/account/login';
 export const LoginSubmitRoute: string = '/account/login/submit';
