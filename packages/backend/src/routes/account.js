@@ -20,7 +20,7 @@ router.post('/create-account/submit', (req, res, next) => {
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
         if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
-        res.status(status.OK).json('Successful');
+        res.status(status.OK).send('Account created Sucesffuly.');
       });
     }
   );
@@ -28,7 +28,7 @@ router.post('/create-account/submit', (req, res, next) => {
 
 router.post('/update/submit', (req, res, next) => {
   if (!req.session.userId) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    res.status(status.NOT_ACCEPTABLE).send('Not logged in.');
   }
 
   bcrypt.hash(
@@ -36,7 +36,7 @@ router.post('/update/submit', (req, res, next) => {
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
       if (hashErr) {
-        res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Error in password.');
         return;
       }
 
@@ -71,7 +71,7 @@ router.post('/update/submit', (req, res, next) => {
           res.cookie('email', item.email);
           res.cookie('name', item.name);
           res.cookie('address', item.address);
-          res.status(status.OK).json('Successful');
+          res.status(status.OK).json('Account updated!');
         }
       );
     }
@@ -84,7 +84,7 @@ router.get('/logout', (req, res, next) => {
   res.cookie('email', '');
   res.cookie('name', '');
   res.cookie('address', '');
-  res.status(status.OK).json('Successful');
+  res.status(status.OK).send('Logged out.');
 });
 
 router.post('/login/submit', (req, res, next) => {
@@ -104,7 +104,7 @@ router.post('/login/submit', (req, res, next) => {
       if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
 
       if (!results || !results.length || !results[0])
-        res.status(status.NOT_ACCEPTABLE).json('Error');
+        res.status(status.NOT_ACCEPTABLE).send('Invalid username or password.');
       else
         bcrypt.compare(password, results[0].password, (err, response) => {
           if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
@@ -117,8 +117,11 @@ router.post('/login/submit', (req, res, next) => {
             res.cookie('email', results[0].email || '');
             res.cookie('name', results[0].name || '');
             res.cookie('address', results[0].address || '');
-            res.status(status.OK).json('Successful');
-          } else res.status(status.NOT_ACCEPTABLE).json('Error');
+            res.status(status.OK).send('Logged in!');
+          } else
+            res
+              .status(status.NOT_ACCEPTABLE)
+              .send('Invalid username or password.');
         });
     }
   );
@@ -133,7 +136,7 @@ router.post('/payment-info/submit', async (req, res, next) => {
   };
 
   if (req.session.userId == null) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    res.status(status.NOT_ACCEPTABLE).send('Not logged in');
   } else if (await checkCreditCard(number, name, cvv, exp)) {
     db.query(
       'UPDATE users SET credit_card = ? WHERE id = ?',
@@ -143,9 +146,9 @@ router.post('/payment-info/submit', async (req, res, next) => {
       }
     );
 
-    res.status(status.OK).json('Successful');
+    res.status(status.OK).send('Successful.');
   } else {
-    res.status(status.NOT_ACCEPTABLE).json('Invalid Credit Card Information');
+    res.status(status.NOT_ACCEPTABLE).send('Invalid Credit Card Information.');
   }
 });
 
