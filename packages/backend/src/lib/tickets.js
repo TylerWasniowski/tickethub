@@ -88,3 +88,18 @@ export async function getSellerId(ticketId) {
     .then(results => results[0].sellerId)
     .catch(console.log('Error connecting to db'));
 }
+
+// check if user has address
+export async function addressExists(userId) {
+  return dbQueryPromise(
+    `SELECT *
+    FROM users
+    WHERE id=?`,
+    [userId]
+  )
+    .then(results => {
+      if (!results[0].address) return false;
+      return true;
+    })
+    .catch(console.log('Error connecting to db'));
+}

@@ -6,6 +6,7 @@ import {
   lockTicket,
   hasTicket,
   getTicket,
+  addressExists,
 } from '../lib/tickets';
 import { createEvent, checkEvents, getEventId } from '../lib/event';
 import { cardExists } from '../lib/creditcard';
@@ -87,6 +88,10 @@ router.post('/sell/submit', async (req, res, next) => {
     res
       .status(status.NOT_ACCEPTABLE)
       .send('User does not have a credit card on file');
+  } else if ((await addressExists(req.session.userId)) === false) {
+    res
+      .status(status.NOT_ACCEPTABLE)
+      .send('User does not have an address on file');
   } else {
     dbQueryPromise(
       'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
