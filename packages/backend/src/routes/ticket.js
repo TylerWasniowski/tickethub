@@ -58,7 +58,7 @@ router.post('/sell/submit', async (req, res, next) => {
   }
 
   if (
-    req.body.name &&
+    req.body.eventName &&
     !(await createEvent(
       req.body.eventName,
       req.body.eventDatetime,
@@ -80,7 +80,10 @@ router.post('/sell/submit', async (req, res, next) => {
   // If it is a new event, grab the new event id
   if (!ticketInfo.eventId) {
     console.log('GETTING EVENT ID');
-    ticketInfo.eventId = await getEventId(req.body.name, req.body.dateTime);
+    ticketInfo.eventId = await getEventId(
+      req.body.eventName,
+      req.body.eventDatetime
+    );
   }
   console.log(`EVENT ID: ${JSON.stringify(ticketInfo.eventId)}`);
 

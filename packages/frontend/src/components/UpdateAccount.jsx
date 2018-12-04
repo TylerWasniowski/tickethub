@@ -15,7 +15,8 @@ const UpdateAccount = (): Node => (
     submitText="Update"
     submitRoute={UpdateAccountSubmitRoute}
     onSubmit={() => alert('Account updated.')}
-    onFail={() => {
+    onFail={reason => {
+      alert(reason);
       window.location.href = `/#${LoginRoute}`;
     }}
   >
