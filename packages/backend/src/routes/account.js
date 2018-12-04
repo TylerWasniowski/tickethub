@@ -20,7 +20,7 @@ router.post('/create-account/submit', (req, res, next) => {
 
       db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
         if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
-        res.status(status.OK).send('Account created Sucesffuly.');
+        res.status(status.OK).json('Account created Sucesffuly.');
       });
     }
   );
@@ -84,7 +84,7 @@ router.get('/logout', (req, res, next) => {
   res.cookie('email', '');
   res.cookie('name', '');
   res.cookie('address', '');
-  res.status(status.OK).send('Logged out.');
+  res.status(status.OK).json('Logged out.');
 });
 
 router.post('/login/submit', (req, res, next) => {
@@ -117,7 +117,7 @@ router.post('/login/submit', (req, res, next) => {
             res.cookie('email', results[0].email || '');
             res.cookie('name', results[0].name || '');
             res.cookie('address', results[0].address || '');
-            res.status(status.OK).send('Logged in!');
+            res.status(status.OK).json('Logged in!');
           } else
             res
               .status(status.NOT_ACCEPTABLE)
@@ -146,7 +146,7 @@ router.post('/payment-info/submit', async (req, res, next) => {
       }
     );
 
-    res.status(status.OK).send('Successful.');
+    res.status(status.OK).json('Successful.');
   } else {
     res.status(status.NOT_ACCEPTABLE).send('Invalid Credit Card Information.');
   }
