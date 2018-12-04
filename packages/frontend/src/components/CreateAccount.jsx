@@ -13,6 +13,7 @@ const CreateAccount = (): Node => (
     submitText="Create"
     submitRoute={CreateAccountSubmitRoute}
     onSubmit={() => alert('Account created.')}
+    onFail={alert}
   >
     <Input id="email" autoComplete="email" required />
     <Input id="password" type="password" required />
