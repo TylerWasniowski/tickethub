@@ -9,39 +9,77 @@ import Input from '@material-ui/core/Input';
 import { UpdateAccountSubmitRoute, LoginRoute } from '../routes';
 import SimpleForm from './SimpleForm';
 
-const UpdateAccount = (): Node => (
-  <SimpleForm
-    formName="Update Account"
-    submitText="Update"
-    submitRoute={UpdateAccountSubmitRoute}
-    onSubmit={() => alert('Account updated.')}
-    onFail={reason => {
-      alert(reason);
-      window.location.href = `/#${LoginRoute}`;
-    }}
-  >
-    <Input
-      id="name"
-      autoComplete="name"
-      defaultValue={Cookies.get('name')}
-      required
-    />
-    <Input
-      id="address"
-      autoComplete="address"
-      defaultValue={Cookies.get('address')}
-      required
-    />
-    <Input id="bankAccount" />
-    <Input
-      id="email"
-      autoComplete="email"
-      defaultValue={Cookies.get('email')}
-      required
-    />
-    <Input id="password" type="password" required />
-    <Input id="confirm-password" type="password" required />
-  </SimpleForm>
-);
+class UpdateAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+  }
+
+  state: {
+    password: string,
+  } = {
+    password: '',
+  };
+
+  handlePasswordChange(event) {
+    this.setState({ password: event.target.value });
+  }
+
+  render() {
+    const { password } = this.state;
+
+    return (
+      <SimpleForm
+        formName="Update Account"
+        submitText="Update"
+        submitRoute={UpdateAccountSubmitRoute}
+        onSubmit={() => alert('Account updated.')}
+        onFail={reason => {
+          alert(reason);
+          window.location.href = `/#${LoginRoute}`;
+        }}
+      >
+        <Input
+          id="name"
+          autoComplete="name"
+          defaultValue={Cookies.get('name')}
+          required
+        />
+        <Input
+          id="address"
+          autoComplete="address"
+          defaultValue={Cookies.get('address')}
+          required
+        />
+        <Input id="cardNumber" />
+        <Input
+          id="email"
+          autoComplete="email"
+          defaultValue={Cookies.get('email')}
+          inputProps={{
+            pattern:
+              '^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$',
+          }}
+          required
+        />
+        <Input
+          id="password"
+          type="password"
+          onChange={this.handlePasswordChange}
+          required
+        />
+        <Input
+          id="confirmPassword"
+          type="password"
+          inputProps={{
+            pattern: password.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'),
+          }}
+          required
+        />
+      </SimpleForm>
+    );
+  }
+}
 
 export default UpdateAccount;

@@ -58,7 +58,13 @@ class SimpleForm extends React.Component<Props> {
     return (
       <FormControl margin="normal" required={required} fullWidth>
         <InputLabel htmlFor={id}>{titleCase(id)}</InputLabel>
-        <Input onChange={this.handleInputChange} {...input.props} />
+        <Input
+          {...input.props}
+          onChange={event => {
+            if (input.props.onChange) input.props.onChange(event);
+            this.handleInputChange(event);
+          }}
+        />
       </FormControl>
     );
   }
