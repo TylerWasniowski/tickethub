@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 
 import Input from '@material-ui/core/Input';
 
+import { Typography } from '@material-ui/core';
 import { UpdateAccountSubmitRoute, LoginRoute } from '../routes';
 import SimpleForm from './SimpleForm';
 
@@ -41,19 +42,6 @@ class UpdateAccount extends React.Component {
         }}
       >
         <Input
-          id="name"
-          autoComplete="name"
-          defaultValue={Cookies.get('name')}
-          required
-        />
-        <Input
-          id="address"
-          autoComplete="address"
-          defaultValue={Cookies.get('address')}
-          required
-        />
-        <Input id="cardNumber" />
-        <Input
           id="email"
           autoComplete="email"
           defaultValue={Cookies.get('email')}
@@ -61,13 +49,11 @@ class UpdateAccount extends React.Component {
             pattern:
               '^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$',
           }}
-          required
         />
         <Input
           id="password"
-          type="password"
           onChange={this.handlePasswordChange}
-          required
+          type="password"
         />
         <Input
           id="confirmPassword"
@@ -75,8 +61,18 @@ class UpdateAccount extends React.Component {
           inputProps={{
             pattern: password.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'),
           }}
-          required
         />
+        <Input
+          id="name"
+          autoComplete="name"
+          defaultValue={Cookies.get('name')}
+        />
+        <Input
+          id="address"
+          autoComplete="address"
+          defaultValue={Cookies.get('address')}
+        />
+        <Input id="cardNumber" />
       </SimpleForm>
     );
   }

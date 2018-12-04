@@ -29,6 +29,7 @@ router.post('/create-account/submit', (req, res, next) => {
 router.post('/update/submit', (req, res, next) => {
   if (!req.session.userId) {
     res.status(status.NOT_ACCEPTABLE).send('Not logged in.');
+    return;
   }
 
   bcrypt.hash(
@@ -44,29 +45,48 @@ router.post('/update/submit', (req, res, next) => {
         name: req.body.name,
         email: req.body.email,
         address: req.body.address,
-        bankAccount: req.body.bankAccount,
+        cardNumber: req.body.cardNumber,
         password: hash,
         userId: req.session.userId,
       };
 
-      const arr = item.cardNumber
-        ? [
-            item.name,
-            item.email,
-            item.address,
-            item.cardNumber,
-            item.password,
-            item.userId,
-          ]
-        : [item.name, item.email, item.address, item.password, item.userId];
+      const names = [];
+      const vals = [];
+      if (item.name) {
+        names.push('name');
+        vals.push(item.name);
+      }
+      if (item.email) {
+        names.push('email');
+        vals.push(item.email);
+      }
+      if (item.address) {
+        names.push('address');
+        vals.push(item.address);
+      }
+      if (item.cardNumber) {
+        names.push('credit_card');
+        vals.push(item.cardNumber);
+      }
+      if (item.password) {
+        names.push('password');
+        vals.push(item.password);
+      }
+      vals.push(item.userId);
+
+      if (!names.length) {
+        res.status(status.OK).json('Nothing changed.');
+        return;
+      }
 
       db.query(
-        `UPDATE users SET name = ?, email = ?, address = ?${
-          item.cardNumber ? ', credit_card = ?' : ''
-        }, password = ? WHERE id = ?`,
-        arr,
+        `UPDATE users SET ${names.join(' = ?,')} = ? WHERE id = ?`,
+        vals,
         (error, results, fields) => {
-          if (error) res.status(status.INTERNAL_SERVER_ERROR).json(error);
+          if (error) {
+            res.status(status.INTERNAL_SERVER_ERROR).json(error);
+            return;
+          }
 
           res.cookie('email', item.email);
           res.cookie('name', item.name);
