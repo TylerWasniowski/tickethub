@@ -2,6 +2,7 @@
 import React from 'react';
 
 import memoize from 'memoize-one';
+import moment from 'moment';
 
 import Input from '@material-ui/core/Input';
 
@@ -68,8 +69,12 @@ class SellTicketForm extends React.Component<Props> {
           className="sell-ticket-form"
         >
           <Input id="eventName" defaultValue={query} required />
-          <Input id="eventDate" required />
-          <Input id="eventTime" required />
+          <Input
+            id="eventDatetime"
+            type="datetime-local"
+            defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+            required
+          />
           <Input id="eventCity" />
           <Input id="eventVenue" />
           <Input id="eventDetails" />

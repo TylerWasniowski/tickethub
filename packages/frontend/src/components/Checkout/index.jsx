@@ -133,7 +133,12 @@ class Checkout extends React.Component<Props> {
           {timeLeftDisplay}
         </Typography>
         <Input id="cardNumber" required />
-        <Input id="expirationDate" required />
+        <Input
+          id="expirationDate"
+          type="date"
+          defaultValue={moment().format('YYYY-MM-DD')}
+          required
+        />
         <Input id="securityCode" required />
         <Input id="nameOnCard" required />
         <Input

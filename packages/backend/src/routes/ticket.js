@@ -60,8 +60,7 @@ router.post('/sell/submit', async (req, res, next) => {
     req.body.name &&
     !(await createEvent(
       req.body.eventName,
-      req.body.eventDate,
-      req.body.eventTime,
+      req.body.eventDatetime,
       req.body.eventVenue,
       req.body.eventCity,
       req.body.eventDetails
