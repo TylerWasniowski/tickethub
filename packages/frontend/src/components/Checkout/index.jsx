@@ -66,6 +66,7 @@ class Checkout extends React.Component<Props> {
     fetch(TicketLockRoute(ticketId), { method: 'POST' })
       .then(res => {
         if (res.status !== 200) {
+          alert(res.text());
           this.componentWillUnmount();
           window.location.href = `/#${LoginRoute}`;
         }
@@ -86,6 +87,7 @@ class Checkout extends React.Component<Props> {
     const { lockedUntil } = this.state;
 
     if (!lockedUntil || moment().isSameOrAfter(lockedUntil)) {
+      alert('You ran out of time.');
       this.componentWillUnmount();
       window.location.href = `/#${HomeRoute}`;
     }
@@ -117,7 +119,8 @@ class Checkout extends React.Component<Props> {
           alert('Ticket purchased. Please wait for delivery.');
           window.location.href = `/#${HomeRoute}`;
         }}
-        onFail={() => {
+        onFail={reason => {
+          alert(reason);
           this.componentWillUnmount();
           window.location.href = `/#${LoginRoute}`;
         }}

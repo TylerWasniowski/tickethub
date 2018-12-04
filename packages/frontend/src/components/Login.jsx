@@ -17,7 +17,7 @@ const Login = (): Node => (
     submitText="Login"
     submitRoute={LoginSubmitRoute}
     onSubmit={() => alert('Logged in.')}
-    onFail={() => alert('Incorrect credentials.')}
+    onFail={reason => alert(reason)}
   >
     <Input id="email" autoComplete="email" required autoFocus />
     <Input
