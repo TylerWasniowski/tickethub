@@ -86,7 +86,8 @@ class SellTicketForm extends React.Component<Props> {
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
           onSubmit={() => alert('Ticket posted.')}
-          onFail={() => {
+          onFail={reason => {
+            alert(reason);
             window.location.href = `/#${LoginRoute}`;
           }}
           className="sell-ticket-form"

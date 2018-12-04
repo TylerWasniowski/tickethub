@@ -87,7 +87,9 @@ class SimpleForm extends React.Component<Props> {
       method: 'POST',
       body: JSON.stringify(body),
     })
-      .then(response => (response.status !== 200 ? onFail() : response))
+      .then(response =>
+        response.status !== 200 ? onFail(response.text()) : response
+      )
       .then(response => response.json())
       .then(onSubmit)
       .catch(console.log);
