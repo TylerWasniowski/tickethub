@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 
+import memoize from 'memoize-one';
 import moment from 'moment';
 
 import {
@@ -38,12 +39,21 @@ class CheckoutInfo extends React.Component<Props> {
   };
 
   componentDidMount() {
-    this.updatePrice();
+    const { address } = this.props;
+    const { shippingMethod } = this.state;
+
+    this.updatePrice(address, shippingMethod);
   }
 
-  updatePrice() {
-    const { id, address } = this.props;
+  componentDidUpdate() {
+    const { address } = this.props;
     const { shippingMethod } = this.state;
+
+    this.updatePrice(address, shippingMethod);
+  }
+
+  updatePrice = memoize((address, shippingMethod) => {
+    const { id } = this.props;
 
     if (!address.trim()) return;
 
@@ -54,6 +64,10 @@ class CheckoutInfo extends React.Component<Props> {
         return res;
       })
       .then(res => res.json())
+      .then(res => {
+        if (shippingMethod === this.state.shippingMethod) return res;
+        throw new Error('Shipping method changed.');
+      })
       .then(info =>
         this.setState({
           ticketPrice: this.round(info.ticketPrice),
@@ -66,13 +80,15 @@ class CheckoutInfo extends React.Component<Props> {
         })
       )
       .catch(console.log);
-  }
+  });
 
   handleSelectionChange(event) {
-    const { onChange } = this.props;
+    const { address, onChange } = this.props;
     const shippingMethod = event.target.value;
 
-    this.setState({ shippingMethod }, this.updatePrice);
+    this.setState({ shippingMethod }, () =>
+      this.updatePrice(address, shippingMethod)
+    );
     onChange(shippingMethod);
   }
 
