@@ -127,4 +127,21 @@ router.post('/lock/:id', async (req, res, next) => {
   }
 });
 
+router.post('/unlock/:id', async (req, res, next) => {
+  if (!req.session.success) res.status(401).json('Not logged in.');
+  else {
+    const { id } = req.params;
+
+    const result = await dbQueryPromise(
+      'UPDATE tickets SET lockedUntil = NULL WHERE id = ?',
+      [id]
+    ).catch(() => res.send('Error with database'));
+
+    req.session.ticketId = undefined;
+    req.session.lockedUntil = undefined;
+
+    res.status(status.OK).json('Ticket canceled.');
+  }
+});
+
 export default router;

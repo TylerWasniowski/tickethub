@@ -12,3 +12,7 @@
 
   justify-content: space-between;
 }
+
+.cancel-button {
+  margin-top: 10px !important;
+}

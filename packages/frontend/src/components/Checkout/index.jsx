@@ -5,14 +5,16 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 
+import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
-
 import Typography from '@material-ui/core/Typography';
+
 import {
   TicketLockRoute,
   CheckoutSubmitRoute,
   LoginRoute,
   HomeRoute,
+  TicketUnlockRoute,
 } from '../../routes';
 
 import EventImage from '../EventImage';
@@ -135,7 +137,14 @@ class Checkout extends React.Component<Props> {
         >
           {timeLeftDisplay}
         </Typography>
-        <Input id="cardNumber" required />
+        <Input
+          id="cardNumber"
+          inputProps={{
+            pattern:
+              '^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\\d{3})\\d{11})$',
+          }}
+          required
+        />
         <Input
           id="expirationDate"
           type="date"
@@ -166,6 +175,31 @@ class Checkout extends React.Component<Props> {
           hidden
           required
         />
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className="cancel-button"
+          onClick={() => {
+            fetch(TicketUnlockRoute(ticketId), { method: 'POST' })
+              .then(async res => {
+                if (res.status !== 200) {
+                  alert('Cancel failed.');
+                  window.location.href = `/#${HomeRoute}`;
+                  throw new Error(`Cancel failed: ${await res.text()}`);
+                }
+                return '';
+              })
+              .then(() => alert('Purchase canceled.'))
+              .then(() => {
+                window.location.href = `/#${HomeRoute}`;
+                return '';
+              })
+              .catch(console.log);
+          }}
+        >
+          Cancel
+        </Button>
       </SimpleForm>
     );
   }

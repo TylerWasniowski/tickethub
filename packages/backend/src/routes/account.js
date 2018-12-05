@@ -33,7 +33,7 @@ router.post('/update/submit', (req, res, next) => {
   }
 
   bcrypt.hash(
-    req.body.password,
+    req.body.password || '',
     parseInt(process.env.BCRYPT_SALT, 10),
     (hashErr, hash) => {
       if (hashErr) {
@@ -68,7 +68,7 @@ router.post('/update/submit', (req, res, next) => {
         names.push('credit_card');
         vals.push(item.cardNumber);
       }
-      if (item.password) {
+      if (req.body.password) {
         names.push('password');
         vals.push(item.password);
       }
