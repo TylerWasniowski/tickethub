@@ -66,9 +66,9 @@ class Checkout extends React.Component<Props> {
     const { ticketId } = match.params;
 
     fetch(TicketLockRoute(ticketId), { method: 'POST' })
-      .then(res => {
+      .then(async res => {
         if (res.status !== 200) {
-          alert(res.text());
+          alert(await res.text());
           this.componentWillUnmount();
           window.location.href = `/#${LoginRoute}`;
         }
