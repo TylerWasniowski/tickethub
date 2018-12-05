@@ -30,7 +30,7 @@ router.post('/create-account/submit', (req, res, next) => {
   );
 });
 
-router.post('/update/submit', async (req, res, next) => {
+router.post('/update/submit', (req, res, next) => {
   if (!req.session.userId) {
     res.status(status.NOT_ACCEPTABLE).send('Not logged in.');
     return;
@@ -39,7 +39,7 @@ router.post('/update/submit', async (req, res, next) => {
   bcrypt.hash(
     req.body.password || '',
     parseInt(process.env.BCRYPT_SALT, 10),
-    (hashErr, hash) => {
+    async (hashErr, hash) => {
       if (hashErr) {
         res.status(status.INTERNAL_SERVER_ERROR).send('Error in password.');
         return;
@@ -87,7 +87,7 @@ router.post('/update/submit', async (req, res, next) => {
         res
           .status(status.NOT_ACCEPTABLE)
           .send('Enter a correct Credit Card Number');
-      } else if (checkCreditCardNumber(item.cardNumber)) {
+      } else if (!(await checkCreditCardNumber(item.cardNumber))) {
         res.status(status.NOT_ACCEPTABLE).send('Credit Card Refused');
       } else {
         db.query(
@@ -169,7 +169,7 @@ router.post('/payment-info/submit', async (req, res, next) => {
 
   if (req.session.userId == null) {
     res.status(status.NOT_ACCEPTABLE).send('Not logged in');
-  } else if (await checkCreditCard(number, name, cvv, exp)) {
+  } else if (await checkCreditCardNumber(number)) {
     db.query(
       'UPDATE users SET credit_card = ? WHERE id = ?',
       [number, req.session.userId],
