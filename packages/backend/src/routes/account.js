@@ -10,24 +10,39 @@ import {
 
 const router = express.Router();
 
-router.post('/create-account/submit', (req, res, next) => {
-  bcrypt.hash(
-    req.body.password,
-    parseInt(process.env.BCRYPT_SALT, 10),
-    (hashErr, hash) => {
-      if (hashErr) res.status(status.INTERNAL_SERVER_ERROR).json(hashErr);
+router.post('/create-account/submit', async (req, res, next) => {
+  const accountExist = await dbQueryPromise(
+    'SELECT * FROM users WHERE email=?',
+    [req.body.email]
+  )
+    .then(results => {
+      if (results.length === 1) return true;
 
-      const ret = {
-        email: req.body.email,
-        password: hash,
-      };
+      return false;
+    })
+    .catch(console.log);
 
-      db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
-        if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
-        res.status(status.OK).json('Account created Sucesffuly.');
-      });
-    }
-  );
+  if (accountExist) {
+    res.status(status.NOT_ACCEPTABLE).send('Account already exists');
+  } else {
+    bcrypt.hash(
+      req.body.password,
+      parseInt(process.env.BCRYPT_SALT, 10),
+      (hashErr, hash) => {
+        if (hashErr) res.status(status.INTERNAL_SERVER_ERROR).json(hashErr);
+
+        const ret = {
+          email: req.body.email,
+          password: hash,
+        };
+
+        db.query('INSERT INTO users SET ?', ret, (err, results, fields) => {
+          if (err) res.status(status.INTERNAL_SERVER_ERROR).json(err);
+          res.status(status.OK).json('Account created Sucesffuly.');
+        });
+      }
+    );
+  }
 });
 
 router.post('/update/submit', (req, res, next) => {
