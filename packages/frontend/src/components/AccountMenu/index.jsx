@@ -9,6 +9,7 @@ import PeopleIcon from '@material-ui/icons/People';
 
 import LoggedInListItems from './LoggedInListItems';
 import LoggedOutListItems from './LoggedOutListItems';
+import { HomeRoute } from '../../routes';
 
 class AccountMenu extends React.Component {
   constructor(props) {
@@ -44,9 +45,10 @@ class AccountMenu extends React.Component {
         <List className={`menu ${showMenu ? '' : 'hide'}`}>
           {Cookies.get('email') ? (
             <LoggedInListItems
-              onLogout={() =>
-                this.setState({ showMenu: false }, () => alert('Logged out.'))
-              }
+              onLogout={() => {
+                this.setState({ showMenu: false }, () => alert('Logged out.'));
+                window.location.href = `/#${HomeRoute}`;
+              }}
             />
           ) : (
             LoggedOutListItems

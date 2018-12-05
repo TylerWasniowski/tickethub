@@ -58,7 +58,13 @@ class SimpleForm extends React.Component<Props> {
     return (
       <FormControl margin="normal" required={required} fullWidth>
         <InputLabel htmlFor={id}>{titleCase(id)}</InputLabel>
-        <Input onChange={this.handleInputChange} {...input.props} />
+        <Input
+          {...input.props}
+          onChange={event => {
+            if (input.props.onChange) input.props.onChange(event);
+            this.handleInputChange(event);
+          }}
+        />
       </FormControl>
     );
   }
@@ -87,8 +93,8 @@ class SimpleForm extends React.Component<Props> {
       method: 'POST',
       body: JSON.stringify(body),
     })
-      .then(response =>
-        response.status !== 200 ? onFail(response.text()) : response
+      .then(async response =>
+        response.status !== 200 ? onFail(await response.text()) : response
       )
       .then(response => response.json())
       .then(onSubmit)
