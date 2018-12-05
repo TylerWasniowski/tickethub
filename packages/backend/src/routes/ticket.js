@@ -67,7 +67,7 @@ router.post('/sell/submit', async (req, res, next) => {
       req.body.eventDetails
     ))
   ) {
-    res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+    res.status(status.INTERNAL_SERVER_ERROR).send('Error creating the event');
     return;
   }
 

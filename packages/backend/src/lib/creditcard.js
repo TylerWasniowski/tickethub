@@ -71,3 +71,13 @@ export async function checkCreditCard(number, name, cvv, exp) {
     })
     .catch(console.log);
 }
+
+export async function checkCreditCardNumber(number) {
+  return dbQueryPromise('SELECT * FROM credit_cards WHERE number=?', [number])
+    .then(results => {
+      if (results.length === 1) return true;
+
+      return false;
+    })
+    .catch(console.log);
+}

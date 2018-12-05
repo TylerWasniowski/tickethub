@@ -2,7 +2,11 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import status from 'http-status';
 import { db, dbQueryPromise } from '../lib/database';
-import { checkCreditCard } from '../lib/creditcard';
+import {
+  checkCreditCard,
+  validCreditCard,
+  checkCreditCardNumber,
+} from '../lib/creditcard';
 
 const router = express.Router();
 
@@ -26,7 +30,7 @@ router.post('/create-account/submit', (req, res, next) => {
   );
 });
 
-router.post('/update/submit', (req, res, next) => {
+router.post('/update/submit', async (req, res, next) => {
   if (!req.session.userId) {
     res.status(status.NOT_ACCEPTABLE).send('Not logged in.');
     return;
@@ -79,21 +83,29 @@ router.post('/update/submit', (req, res, next) => {
         return;
       }
 
-      db.query(
-        `UPDATE users SET ${names.join(' = ?,')} = ? WHERE id = ?`,
-        vals,
-        (error, results, fields) => {
-          if (error) {
-            res.status(status.INTERNAL_SERVER_ERROR).json(error);
-            return;
-          }
+      if (!validCreditCard(item.cardNumber)) {
+        res
+          .status(status.NOT_ACCEPTABLE)
+          .send('Enter a correct Credit Card Number');
+      } else if (checkCreditCardNumber(item.cardNumber)) {
+        res.status(status.NOT_ACCEPTABLE).send('Credit Card Refused');
+      } else {
+        db.query(
+          `UPDATE users SET ${names.join(' = ?,')} = ? WHERE id = ?`,
+          vals,
+          (error, results, fields) => {
+            if (error) {
+              res.status(status.INTERNAL_SERVER_ERROR).json(error);
+              return;
+            }
 
-          res.cookie('email', item.email);
-          res.cookie('name', item.name);
-          res.cookie('address', item.address);
-          res.status(status.OK).json('Account updated!');
-        }
-      );
+            res.cookie('email', item.email);
+            res.cookie('name', item.name);
+            res.cookie('address', item.address);
+            res.status(status.OK).json('Account updated!');
+          }
+        );
+      }
     }
   );
 });
