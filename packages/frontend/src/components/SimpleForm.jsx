@@ -51,7 +51,8 @@ class SimpleForm extends React.Component<Props> {
     const { id, required, defaultValue, hidden } = input.props;
     const { inputValues } = this.state;
 
-    if (defaultValue) inputValues.set(id, defaultValue);
+    if (!document.getElementById(id) && defaultValue)
+      inputValues.set(id, defaultValue);
 
     if (hidden) return <React.Fragment />;
 
