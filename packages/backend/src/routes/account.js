@@ -98,11 +98,14 @@ router.post('/update/submit', (req, res, next) => {
         return;
       }
 
-      if (!validCreditCard(item.cardNumber)) {
+      if (item.cardNumber && !validCreditCard(item.cardNumber)) {
         res
           .status(status.NOT_ACCEPTABLE)
           .send('Enter a correct Credit Card Number');
-      } else if (!(await checkCreditCardNumber(item.cardNumber))) {
+      } else if (
+        item.cardNumber &&
+        !(await checkCreditCardNumber(item.cardNumber))
+      ) {
         res.status(status.NOT_ACCEPTABLE).send('Credit Card Refused');
       } else {
         db.query(
