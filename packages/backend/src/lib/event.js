@@ -23,12 +23,12 @@ export async function checkEvents(eventName) {
 }
 
 export async function createEvent(
-  eventName = null,
-  eventDateTime = null,
-  eventVenue = null,
-  eventCity = null,
-  eventDetails = null,
-  eventArtistName = null,
+  eventName = '',
+  eventDateTime = '',
+  eventVenue = '',
+  eventCity = '',
+  eventDetails = '',
+  eventArtistName = '',
   eventImage = null
 ) {
   /*
