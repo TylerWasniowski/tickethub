@@ -51,14 +51,21 @@ class SimpleForm extends React.Component<Props> {
     const { id, required, defaultValue, hidden } = input.props;
     const { inputValues } = this.state;
 
-    if (defaultValue) inputValues.set(id, defaultValue);
+    if (!document.getElementById(id) && defaultValue)
+      inputValues.set(id, defaultValue);
 
     if (hidden) return <React.Fragment />;
 
     return (
       <FormControl margin="normal" required={required} fullWidth>
         <InputLabel htmlFor={id}>{titleCase(id)}</InputLabel>
-        <Input onChange={this.handleInputChange} {...input.props} />
+        <Input
+          {...input.props}
+          onChange={event => {
+            if (input.props.onChange) input.props.onChange(event);
+            this.handleInputChange(event);
+          }}
+        />
       </FormControl>
     );
   }
@@ -87,7 +94,9 @@ class SimpleForm extends React.Component<Props> {
       method: 'POST',
       body: JSON.stringify(body),
     })
-      .then(response => (response.status !== 200 ? onFail() : response))
+      .then(async response =>
+        response.status !== 200 ? onFail(await response.text()) : response
+      )
       .then(response => response.json())
       .then(onSubmit)
       .catch(console.log);

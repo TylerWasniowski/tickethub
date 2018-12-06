@@ -2,6 +2,7 @@
 import React from 'react';
 
 import memoize from 'memoize-one';
+import moment from 'moment';
 
 import Input from '@material-ui/core/Input';
 
@@ -62,19 +63,30 @@ class SellTicketForm extends React.Component<Props> {
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
           onSubmit={() => alert('Ticket posted.')}
-          onFail={() => {
+          onFail={reason => {
+            alert(reason);
             window.location.href = `/#${LoginRoute}`;
           }}
           className="sell-ticket-form"
         >
           <Input id="eventName" defaultValue={query} required />
-          <Input id="eventDate" required />
-          <Input id="eventTime" required />
+          <Input
+            id="eventDatetime"
+            type="datetime-local"
+            defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+            required
+          />
           <Input id="eventCity" />
           <Input id="eventVenue" />
           <Input id="eventDetails" />
           <Input id="seat" required />
-          <Input id="price" required />
+          <Input
+            id="price"
+            inputProps={{
+              pattern: '^\\d*\\.?\\d+$',
+            }}
+            required
+          />
         </SimpleForm>
       );
     }
@@ -86,14 +98,21 @@ class SellTicketForm extends React.Component<Props> {
           submitText="Sell"
           submitRoute={SellTicketSubmitRoute}
           onSubmit={() => alert('Ticket posted.')}
-          onFail={() => {
+          onFail={reason => {
+            alert(reason);
             window.location.href = `/#${LoginRoute}`;
           }}
           className="sell-ticket-form"
         >
           <EventImage id={eventId} className="form-event-image" />
           <Input id="seat" required />
-          <Input id="price" required />
+          <Input
+            id="price"
+            inputProps={{
+              pattern: '^\\d*[\\.\\d*]?$',
+            }}
+            required
+          />
           <Input id="eventId" defaultValue={eventId} hidden required />
         </SimpleForm>
       );

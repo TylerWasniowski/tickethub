@@ -23,6 +23,8 @@ export const CheckoutRoute: (string, string, string) => string = (
 export const CheckoutSubmitRoute: string = '/checkout/buy/submit';
 export const TicketLockRoute: string => string = id =>
   `/ticket/lock/${encodeURI(id || ':id')}`;
+export const TicketUnlockRoute: string => string = id =>
+  `/ticket/unlock/${encodeURI(id || ':id')}`;
 export const CheckoutInfoRoute: (string, string, string) => string = (
   id,
   shippingMethod,

@@ -6,6 +6,7 @@ import {
   lockTicket,
   hasTicket,
   getTicket,
+  addressExists,
 } from '../lib/tickets';
 import { createEvent, checkEvents, getEventId } from '../lib/event';
 import { cardExists } from '../lib/creditcard';
@@ -57,17 +58,16 @@ router.post('/sell/submit', async (req, res, next) => {
   }
 
   if (
-    req.body.name &&
+    req.body.eventName &&
     !(await createEvent(
       req.body.eventName,
-      req.body.eventDate,
-      req.body.eventTime,
+      req.body.eventDatetime,
       req.body.eventVenue,
       req.body.eventCity,
       req.body.eventDetails
     ))
   ) {
-    res.status(status.INTERNAL_SERVER_ERROR).json('Error');
+    res.status(status.INTERNAL_SERVER_ERROR).send('Error creating the event');
     return;
   }
 
@@ -80,7 +80,10 @@ router.post('/sell/submit', async (req, res, next) => {
   // If it is a new event, grab the new event id
   if (!ticketInfo.eventId) {
     console.log('GETTING EVENT ID');
-    ticketInfo.eventId = await getEventId(req.body.name, req.body.dateTime);
+    ticketInfo.eventId = await getEventId(
+      req.body.eventName,
+      req.body.eventDatetime
+    );
   }
   console.log(`EVENT ID: ${JSON.stringify(ticketInfo.eventId)}`);
 
@@ -88,6 +91,10 @@ router.post('/sell/submit', async (req, res, next) => {
     res
       .status(status.NOT_ACCEPTABLE)
       .send('User does not have a credit card on file');
+  } else if ((await addressExists(req.session.userId)) === false) {
+    res
+      .status(status.NOT_ACCEPTABLE)
+      .send('User does not have an address on file');
   } else {
     dbQueryPromise(
       'INSERT INTO tickets (sellerId, eventID, price, seat) VALUES (?,?,?,?)',
@@ -117,6 +124,23 @@ router.post('/lock/:id', async (req, res, next) => {
     req.session.lockedUntil = lockedUntil;
 
     res.json(lockedUntil);
+  }
+});
+
+router.post('/unlock/:id', async (req, res, next) => {
+  if (!req.session.success) res.status(401).json('Not logged in.');
+  else {
+    const { id } = req.params;
+
+    const result = await dbQueryPromise(
+      'UPDATE tickets SET lockedUntil = NULL WHERE id = ?',
+      [id]
+    ).catch(() => res.send('Error with database'));
+
+    req.session.ticketId = undefined;
+    req.session.lockedUntil = undefined;
+
+    res.status(status.OK).json('Ticket canceled.');
   }
 });
 

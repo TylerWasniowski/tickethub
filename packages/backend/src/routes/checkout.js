@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post('/buy/submit', async (req, res, next) => {
   if (!req.session.userId) {
-    res.status(status.NOT_ACCEPTABLE).json('Not logged in');
+    res.status(status.NOT_ACCEPTABLE).send('Not logged in');
     return;
   }
 
@@ -39,7 +39,7 @@ router.post('/buy/submit', async (req, res, next) => {
       formData.expiration
     ))
   ) {
-    res.status(status.NOT_ACCEPTABLE).json('invalid credit card information');
+    res.status(status.NOT_ACCEPTABLE).send('invalid credit card information');
   }
   // check if valid
   else if (validCreditCard(formData.number)) {
@@ -68,7 +68,7 @@ router.post('/buy/submit', async (req, res, next) => {
     ticketTransaction(formData.number, sellerAcc, checkoutInfo);
     res.status(200).json('Success');
   } else {
-    res.status(status.NOT_ACCEPTABLE).json('Invalid credit card info');
+    res.status(status.NOT_ACCEPTABLE).send('Invalid credit card info');
   }
 });
 
