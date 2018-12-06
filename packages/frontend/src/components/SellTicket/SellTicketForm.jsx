@@ -80,7 +80,13 @@ class SellTicketForm extends React.Component<Props> {
           <Input id="eventVenue" />
           <Input id="eventDetails" />
           <Input id="seat" required />
-          <Input id="price" required />
+          <Input
+            id="price"
+            inputProps={{
+              pattern: '^\\d*\\.?\\d+$',
+            }}
+            required
+          />
         </SimpleForm>
       );
     }
@@ -100,7 +106,13 @@ class SellTicketForm extends React.Component<Props> {
         >
           <EventImage id={eventId} className="form-event-image" />
           <Input id="seat" required />
-          <Input id="price" required />
+          <Input
+            id="price"
+            inputProps={{
+              pattern: '^\\d*[\\.\\d*]?$',
+            }}
+            required
+          />
           <Input id="eventId" defaultValue={eventId} hidden required />
         </SimpleForm>
       );
