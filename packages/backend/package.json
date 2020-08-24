@@ -19,7 +19,7 @@
   "dependencies": {
     "@easypost/api": "^3.6.4",
     "@google/maps": "^0.5.5",
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^5.0.0",
     "chalk": "^2.4.1",
     "cookie-parser": "~1.4.3",
     "debug": "~4.1.0",
