@@ -5251,10 +5251,10 @@ flatmap-stream@^0.1.0:
   resolved "https://registry.yarnpkg.com/flatmap-stream/-/flatmap-stream-0.1.0.tgz#ed54e01422cd29281800914fcb968d58b685d5f1"
   integrity sha512-Nlic4ZRYxikqnK5rj3YoxDVKGGtUjcNDUtvQ7XsdGLZmMwdUYnXf10o1zcXtzEZTBgc6GxeRpQxV/Wu3WPIIHA==
 
-flow-bin@^0.86.0:
-  version "0.86.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.86.0.tgz#153a28722b4dc13b7200c74b644dd4d9f4969a11"
-  integrity sha512-ulRvFH3ewGIYwg+qPk/OJXoe3Nhqi0RyR0wqgK0b1NzUDEC6O99zU39MBTickXvlrr6iwRO6Wm4lVGeDmnzbew==
+flow-bin@^0.250.0:
+  version "0.250.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.250.0.tgz#a9baa110a03563e373f1d61309088d9aaa0cdfae"
+  integrity sha512-OYEPzpgSzvV+33kBuOOA1C0AjQkzIjrmbS/324CRRijnU1tABKyM5unzf4KIkyN5IQutgxqsSRZ1GsixC8+xIQ==
 
 flow-typed@^2.5.1:
   version "2.5.1"
