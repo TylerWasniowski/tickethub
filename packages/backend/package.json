@@ -29,7 +29,7 @@
     "forever": "^0.15.3",
     "google-distance-matrix": "^1.1.1",
     "http-errors": "~1.7.1",
-    "http-status": "^1.2.0",
+    "http-status": "^1.8.1",
     "jest": "^23.6.0",
     "moment": "^2.22.2",
     "morgan": "~1.9.1",
