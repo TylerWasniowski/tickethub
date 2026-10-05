@@ -17,7 +17,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@easypost/api": "^3.6.4",
+    "@easypost/api": "^3.11.2",
     "@google/maps": "^0.5.5",
     "bcrypt": "^3.0.2",
     "chalk": "^2.4.1",
